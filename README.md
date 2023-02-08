@@ -2,4 +2,4 @@
 Simulated Trading Exchange using FIX protocol
 
 
-Updated readME.md
+Updated README.md
