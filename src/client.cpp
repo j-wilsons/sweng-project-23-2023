@@ -26,7 +26,7 @@ int main()
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(PORT);
 
-    if (inet_pton(AF_INET, "172.21.0.2", &serv_addr.sin_addr) <= 0) //LOCAL
+    if (inet_pton(AF_INET, "172.21.0.3", &serv_addr.sin_addr) <= 0) //LOCAL
     //if(inet_pton(AF_INET, "172.17.0.2", &serv_addr.sin_addr)<=0)  //CLIENT DOES NOT RUN IS CONTAINER
     //if(inet_pton(AF_INET, "172.21.0.1", &serv_addr.sin_addr)<=0) //CONTAINER
     //if(inet_pton(AF_INET, "10.0.9.1", &serv_addr.sin_addr)<=0) //OVERLAY
