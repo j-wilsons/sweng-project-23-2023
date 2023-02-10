@@ -1,6 +1,7 @@
 # sweng-project-23-2023
 Simulated Trading Exchange using FIX protocol
 
+
 <h2> Running app locally </h2>
 
 To run the app locally, we have to create a docker subnet and connect 2 containers to it. These 2 containers will mimic a Client and Server.
@@ -76,13 +77,3 @@ Now onto the client. Same process.
 In the client container, compile and run client.cpp by using `g++ client.cpp -o clientExec` and `./clientExec`
 
 If no errors return, client and server should have talked to each other and printed their responses.
-
-
-
-
-
-
-
-
-
-
