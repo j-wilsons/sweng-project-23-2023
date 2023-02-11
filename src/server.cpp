@@ -30,7 +30,7 @@ bool isNum(string input){
 
 //check if the input is in a correct form: orderType, Quantity, companyName
 bool isCorrectForm(vector<string> input){
-    if(input.size()>=3 && (input[0].compare("Buy")||input[0].compare("Sell"))&&isNum(input[1])){
+    if(input.size()>=3 && (input[0]=="Buy"||input[0]=="Sell")&&isNum(input[1])){
         return true;
     }
     return false;
