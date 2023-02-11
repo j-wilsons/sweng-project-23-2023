@@ -110,14 +110,14 @@ int main()
         orderType=items[0];
         orderQuantity=(int) stoi(items[1]);
         companyName=concatVec(items);
-        cout<<orderType<<endl;
-        cout<<orderQuantity<<endl;
-        cout<<companyName<<endl;
+        //cout<<orderType<<endl;
+        //cout<<orderQuantity<<endl;
+        //cout<<companyName<<endl;
     }else{
         cout<<"bad form"<<endl;
     }
     send(new_socket, cstr, strlen(cstr), 0);
-    //cout << "Message has been sent!" << endl;
+    cout << "Message has been sent!" << endl;
 
     return 0;
 }
