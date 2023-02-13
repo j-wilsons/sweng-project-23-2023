@@ -8,5 +8,4 @@ set(SOURCES
 foreach(src_file ${SOURCES})
     get_filename_component(exec_name ${src_file} NAME_WE)
     add_executable(${exec_name} ${src_file})
-    target_link_libraries(${exec_name} Threads::Threads)
 endforeach()
