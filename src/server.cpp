@@ -100,7 +100,7 @@ int main()
     //stringformatting starts here
     int orderQuantity;
     string  item, input, companyName, orderType; //input: string from the client
-
+    input=string(buffer);                        //the "buffer" is from the client
     vector<string> items;
     stringstream ss(input);
     while (std::getline(ss, item, ' ')) {
