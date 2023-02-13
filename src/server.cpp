@@ -10,10 +10,11 @@
 #include <string.h>
 
 #define PORT 5555
+int server_fd, new_socket, valread;
+
 
 int main()
 {
-    int server_fd, new_socket, valread;
     struct sockaddr_in address;
     int opt = 1;
     int addrlen = sizeof(address);
@@ -67,4 +68,7 @@ int main()
     std::cout << "Message has been sent!" << std::endl;
 
     return 0;
+}
+void notifyClient(){
+    send(new_socket, "Trade Executed", 0);
 }
