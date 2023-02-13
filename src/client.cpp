@@ -26,10 +26,10 @@ int main()
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(PORT);
 
-    if (inet_pton(AF_INET, "172.21.0.3", &serv_addr.sin_addr) <= 0) //LOCAL
-    //if(inet_pton(AF_INET, "172.17.0.2", &serv_addr.sin_addr)<=0)  //CLIENT DOES NOT RUN IS CONTAINER
-    //if(inet_pton(AF_INET, "172.21.0.1", &serv_addr.sin_addr)<=0) //CONTAINER
-    //if(inet_pton(AF_INET, "10.0.9.1", &serv_addr.sin_addr)<=0) //OVERLAY
+    if (inet_pton(AF_INET, "172.21.0.3", &serv_addr.sin_addr) <= 0) // LOCAL
+    // if(inet_pton(AF_INET, "172.17.0.2", &serv_addr.sin_addr)<=0)  //CLIENT DOES NOT RUN IS CONTAINER
+    // if(inet_pton(AF_INET, "172.21.0.1", &serv_addr.sin_addr)<=0) //CONTAINER
+    // if(inet_pton(AF_INET, "10.0.9.1", &serv_addr.sin_addr)<=0) //OVERLAY
     {
         std::cout << "Address is invalid ... " << std::endl;
         return -1;
@@ -52,6 +52,15 @@ int main()
     std::cout << "Message sent " << std::endl;
     valread = read(sock, buffer, 1024);
     std::cout << buffer << std::endl;
-
+    // check for new message from server
+    valread = read(sock, buffer, 1024);
+    // null terminate buffer to avoid garbage values from previous messages
+    buffer[valread] = '\0';
+    // check if message is "Trade Executed", print it and exit
+    if (strcmp(buffer, "Trade Executed") == 0)
+    {
+        std::cout << buffer << std::endl;
+        return 0;
+    }
     return 0;
 }
