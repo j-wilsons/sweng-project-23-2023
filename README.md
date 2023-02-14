@@ -77,3 +77,10 @@ Now onto the client. Same process.
 In the client container, compile and run client.cpp by using `g++ client.cpp -o clientExec` and `./clientExec`
 
 If no errors return, client and server should have talked to each other and printed their responses.
+
+
+For later testing, when you need to run your client container again. Run
+```
+docker start -i Client 
+```
+and same format for server
