@@ -8,10 +8,46 @@
 #include <netinet/in.h>
 #include <string>
 #include <string.h>
+#include <sstream>
+#include <vector>
+
+
+using namespace std;
 
 #define PORT 5555
 int server_fd, new_socket, valread;
 
+
+using namespace std;
+
+
+
+//checks the string inpput could be a number
+bool isNum(string input){
+    for(int i=0;i<input.size();i++){
+        if(isdigit(input[i])==0){
+            return false;
+        }
+    }
+    return true;
+}
+
+//check if the input is in a correct form: orderType, Quantity, companyName
+bool isCorrectForm(vector<string> input){
+    if(input.size()>=3 && (input[0]=="Buy"||input[0]=="Sell")&&isNum(input[1])){
+        return true;
+    }
+    return false;
+}
+//concatanates the rest of the inpupt, if the Company name is longer than 1 word
+string concatVec(vector<string>input){
+    string result="";
+    for(int i=2;i<input.size()-1;i++){
+        result=result+input[i]+" ";
+    } 
+    result=result+input[input.size()-1];
+    return result;
+}
 
 int main()
 {
@@ -23,14 +59,14 @@ int main()
 
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
     {
-        std::cout << "socket failed" << std::endl;
+        cout << "socket failed" << endl;
         exit(EXIT_FAILURE);
     }
 
     if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,
                    &opt, sizeof(opt)))
     {
-        std::cout << "socket failed" << std::endl;
+        cout << "socket failed" << endl;
         exit(EXIT_FAILURE);
     }
     address.sin_family = AF_INET;
@@ -40,35 +76,68 @@ int main()
     if (bind(server_fd, (struct sockaddr *)&address,
              sizeof(address)) < 0)
     {
-        std::cout << "bind failed" << std::endl;
+        cout << "bind failed" << endl;
         exit(EXIT_FAILURE);
     }
     if (listen(server_fd, 3) < 0)
     {
-        std::cout << "listen" << std::endl;
+        cout << "listen" << endl;
         exit(EXIT_FAILURE);
     }
     if ((new_socket = accept(server_fd, (struct sockaddr *)&address,
                              (socklen_t *)&addrlen)) < 0)
     {
-        std::cout << "accept" << std::endl;
+        cout << "accept" << endl;
         exit(EXIT_FAILURE);
     }
 
     double pi = 3.1415;
-    std::string str1 = "server => ";
-    std::string str2 = std::to_string(pi);
+    string str1 = "server => ";
+    string str2 = to_string(pi);
 
     valread = read(new_socket, buffer, 1024);
-    std::cout << buffer << std::endl;
-    std::string str = str1 + " : " + str2 + " and " + buffer;
+    cout << buffer << endl;
+    string str = str1 + " : " + str2 + " and " + buffer;
     char *cstr = &str[0];
 
+    //stringformatting starts here
+    int orderQuantity;
+    string  item, input, companyName, orderType; //input: string from the client
+    input=string(buffer);                        //the "buffer" is from the client
+    vector<string> items;
+    stringstream ss(input);
+    while (std::getline(ss, item, ' ')) {
+        items.push_back(item);
+    }
+    if(isCorrectForm(items)){
+        orderType=items[0];
+        orderQuantity=(int) stoi(items[1]);
+        companyName=concatVec(items);
+        //cout<<orderType<<endl;
+        //cout<<orderQuantity<<endl;
+        //cout<<companyName<<endl;
+    }else{
+        cout<<"bad form"<<endl;
+    }
     send(new_socket, cstr, strlen(cstr), 0);
-    std::cout << "Message has been sent!" << std::endl;
+    cout << "Message has been sent!" << endl;
 
     return 0;
 }
+
+
+int tradeExectution(string companyName, int orderQuantity) {
+    int randomNumber;
+    while(orderQuantity >= 5) {
+        randomNumber = rand()%(orderQuantity+ 1) + orderQuantity;
+        orderQuantity -= randomNumber;
+        printf("%d shares are remaining to execute \n", orderQuantity);
+        sleep(1000);
+    }
+    printf("All shares executed for %s \n", companyName);
+    return 0;
+}
+
 void notifyClient(){
     send(new_socket, "Trade Executed", 0);
 }
