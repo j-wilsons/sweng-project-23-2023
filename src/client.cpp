@@ -10,6 +10,15 @@
 
 #define PORT 5555
 
+std::string userInput(){
+    std::string str;
+
+    std::cout<<"Enter order: ";
+    getline(std::cin, str);              // Taking in user's order
+    
+    return str;
+}
+
 int main()
 {
     int sock = 0, valread;
