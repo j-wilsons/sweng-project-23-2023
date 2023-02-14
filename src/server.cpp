@@ -15,6 +15,8 @@
 using namespace std;
 
 #define PORT 5555
+int server_fd, new_socket, valread;
+
 
 using namespace std;
 
@@ -49,7 +51,6 @@ string concatVec(vector<string>input){
 
 int main()
 {
-    int server_fd, new_socket, valread;
     struct sockaddr_in address;
     int opt = 1;
     int addrlen = sizeof(address);
@@ -124,6 +125,7 @@ int main()
     return 0;
 }
 
+
 int tradeExectution(string companyName, int orderQuantity) {
     int randomNumber;
     while(orderQuantity >= 5) {
@@ -132,6 +134,10 @@ int tradeExectution(string companyName, int orderQuantity) {
         printf("%d shares are remaining to execute \n", orderQuantity);
         sleep(1000);
     }
-    printf("All shares executed for %s \n", companyName);
+    printf("All shares executed for %s \n", companyName.c_str());
     return 0;
+}
+
+void notifyClient(){
+    send(new_socket, "Trade Executed", strlen("Trade Executed"), 0);
 }
