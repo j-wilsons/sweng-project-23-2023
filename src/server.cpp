@@ -134,10 +134,10 @@ int tradeExectution(string companyName, int orderQuantity) {
         printf("%d shares are remaining to execute \n", orderQuantity);
         sleep(1000);
     }
-    printf("All shares executed for %s \n", companyName);
+    printf("All shares executed for %s \n", companyName.c_str());
     return 0;
 }
 
 void notifyClient(){
-    send(new_socket, "Trade Executed", 0);
+    send(new_socket, "Trade Executed", strlen("Trade Executed"), 0);
 }
