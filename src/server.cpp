@@ -12,6 +12,8 @@
 #include <vector>
 
 
+using namespace std;
+
 #define PORT 5555
 
 using namespace std;
@@ -119,5 +121,17 @@ int main()
     send(new_socket, cstr, strlen(cstr), 0);
     cout << "Message has been sent!" << endl;
 
+    return 0;
+}
+
+int tradeExectution(string companyName, int orderQuantity) {
+    int randomNumber;
+    while(orderQuantity >= 5) {
+        randomNumber = rand()%(orderQuantity+ 1) + orderQuantity;
+        orderQuantity -= randomNumber;
+        printf("%d shares are remaining to execute \n", orderQuantity);
+        sleep(1000);
+    }
+    printf("All shares executed for %s \n", companyName);
     return 0;
 }
