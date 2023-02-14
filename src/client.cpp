@@ -44,16 +44,8 @@ bool isCorrectForm(string input)
     return false;
 }
 
-std::string userInput()
-{
-    std::string str;
-    std::cout << "Enter order: ";
-    getline(std::cin, str); // Taking in user's order
-}
-
 std::string userInput(){
     std::string str;
-
     std::cout<<"Enter order: ";
     getline(std::cin, str);              // Taking in user's order
     return str;
