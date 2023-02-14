@@ -49,6 +49,23 @@ string concatVec(vector<string>input){
     return result;
 }
 
+int tradeExecution(string companyName, int orderQuantity) {
+    int randomNumber;
+    while(orderQuantity >= 5) {
+        //randomNumber = rand()%(orderQuantity+ 1) + orderQuantity;
+        randomNumber = 0 + (rand() % orderQuantity);
+        orderQuantity -= randomNumber;
+        printf("%d shares traded\n", randomNumber);
+        sleep(1);
+    }
+    printf("All shares executed for %s \n", companyName.c_str());
+    return 0;
+}
+
+void notifyClient(){
+    send(new_socket, "Trade Executed", strlen("Trade Executed"), 0);
+}
+
 int main()
 {
     struct sockaddr_in address;
@@ -91,14 +108,8 @@ int main()
         exit(EXIT_FAILURE);
     }
 
-    double pi = 3.1415;
-    string str1 = "server => ";
-    string str2 = to_string(pi);
-
     valread = read(new_socket, buffer, 1024);
     cout << buffer << endl;
-    string str = str1 + " : " + str2 + " and " + buffer;
-    char *cstr = &str[0];
 
     //stringformatting starts here
     int orderQuantity;
@@ -119,25 +130,10 @@ int main()
     }else{
         cout<<"bad form"<<endl;
     }
-    send(new_socket, cstr, strlen(cstr), 0);
-    cout << "Message has been sent!" << endl;
+    tradeExecution(companyName, orderQuantity);
+    //send(new_socket, cstr, strlen(cstr), 0);
+    notifyClient();
+    cout << "Trade Executed!" << endl;
 
     return 0;
-}
-
-
-int tradeExectution(string companyName, int orderQuantity) {
-    int randomNumber;
-    while(orderQuantity >= 5) {
-        randomNumber = rand()%(orderQuantity+ 1) + orderQuantity;
-        orderQuantity -= randomNumber;
-        printf("%d shares are remaining to execute \n", orderQuantity);
-        sleep(1000);
-    }
-    printf("All shares executed for %s \n", companyName.c_str());
-    return 0;
-}
-
-void notifyClient(){
-    send(new_socket, "Trade Executed", strlen("Trade Executed"), 0);
 }
