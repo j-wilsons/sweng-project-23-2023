@@ -10,41 +10,14 @@
 
 #define PORT 5555
 
-void userInput(){
+string userInput(){
 
     string str;
-    string buyOrSell;
-    string amount;
-    string company;
 
     cout<<"Enter order: ";
     getline(cin, str);              //Taking in user's order
-
-    string word = "";
-    for (auto x : str){             //Collecting whether they are buying/selling
-        if(x == ' '){
-            buyOrSell = word;
-            word = "";
-            break;
-        }
-        word = word + x;
-    }
-    for (auto z : str){             //Collecting the amount
-        if(z == ' '){
-            amount = word;
-            word = "";
-            break;
-        }
-        word = word + z;
-    }
-    for (auto y : str){             //Collecting the company name
-        if(y == ' ' || y == '\0'){
-            company = word;
-            word = "";
-            break;
-        }
-        word = word + y;
-    }
+    
+    return str;
 
 }
 
