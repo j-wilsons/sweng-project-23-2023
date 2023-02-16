@@ -61,9 +61,14 @@ int tradeExecution(string companyName, int orderQuantity) {
     printf("All shares executed for %s \n", companyName.c_str());
     return 0;
 }
-
+string userInput(){
+    string str;
+    cout<<"----Type 'quit' to exit or press anything to continue----"<<endl;
+    getline(cin, str);              // Taking in user's order
+    return str;
+}
 void notifyClient(){
-    send(new_socket, "Trade Executed", strlen("Trade Executed"), 0);
+    send(new_socket, "----Trade Executed----", strlen("----Trade Executed----"), 0);
 }
 
 int main()
@@ -107,33 +112,38 @@ int main()
         cout << "accept" << endl;
         exit(EXIT_FAILURE);
     }
+    while(true){
+        string cmdInput=userInput();
+        if(cmdInput=="quit"){
+            return 0;
+        }
+        cout<<"----waiting for client input----"<<endl;
+        valread = read(new_socket, buffer, 1024);
+        //cout << buffer << endl;
+        if(strcmp(buffer, "quit")==0){
+            cout<<"------client quit-------"<<endl;
+        }else{
+            //stringformatting starts here
+            int orderQuantity;
+            string  item, clientInput, companyName, orderType; //input: string from the client
+            clientInput=string(buffer);                        //the "buffer" is from the client
+            vector<string> items;
+            stringstream ss(clientInput);
+            while (std::getline(ss, item, ' ')) {
+                items.push_back(item);
+            }
+            if(isCorrectForm(items)){
+                orderType=items[0];
+                orderQuantity=(int) stoi(items[1]);
+                companyName=concatVec(items);
 
-    valread = read(new_socket, buffer, 1024);
-    cout << buffer << endl;
-
-    //stringformatting starts here
-    int orderQuantity;
-    string  item, input, companyName, orderType; //input: string from the client
-    input=string(buffer);                        //the "buffer" is from the client
-    vector<string> items;
-    stringstream ss(input);
-    while (std::getline(ss, item, ' ')) {
-        items.push_back(item);
+            }else{
+                cout<<"----bad form----"<<endl;
+            }
+            tradeExecution(companyName, orderQuantity);
+            notifyClient();
+            cout << "----Trade Executed----" << endl;
+        }
     }
-    if(isCorrectForm(items)){
-        orderType=items[0];
-        orderQuantity=(int) stoi(items[1]);
-        companyName=concatVec(items);
-        //cout<<orderType<<endl;
-        //cout<<orderQuantity<<endl;
-        //cout<<companyName<<endl;
-    }else{
-        cout<<"bad form"<<endl;
-    }
-    tradeExecution(companyName, orderQuantity);
-    //send(new_socket, cstr, strlen(cstr), 0);
-    notifyClient();
-    cout << "Trade Executed!" << endl;
-
     return 0;
 }

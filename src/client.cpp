@@ -31,23 +31,23 @@ bool isCorrectForm(string input)
     string item;
     vector<string> items;
     stringstream ss(input);
-    while (std::getline(ss, item, ' '))
+    while (getline(ss, item, ' '))
     {
         items.push_back(item);
     }
 
     // checking corret formatting
-    if (items.size() >= 3 && (items[0] == "Buy" || items[0] == "Sell") && isNum(items[1]))
+    if ((items.size() >= 3 && (items[0] == "Buy" || items[0] == "Sell") && isNum(items[1])) || items[0] == "quit")
     {
         return true;
     }
     return false;
 }
 
-std::string userInput(){
-    std::string str;
-    std::cout<<"Enter order: ";
-    getline(std::cin, str);              // Taking in user's order
+string userInput(){
+    string str;
+    cout<<"Enter order: or type 'quit' to exit"<<endl;
+    getline(cin, str);              // Taking in user's order
     return str;
 }
 
@@ -75,40 +75,50 @@ int main()
         std::cout << "Address is invalid ... " << std::endl;
         return -1;
     }
-
-    // Getting Order
-    string str;
-    do
-    {
-        str = userInput();
-        if (isCorrectForm(str))
-        {
-            break;
-        }
-        cout << "----Order is not Correctly formatted----" << endl;
-        cout << "Please follow: Buy/Sell Quantity CompanyName" << endl;
-    } while (true);
-
     if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
     {
         std::cout << "Connection Failed. Try again! ..." << std::endl;
         return -1;
     }    
+    // Getting Order
+    string str;
+    while(true)
+    {   
+        do //user input
+        {
+            str = userInput();
+            if (isCorrectForm(str))
+            {
+                break;
+            }
+            cout << "----Order is not Correctly formatted----" << endl;
+            cout << "Please follow: Buy/Sell Quantity CompanyName or type 'quit' to exit" << endl;
+        } while (true);
+        if (str == "quit")
+        {
+            char *cstr = &str[0];              //
+            send(sock, cstr, strlen(cstr), 0);
+            std::cout << "----Message sent---- " << std::endl;
+            return 0;
+        }
 
-    char *cstr = &str[0];
-    send(sock, cstr, strlen(cstr), 0);
-    std::cout << "Message sent " << std::endl;
-    valread = read(sock, buffer, 1024);
-    std::cout << buffer << std::endl;
-    // check for new message from server
-    valread = read(sock, buffer, 1024);
-    // null terminate buffer to avoid garbage values from previous messages
-    buffer[valread] = '\0';
-    // check if message is "Trade Executed", print it and exit
-    if (strcmp(buffer, "Trade Executed") == 0)
-    {
-        std::cout << buffer << std::endl;
-        return 0;
+
+        char *cstr = &str[0];              //
+        send(sock, cstr, strlen(cstr), 0);
+        cout << "----Message sent ----" << std::endl;
+
+        // check for new message from server
+        // check if message is "Trade Executed", print it and exit
+        valread = read(sock, buffer, 1024);        
+        if (strcmp(buffer, "----Trade Executed----") == 0)
+        {
+            cout<<"----'"<<str<<"' executed----"<<endl;
+        }else{
+            cout<<"----Trade was not executed:----"<<endl;
+        }
+        // null terminate buffer to avoid garbage values from previous messages
+        buffer[valread] = '\0';
+        cout<<"----Waiting for Server----"<<endl;
     }
     return 0;
 }
