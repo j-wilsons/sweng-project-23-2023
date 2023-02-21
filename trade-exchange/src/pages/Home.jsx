@@ -1,10 +1,5 @@
-import * as React from 'react';
 import "../App.css";
 import logo from "../logo.svg";
-
-require('react-dom');
-window.React2 = require('react');
-console.log(window.React1 === window.React2);
 
 export const Home = () => {
   return (
@@ -12,7 +7,7 @@ export const Home = () => {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Edit <code>src/pages/Home.jsx</code> and save to reload.
         </p>
         <a
           className="App-link"
