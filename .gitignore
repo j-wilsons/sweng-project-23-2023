@@ -117,3 +117,6 @@ fabric.properties
 *.exe
 *.out
 *.app
+
+# React modules
+/node_modules
