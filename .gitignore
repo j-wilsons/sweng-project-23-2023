@@ -114,7 +114,6 @@ fabric.properties
 *.lai
 *.la
 *.a
-*.lib
 
 # Executables
 *.exe
