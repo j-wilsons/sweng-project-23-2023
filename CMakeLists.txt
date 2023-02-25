@@ -4,8 +4,8 @@ set(CMAKE_BUILD_TYPE Release)
 add_library(Application ${CMAKE_CURRENT_SOURCE_DIR}/src/Application.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/Application.h)
 
 #add_library(quickfix STATIC ${CMAKE_CURRENT_SOURCE_DIR}/libs/quickfix.lib)
-set(SOURCES ../src/Client.cpp
-            ../src/Server.cpp
+set(SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/Client.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/src/Server.cpp
             )
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 foreach(src_file ${SOURCES})
