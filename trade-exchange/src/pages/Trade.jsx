@@ -1,5 +1,9 @@
 import "../css/Main.css";
 import "../css/Text.css";
+import NavBar from "../Components/NavBar";
+import TradeCard from "../Components/TradeCard"
+import PropTypes from "prop-types";
+import { useState } from "react";
 
 var amount = 0;
 var shares = 0;
@@ -16,10 +20,29 @@ const sellShares = () => {
   console.log("Selling " + amount + " shares of " + shares);
 };
 
+
 export const Trade = () => {
+  const [visibility, setVisibility] = useState(false);
+
+const popupCloseHandler = (e) => {
+  setVisibility(false);
+};
   return (
-    <div className="center center-text">
-      <h1>Trade</h1>
+    <div className="home">
+    <NavBar />
+    <div>
+      <h2 className="main-text">
+        Welcome user
+      </h2>
+      <h2>
+        Balance: $10,000
+      </h2>
+      <h2 style= {{ color: '#45c393', font: 'Times New Roman' }}>
+        +0% last week.
+      </h2> 
+    </div>
+    <div className="center">
+      <h2>Trade</h2>
       <input
         className="center-text"
         type="text"
@@ -34,21 +57,22 @@ export const Trade = () => {
       />
       <br />
       <button
-        className="center-text"
+        className="button" variant="primary" size="lg"
         onClick={() => {
-          buyShares();
+          setVisibility(true)
         }}
       >
-        Buy
+        Go
       </button>
-      <button
-        className="center-text"
-        onClick={() => {
-          sellShares();
-        }}
-      >
-        Sell
-      </button>
+      
     </div>
-  );
+    <div>
+    
+    <TradeCard  onClose={popupCloseHandler}
+        show={visibility} title={Trade}>
+          Go now </TradeCard>
+    </div>
+    </div>
+       
+    );
 };
