@@ -42,7 +42,7 @@ function TradeCard(props) {
     <Card>
       <Card.Body >
         <div className ="row">
-      <img src={IBMImg}  alt="horse" style={{ width: 200, height: 200 }} ></img>
+      <img src={IBMImg}  alt="horse" style={{ width: 170, height: 150 }} ></img>
         <button
         className="buyButton" variant="primary" size="lg" 
         onClick={() => {
@@ -59,46 +59,38 @@ function TradeCard(props) {
       >
         Sell
       </button>
+     
         </div>
         <div>
-            <Card.Text className="center-text">
-                130.57  
+            <Card.Text className="card-text">
+                $130.57  
             </Card.Text>
         </div>
         <div>
-            
+        <hr style={{width: 450, height: 0.5, background: 'black'}}/>
         </div>
         <div className ="row2">
             <div className="left-text">
         <Card.Text >
-          Name :   
+          Name : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; IBM 
         </Card.Text>
-        <Card.Text className="centre-text" >
-          IBM
-        </Card.Text >
         </div>
         </div>
         <div className ="row2">
             <div className="left-text">
         <Card.Text >
-          Exchange :   
-        </Card.Text>
-        <Card.Text >
-          NYSTE
+          Exchange :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NYSTE
         </Card.Text>
         </div>
         </div>
         <div className ="row2">
         <div className="left-text">
         <Card.Text >
-          IPO:   
-        </Card.Text>
-        <Card.Text >
-          1915-11-11
+          IPO:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1915-11-11
         </Card.Text>
         </div>
         </div>
-      
+        <hr style={{width: 450, height: 0.5, background: 'black'}}/>
       </Card.Body>
     </Card>
     </div>
