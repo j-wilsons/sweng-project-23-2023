@@ -5,6 +5,7 @@ import TradeCard from "../Components/TradeCard"
 import PropTypes from "prop-types";
 import { useState } from "react";
 
+
 var amount = 0;
 var shares = 0;
 
@@ -28,21 +29,22 @@ const popupCloseHandler = (e) => {
   setVisibility(false);
 };
   return (
+
     <div className="home">
     <NavBar />
     <div>
+      <h2 className="card-text">
+        Welcome back, user
+      </h2>
       <h2 className="main-text">
-        Welcome user
+         $10,000
       </h2>
-      <h2>
-        Balance: $10,000
-      </h2>
-      <h2 style= {{ color: '#45c393', font: 'Times New Roman' }}>
+      <h2 style= {{ color: '#45c393', font: 'Times New Roman', marginLeft: 650}}>
         +0% last week.
       </h2> 
     </div>
     <div className="center">
-      <h2>Trade</h2>
+      <h2>Make a Trade</h2>
       <input
         className="center-text"
         type="text"
@@ -64,15 +66,14 @@ const popupCloseHandler = (e) => {
       >
         Go
       </button>
-      
     </div>
     <div>
-    
     <TradeCard  onClose={popupCloseHandler}
         show={visibility} title={Trade}>
           Go now </TradeCard>
     </div>
     </div>
+           
        
     );
 };
