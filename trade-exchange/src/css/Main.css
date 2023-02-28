@@ -5,3 +5,30 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+.left {
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    transform: translate(0%, -50%);
+}
+
+.right {
+    position: absolute;
+    top: 50%;
+    right: 25%;
+    transform: translate(0%, -50%);
+}
+
+.GetStartedButton {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
