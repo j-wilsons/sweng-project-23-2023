@@ -20,7 +20,16 @@ int main()
         FIX::SocketInitiator initiator(application, storeFactory, settings, logFactory);
         initiator.start();
         while (true) {
-            //FIX::process_sleep(1);
+            char value;
+            std::cin >> value;
+
+            const std::string& Symbol = "TSLA";
+            int Quantity = 100;
+            try{
+                application.run(application.sessionId_, Symbol, Quantity);
+            }catch(std::exception & e){
+                std::cout << e.what();
+            }
         }
         return 0;
     }

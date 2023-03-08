@@ -15,7 +15,6 @@ void Application::onLogon(const FIX::SessionID& sessionID)
 {
 	std::cout << std::endl << "Logon - SessionID:   " << sessionID << std::endl;
 	sessionId_ = sessionID;
-
 }
 
 void Application::onLogout(const FIX::SessionID& sessionID)
@@ -28,21 +27,11 @@ void Application::toAdmin(FIX::Message&, const FIX::SessionID&)
 
 void Application::toApp(FIX::Message&, const FIX::SessionID&) throw(FIX::DoNotSend)
 {
-
 }
 
 void Application::fromApp( const FIX::Message& message, const FIX::SessionID& sessionID )
 throw( FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX::UnsupportedMessageType )
 {
-}
-
-void Application::onMessage(const FIX44::NewOrderSingle& message, const FIX::SessionID& sessionID)
-{
-    // handle the ExecutionReport message
-    std::string orderID = message.getField(11);
-    std::string symbol = message.getField(55);
-    std::cout<<orderID<<std::endl;
-    
 }
 
 void Application::run(const FIX::SessionID& sessionID,const std::string& Symbol, int Quantity)
