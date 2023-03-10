@@ -1,6 +1,6 @@
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import IBMImg from "../pages/IBM.jpg"
+import IBMImg from "../Images/IBM.jpg"
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 

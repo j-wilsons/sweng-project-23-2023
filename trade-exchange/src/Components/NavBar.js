@@ -29,6 +29,9 @@ const NavBar = () => {
                 Separated link
               </NavDropdown.Item>
             </NavDropdown>
+            <div>
+            <Nav.Link href="Admin">Admin</Nav.Link>
+            </div>
         </Navbar.Collapse>
         </Nav>
       </Container>

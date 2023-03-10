@@ -4,13 +4,22 @@ h1 {
   font-family: monospace;
   font-size: 40px;
   font-weight: bold;
-  margin-top: -0.5cm;
-  margin-bottom: -0.5cm;
-  margin-left: 5cm;
+  margin: 0;
+  padding: 0;
+  /* margin-top: -0.5cm; */
+  /* margin-bottom: -0.5cm; */
+  /* margin-left: 5cm; */
   color: hsl(0, 0%, 28%);
 }
-h1 {
+/* h1 {
   padding: 64px;
+  background: linear-gradient(to right, hsl(0, 0%, 30%) 0, hsl(0, 0%, 100%) 10%, hsl(0, 0%, 30%) 20%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 3s infinite linear;
+} */
+
+.text-animation{
   background: linear-gradient(to right, hsl(0, 0%, 30%) 0, hsl(0, 0%, 100%) 10%, hsl(0, 0%, 30%) 20%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -27,12 +36,11 @@ h1 {
     background-position: 900px;
   }
 }
-.center-text {
+
+.text-center {
   text-align: center;
-  font-size: 30px;
-  margin-top: -1cm;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
+
 .card-text{
   margin-top: 0.5cm;
   text-align: center;
@@ -47,8 +55,8 @@ h1 {
 }
 .under-text{
   text-align: left;
-  margin-left: 12cm;
-  margin-top: -1cm;
+  /* margin-left: 12cm; */
+  /* margin-top: -1cm; */
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   font-size: x-large;
   color: hsl(0, 0%, 78%);

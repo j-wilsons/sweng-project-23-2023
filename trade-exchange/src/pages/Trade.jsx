@@ -1,8 +1,8 @@
 import "../css/Main.css";
 import "../css/Text.css";
-import NavBar from "../Components/NavBar";
+// import NavBar from "../Components/NavBar";
 import TradeCard from "../Components/TradeCard"
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 import { useState } from "react";
 
 
@@ -31,7 +31,6 @@ const popupCloseHandler = (e) => {
   return (
 
     <div className="home">
-    <NavBar />
     <div>
       <h2 className="card-text">
         Welcome back, user

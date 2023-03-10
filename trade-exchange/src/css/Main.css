@@ -3,12 +3,15 @@ body {
 }
 /* centre div vertically and horizontally*/
 .center {
-    background-color: black;
     position: absolute;
-    top: 40%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    
+}
+.center-horizontal {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0%);
 }
 
 .home{

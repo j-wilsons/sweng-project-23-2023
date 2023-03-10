@@ -1,6 +1,8 @@
 .navBar{
     background-color: #1b1a1a;
     overflow: hidden;
+    /* padding-bottom: 5%; */
+    /* margin-bottom: 5%; */
   }
   
   /* Style the links inside the navigation bar */
