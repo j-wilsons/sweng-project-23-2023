@@ -29,5 +29,5 @@ public:
     void onMessage(const FIX44::NewOrderSingle& message, const FIX::SessionID& sessionID);
     FIX44::NewOrderSingle Application::queryNewOrderSingle44(const std::string& Symbol, int Quantity);
     FIX::SessionID sessionId_;
-    FIX44::NewOrderSingle& orderSingleMessage;
+    FIX44::NewOrderSingle orderSingleMessage;
 };

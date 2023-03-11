@@ -5,7 +5,6 @@
 #include <quickfix/MessageCracker.h>
 #include "quickfix/fix44/ExecutionReport.h"
 #include <quickfix/fix44/NewOrderSingle.h>
-FIX44::NewOrderSingle& orderSingleMessage;
 
 void Application::onCreate(const FIX::SessionID&)
 {
@@ -34,6 +33,7 @@ void Application::fromApp( const FIX::Message& message, const FIX::SessionID& se
 throw( FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX::UnsupportedMessageType )
 {
     crack(message, sessionID);
+
 }
 void Application::onMessage(const FIX44::NewOrderSingle& message, const FIX::SessionID& sessionID)
 {
