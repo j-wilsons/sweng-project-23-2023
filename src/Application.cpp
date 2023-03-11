@@ -5,7 +5,8 @@
 #include <quickfix/MessageCracker.h>
 #include "quickfix/fix44/ExecutionReport.h"
 #include <quickfix/fix44/NewOrderSingle.h>
-
+#include <string>
+#include<windows.h>           // for windows for sleeping
 void Application::onCreate(const FIX::SessionID&)
 {
 
@@ -38,8 +39,36 @@ throw( FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX
 void Application::onMessage(const FIX44::NewOrderSingle& message, const FIX::SessionID& sessionID)
 {
     orderSingleMessage=message;
-    std::cout << "message got: " << message << std::endl;
+    //checkfields, <todo>
+    /*
+    if(message.isSetField(49)){
+        std::cout<<"Client Order Received"<<std::endl;
+    }else{
+        std::cout<<"missing"<<std::endl;
+    }
+    if(message.isSetField(8)){
+        std::cout<<"Client Order Received"<<std::endl;
+    }else{
+        std::cout<<"missing"<<std::endl;
+    }*/
+    int quantity = stoi(message.getField(38));
+    std::string ticker = message.getField(55);
+    fakeExec(ticker, quantity);
     
+    
+}
+void Application::fakeExec(std::string& ticker, int quantity){
+    int randomNumber;
+    while(quantity >= 5) {
+        randomNumber = rand()%(quantity+ 1);
+        //randomNumber = 0 + (rand() % quantity);
+        if(randomNumber>0){
+            quantity -= randomNumber;
+            printf("%d shares traded\n", randomNumber);
+        }
+        //sleep(1);
+    }
+    printf("All shares executed for %s \n", ticker.c_str());
 }
 void Application::run(const FIX::SessionID& sessionID,const std::string& Symbol, int Quantity)
 {
