@@ -6,6 +6,7 @@
 #include "quickfix/fix44/ExecutionReport.h"
 #include <quickfix/fix44/NewOrderSingle.h>
 #include <string>
+#include <iostream>
 #include<windows.h>           // for windows for sleeping
 void Application::onCreate(const FIX::SessionID&)
 {
@@ -66,7 +67,7 @@ void Application::fakeExec(std::string& ticker, int quantity){
             quantity -= randomNumber;
             printf("%d shares traded\n", randomNumber);
         }
-        //sleep(1);
+        Sleep(1000);//its in miliseconds
     }
     printf("All shares executed for %s \n", ticker.c_str());
 }
