@@ -8,6 +8,8 @@
 #include "quickfix/MessageCracker.h"
 #include "quickfix/SocketAcceptor.h"
 #include "Application.h"
+#include <quickfix/fix44/NewOrderSingle.h>
+
 
 class Application : public FIX::Application, public FIX::MessageCracker
 {
@@ -24,6 +26,8 @@ public:
     void fromApp(const FIX::Message& message, const FIX::SessionID& sessionID)
         throw(FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX::UnsupportedMessageType);
     void run(const FIX::SessionID& sessionID,const std::string& Symbol, int Quantity);
+    void onMessage(const FIX44::NewOrderSingle& message, const FIX::SessionID& sessionID);
     FIX44::NewOrderSingle Application::queryNewOrderSingle44(const std::string& Symbol, int Quantity);
     FIX::SessionID sessionId_;
+    FIX44::NewOrderSingle& orderSingleMessage;
 };
