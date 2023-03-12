@@ -1,7 +1,7 @@
 import React from "react";
 import { Pie } from "react-chartjs-2";
 
-function PieChart({ chartData, headLine }) {
+function PieChart({ chartData }) {
   return (
     <div className="chart-container">
       <Pie
@@ -10,7 +10,7 @@ function PieChart({ chartData, headLine }) {
           plugins: {
             title: {
               display: true,
-              text: headLine
+            //   text: headLine
             }
           }
         }}
