@@ -1,5 +1,6 @@
 cmake_minimum_required (VERSION 3.8)
 project ("Sweng-project-2023")
+set(CMAKE_GENERATOR "Visual Studio 17 2022")
 set(CMAKE_BUILD_TYPE Release)
 add_library(Application ${CMAKE_CURRENT_SOURCE_DIR}/src/Application.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/Application.h)
 
