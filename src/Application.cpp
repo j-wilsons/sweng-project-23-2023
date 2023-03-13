@@ -34,11 +34,28 @@ void Application::toApp(FIX::Message&, const FIX::SessionID&) throw(FIX::DoNotSe
 void Application::fromApp( const FIX::Message& message, const FIX::SessionID& sessionID )
 throw( FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX::UnsupportedMessageType )
 {
-    FIX44::ExecutionReport orderReport = tradeSuccessful(sessionID);
+    std::string senderCompID;
+    senderCompID = message.getHeader().getField(FIX::FIELD::SenderCompID);
+     if (senderCompID == "CLIENT")
+    {
+        crack( message, sessionID );
+        FIX44::ExecutionReport orderReport = tradeSuccessful(sessionID);
+        FIX::Session::sendToTarget(orderReport,  sessionID);
+    }
+    else if (senderCompID == "SERVER")
+    {
+       
+    }else{
+        std::cout << std::endl << "UNKNOWN SENDER" << std::endl;
+    }
+      
+
 }
+
 void Application::onMessage(const FIX44::NewOrderSingle& message, const FIX::SessionID& sessionID)
-{
+{   
     orderSingleMessage=message;
+    
     //checkfields, <todo>
     /*
     if(message.isSetField(49)){
@@ -57,6 +74,7 @@ void Application::onMessage(const FIX44::NewOrderSingle& message, const FIX::Ses
     
     
 }
+
 void Application::fakeExec(std::string& ticker, int quantity){
     int randomNumber;
     while(quantity >= 5) {
@@ -70,10 +88,11 @@ void Application::fakeExec(std::string& ticker, int quantity){
     }
     printf("All shares executed for %s \n", ticker.c_str());
 }
+
 void Application::run(const FIX::SessionID& sessionID,const std::string& Symbol, int Quantity)
 {
     FIX44::NewOrderSingle newOrder = queryNewOrderSingle44(Symbol, Quantity);
-    FIX::Session::sendToTarget(newOrder,  sessionID);
+    FIX::Session::sendToTarget(newOrder,  sessionID);  
 }
 
 FIX44::NewOrderSingle Application::queryNewOrderSingle44(const std::string& Symbol, int Quantity)
@@ -88,8 +107,14 @@ FIX44::NewOrderSingle Application::queryNewOrderSingle44(const std::string& Symb
 }
 
 FIX44::ExecutionReport Application::tradeSuccessful(const FIX::SessionID& sessionID){
-    FIX44::ExecutionReport orderReport(FIX::OrderID("12345"), FIX::ExecID("I"), FIX::ExecType('F'), FIX::OrdStatus('2'), FIX::Side('1'),
-     FIX::LeavesQty(0), FIX::CumQty(100), FIX::AvgPx(5));
+    FIX44::ExecutionReport orderReport(FIX::OrderID("12345"),
+                                        FIX::ExecID("I"),
+                                        FIX::ExecType('F'),
+                                        FIX::OrdStatus('2'),
+                                        FIX::Side('1'),
+                                        FIX::LeavesQty(0),
+                                        FIX::CumQty(100),
+                                        FIX::AvgPx(5));
     std::cout << "\nTrade Successful";
     return orderReport;
 }
