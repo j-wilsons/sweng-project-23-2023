@@ -32,6 +32,7 @@ void Application::toApp(FIX::Message&, const FIX::SessionID&) throw(FIX::DoNotSe
 void Application::fromApp( const FIX::Message& message, const FIX::SessionID& sessionID )
 throw( FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX::UnsupportedMessageType )
 {
+    FIX44::ExecutionReport orderReport = tradeSuccessful(sessionID);
 }
 
 void Application::run(const FIX::SessionID& sessionID,const std::string& Symbol, int Quantity)
@@ -49,4 +50,11 @@ FIX44::NewOrderSingle Application::queryNewOrderSingle44(const std::string& Symb
     newOrder.set(FIX::HandlInst('1'));
     newOrder.set(FIX::TimeInForce(FIX::TimeInForce_DAY));
     return newOrder;
+}
+
+FIX44::ExecutionReport Application::tradeSuccessful(const FIX::SessionID& sessionID){
+    FIX44::ExecutionReport orderReport(FIX::OrderID("12345"), FIX::ExecID("I"), FIX::ExecType('F'), FIX::OrdStatus('2'), FIX::Side('1'),
+     FIX::LeavesQty(0), FIX::CumQty(100), FIX::AvgPx(5));
+    std::cout << "\nTrade Successful";
+    return orderReport;
 }
