@@ -11,6 +11,8 @@ int test_isCorrectForm() {
     if (!isCorrectForm("Sell 0 3")) return false;
     if (!isCorrectForm("Sell 001 eggs")) return false;
     if (!isCorrectForm("Sell 100000000 uhnjiofeau284uroeuefoiERI")) return false;
+    if (!isCorrectForm("Buy 0 apples")) return false;
+    if (!isCorrectForm("Sell 0 oranges")) return false;
 
     // invalid
     if (isCorrectForm("buy 100 val")) return false;
@@ -23,7 +25,7 @@ int test_isCorrectForm() {
     if (isCorrectForm("sell fifty NIKE")) return false;
     if (isCorrectForm("SELL 800 Ls")) return false;
     if (isCorrectForm("Slel 800 dsfrwergt")) return false;
-    if (isCorrectForm("Slel 800 dsfrwergt")) return false;
+    if (isCorrectForm("Sell 12e3 things")) return false;
 
     return true;
 }

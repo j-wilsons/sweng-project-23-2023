@@ -55,9 +55,9 @@ to build the files created. (There may be failing commands when running this. Th
 Finally, run:
 
 ```
-ctest -C Debug
+ctest -C [build_type]
 ```
 
-to actually run the tests.
+where `build_type` is either `Debug` or `Release` to actually run the tests.
 
 If tests are not run, there may be an issue with the tests themselves, or with linking any libraries. Check the log for the third step for any "unresolved external symbols", which may be from libraries not being linked or implemented properly.
