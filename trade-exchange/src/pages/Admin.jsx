@@ -20,14 +20,27 @@ Chart.register(CategoryScale);
 // ];
 
 var user = 0;
-function bruh2() {
-  console.log("bruh2");
-  
-    user = document.getElementById("someid").value;
-    console.log(user);
-}
 
 export const Admin = () => {
+  function changeSelection() {
+    console.log("Befre: ", user);
+    user = document.getElementsByName("userSelect")[0].value;
+    console.log("After: ", user);
+    setChartData({
+      labels: ["Shares Processed", "Shares Left"],
+      datasets: [
+        {
+          data: [
+            Data[user].totalShares - Data[user].sharesLeft,
+            Data[user].sharesLeft,
+          ],
+          backgroundColor: ["rgba(40,245,40,1)", "rgba(255,0,0,1)"],
+          borderColor: "black",
+          borderWidth: 4,
+        },
+      ],
+    });
+  }
   const [chartData, setChartData] = useState({
     labels: ["Shares Processed", "Shares Left"],
     // labels: Data.map((data) => data.user),
@@ -51,15 +64,11 @@ export const Admin = () => {
       {console.log(user)}
       <select
         className="center-horizontal"
-        id={"someid"}
-        value={"all"}
-        onChange={bruh2}
+        name={"userSelect"}
+        onChange={changeSelection}
       >
-        {/* <option disabled={true} value="">
-          Select a user
-        </option> */}
         {Data.map((data, index) => (
-          <option key={data.user}>{data.user}</option>
+          <option value={index}>{data.user}</option>
         ))}
       </select>
       {console.log(user)}
