@@ -39,6 +39,14 @@ add_test (
     COMMAND $<TARGET_FILE:test_isCorrectForm>
 )
 
+# test_example.cpp
+add_executable(test_example test/test_example.cpp) # add test file
+target_link_libraries(test_example PRIVATE imps)
+add_test (
+    NAME test_example
+    COMMAND $<TARGET_FILE:test_example>
+)
+
 
 
 # ! AUTOMATIC TESTING, LINKING NOT WORKING, IGNORE
@@ -54,7 +62,7 @@ add_test (
 #     test/test_isNum.cpp
 # )
 # add_executable(AllTests ${Tests}) # add second test file
-# target_link_libraries(AllTests PUBLIC imps)
+# target_link_libraries(AllTests PRIVATE imps)
 # set (ActiveTests ${Tests})
 # remove (ActiveTests AllTests.cpp)
 # foreach (test ${ActiveTests})

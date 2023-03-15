@@ -30,12 +30,12 @@ add_test (
 The file itself must either include the header file for the functions to test (in which case, add the function definition to `test_implementations.cpp`) and have a single testing function. This function must be the exact same as the filename itself and must return an integer. If the function returns `0`, that means all tests within have passed. If not, at least one test has failed and the file fails overall. The file should also have a `main` function that calls and returns the test function. Look at current files for examples.
 
 ## Running tests
-Make sure there is no preexisting `build` folder before running, or it may be overwritten (unless that's what you want). 
+Make sure there is no preexisting `build` folder before running. 
 Call the following commands, in order:
 
 First, run 
 ```
-cmake --S. -Bbuild
+make
 ```
 
 to create and write to a new `build` folder. Next,
@@ -44,20 +44,12 @@ to create and write to a new `build` folder. Next,
 cd build
 ```
 
-to move to that folder. Next,
-
-```
-cmake --build .
-```
-
-to build the files created. (There may be failing commands when running this. These are mainly from the `client.cpp` and `server.cpp` files and can be ignored.)
-
-Finally, run:
+to move to that folder. Finally,
 
 ```
 ctest -C [build_type]
 ```
 
-where `build_type` is either `Debug` or `Release` to actually run the tests.
+where `build_type` is either `Release` or `Debug` to actually run the tests.
 
 If tests are not run, there may be an issue with the tests themselves, or with linking any libraries. Check the log for the third step for any "unresolved external symbols", which may be from libraries not being linked or implemented properly.

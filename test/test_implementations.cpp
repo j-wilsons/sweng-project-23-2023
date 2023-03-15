@@ -36,3 +36,7 @@ bool isCorrectForm(string input)
     }
     return false;
 }
+
+int sums (int a, int b, int c) {
+    return a+b+c;
+}
