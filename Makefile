@@ -13,6 +13,10 @@ clean:
 
 .PHONY: all build clean
 
-run:
+runServer:
 	cd build/release && start server.exe &
+
+runClient:
 	cd build/release && start client.exe &
+
+run: runClient runServer
