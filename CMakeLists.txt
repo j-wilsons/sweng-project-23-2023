@@ -15,8 +15,3 @@ foreach(src_file ${SOURCES})
     target_link_libraries(${exec_name} wsock32 ws2_32)
     target_link_libraries(${exec_name} Application)
 endforeach()
-
-
-
-
-
