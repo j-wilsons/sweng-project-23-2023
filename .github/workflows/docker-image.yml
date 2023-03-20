@@ -1,0 +1,45 @@
+name: CD to Dockerhub
+
+on:
+  create:
+    tags:
+      - "v*.*.*"
+
+
+jobs:
+
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Docker Login
+      uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+      with:
+        # Server address of Docker registry. If not set then will default to Docker Hub
+        registry: # optional
+        # Username used to log against the Docker registry
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        # Password or personal access token used to log against the Docker registry
+        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+        
+    - name: Docker Setup Buildx
+      id: buildx
+      uses: docker/setup-buildx-action@v2.5.0
+      
+    - name: Build and push
+      # build the image using the Dockerfile and push it to DockerHub with the tag latest.
+      id: docker_build
+      uses: docker/build-push-action@v2
+      with:
+        context: ./
+        file: ./Dockerfile
+        push: true
+        tags: ${{ secrets.DOCKER_HUB_USERNAME }}/Sweng-project-23:latest
+
+    - name: Image digest
+      run: echo ${{ steps.docker_build.outputs.digest }}
+
+      
