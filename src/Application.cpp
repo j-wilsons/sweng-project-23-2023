@@ -7,10 +7,12 @@
 #include <quickfix/fix44/NewOrderSingle.h>
 #include <string>
 #include <iostream>
+#include <httplib.h>
 #include<windows.h>           // for windows for sleeping
 void Application::onCreate(const FIX::SessionID&)
 {
-
+    httplib::Client cli("localhost", 1234);
+    std::cout << std::endl << "-----------ENDPOINT CREATED___________ " << std::endl;
 }
 
 void Application::onLogon(const FIX::SessionID& sessionID)
