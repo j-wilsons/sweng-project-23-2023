@@ -49,7 +49,20 @@
 #ifndef CPPHTTPLIB_IDLE_INTERVAL_SECOND
 #define CPPHTTPLIB_IDLE_INTERVAL_SECOND 0
 #endif
+#if defined(_MSC_VER)
+#if _MSC_VER < 1900
+#error Sorry, Visual Studio versions prior to 2015 are not supported
+#endif
 
+#pragma comment(lib, "ws2_32.lib")
+
+#ifdef _WIN64
+using ssize_t = __int64;
+/*
+#else
+using ssize_t = long;*/ //this is the original line
+#endif
+#endif // _MSC_VER
 #ifndef CPPHTTPLIB_IDLE_INTERVAL_USECOND
 #ifdef _WIN32
 #define CPPHTTPLIB_IDLE_INTERVAL_USECOND 10000
@@ -126,19 +139,7 @@
 #define _CRT_NONSTDC_NO_DEPRECATE
 #endif //_CRT_NONSTDC_NO_DEPRECATE
 
-#if defined(_MSC_VER)
-#if _MSC_VER < 1900
-#error Sorry, Visual Studio versions prior to 2015 are not supported
-#endif
 
-#pragma comment(lib, "ws2_32.lib")
-
-#ifdef _WIN64
-using ssize_t = __int64;
-#else
-using ssize_t = long;
-#endif
-#endif // _MSC_VER
 
 #ifndef S_ISREG
 #define S_ISREG(m) (((m)&S_IFREG) == S_IFREG)
