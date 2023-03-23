@@ -10,8 +10,20 @@
 #include <chrono>
 #include <thread>
 #include <cstdio>
+#include <httplib.h>
+#include <string.h>
 
-
+std::string getDataFromServer() {
+    httplib::Client cli("localhost", 8080);
+    std::cout << "Client started" << std::endl;
+    auto res = cli.Get("/");
+    if (res && res->status == 200) {
+        return res->body;
+    } else {
+        std::cerr << "Error getting data: " << res.error() << std::endl;
+        return "";
+    }
+}
 int main(int argc, char* argv[]) {
     try
     {
@@ -21,6 +33,8 @@ int main(int argc, char* argv[]) {
         FIX::ScreenLogFactory logFactory(settings);
         FIX::ThreadedSocketAcceptor acceptor(application, storeFactory, settings, logFactory);
         acceptor.start();
+        std::string asd=getDataFromServer();
+        std::cout<<asd<<std::endl;
         while (true) {
      
         }

@@ -11,10 +11,7 @@
 #include<windows.h>           // for windows for sleeping
 void Application::onCreate(const FIX::SessionID&)
 {
-    httplib::Client cli("localhost", 1234);
-    httplib::Server svr;
-    std::cout << "Server started" << std::endl;
-    svr.listen("localhost", 8080);
+    
 }
 
 void Application::onLogon(const FIX::SessionID& sessionID)
