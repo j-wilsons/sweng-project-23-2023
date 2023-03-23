@@ -120,3 +120,15 @@ fabric.properties
 *.exe
 *.out
 *.app
+
+# VSCode folder
+.vscode/
+
+# Testing-related
+*.gcda
+*.gcno
+Testing/
+
+# Allow 
+# gcov file necessary for testing code coverage
+!/libs/gcov.exe
