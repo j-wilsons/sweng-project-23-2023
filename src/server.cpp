@@ -12,6 +12,7 @@
 #include <cstdio>
 #include "curl/curl.h"
 #include <iostream>
+#include <string>
 
 size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp)
 {
@@ -26,7 +27,13 @@ int main(int argc, char* argv[]) {
     {
         // delete from here
 
-        std::string url = "https://api.github.com";
+       std::string api_key = "EPD436H91DGONRID"; // replace with your own API key
+    std::string url_base = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=";
+    std::vector<std::string> symbols = {"AAPL", "GOOG", "TSLA", "AMZN"}; // replace with your desired symbols
+
+    for (const auto &symbol : symbols)
+    {
+        std::string url = url_base + symbol + "&apikey=" + api_key;
         std::string response;
 
         CURL *curl = curl_easy_init();
@@ -57,6 +64,7 @@ int main(int argc, char* argv[]) {
         while (true) {
      
         }
+    }
         return 0;
     }
     catch (FIX::ConfigError& e)
