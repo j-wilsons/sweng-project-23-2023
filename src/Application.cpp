@@ -131,33 +131,41 @@ int Application::marketData()
 {
     try
     {
-        std::vector<std::string> symbols = {"AAPL", "GOOGL", "TSLA", "AMZN","MSFT"}; // replace with your desired symbols
-        std::string url_base = "https://finance.yahoo.com/quote/";
-        std::string url_suffix = "/history?p=";
+        std::string url_base = "https://query1.finance.yahoo.com/v7/finance/quote?symbols=";
+        std::vector<std::string> symbols = {"AAPL", "GOOGL", "TSLA", "AMZN","MSFT","META","V","NVDA","BTC-USD","ETH-USD"};
 
         for (const auto &symbol : symbols)
         {
-            std::string url = url_base + symbol + url_suffix + symbol;
+            std::string url = url_base + symbol;
             std::string response;
 
             CURL *curl = curl_easy_init();
             if (curl)
             {
                 curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+                curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+                curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
                 curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
                 curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
                 CURLcode res = curl_easy_perform(curl);
                 if (res != CURLE_OK)
                     std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
                 else
-                    std::cout << "Response:" << std::endl
-                              << response << std::endl;
+                    std::cout << "Response:" << std::endl << response << std::endl;
                 curl_easy_cleanup(curl);
             }
         }
-        
-        // FIX session code omitted for brevity
-        
+
+        FIX::SessionSettings settings("../../src/server.cfg");
+        Application application;
+        FIX::FileStoreFactory storeFactory(settings);
+        FIX::ScreenLogFactory logFactory(settings);
+        FIX::ThreadedSocketAcceptor acceptor(application, storeFactory, settings, logFactory);
+        acceptor.start();
+        while (true) {
+     
+        }
+    
         return 0;
     }
     catch (FIX::ConfigError& e)
@@ -168,3 +176,5 @@ int Application::marketData()
         return 1;
     }
 }
+
+
