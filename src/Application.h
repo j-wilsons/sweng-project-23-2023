@@ -32,4 +32,5 @@ public:
     FIX44::ExecutionReport Application::tradeSuccessful(const FIX::SessionID& sessionID);
     void onMessage(const FIX44::NewOrderSingle& message, const FIX::SessionID& sessionID);
     void fakeExec(std::string& ticker, int quantity);
-};
+    int marketData();
+}; 
