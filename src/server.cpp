@@ -52,6 +52,7 @@ int main(int argc, char* argv[]) {
                           << response << std::endl;
             curl_easy_cleanup(curl);
         }
+    }//
         
         // to here
 
@@ -64,7 +65,7 @@ int main(int argc, char* argv[]) {
         while (true) {
      
         }
-    }
+    
         return 0;
     }
     catch (FIX::ConfigError& e)
