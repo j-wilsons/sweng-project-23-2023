@@ -23,7 +23,21 @@ const buyShares = () => {
   amount = document.getElementById("amount").value;
   shares = document.getElementById("shares").value; 
   console.log("Buying " + amount + " shares of " + shares);
-};
+  const xhr= new XMLHttpRequest();
+  xhr.open("POST", "http://localhost:3000/api/buy-shares");
+
+  xhr.setRequestHeader("Content-Type", "application/json"); 
+  const payload = JSON.stringify({
+    amount: amount,
+    shares: shares
+  });
+  xhr.onreadystatechange= function() {
+    if(xhr.readyState===XMLHttpRequest.DONE && xhr.status===200) {
+      console.log("Done");
+    }
+  }
+  xhr.send(payload);
+}
 
 const sellShares = () => {
   amount = document.getElementById("amount").value;
