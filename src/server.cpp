@@ -14,7 +14,7 @@
 #include <string.h>
 
 std::string getDataFromServer() {
-    httplib::Client cli("localhost", 8080);
+    httplib::Client cli("localhost", 3000);
     std::cout << "Client started" << std::endl;
     auto res = cli.Get("/");
     if (res && res->status == 200) {

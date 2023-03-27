@@ -1,0 +1,145 @@
+body {
+    background-color: black;
+    
+}
+/* centre div vertically and horizontally*/
+.center {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+}
+
+.home{
+    background-color: black;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.container-pos{
+    background-color:rgb(48, 48, 48);
+    width: 200px;
+    height: 40px;
+    font-size: x-large;
+    color: #e2d9d9;
+    text-align: center;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+.right-pos{
+    position: absolute;
+    left: 50%;
+    right: 0%;
+    background-color: black;
+}
+img {
+    width: 1300px;
+    height: 400px;
+    margin-top: 0cm;
+    margin-left: 2.5cm;
+   
+}
+.img2{
+    margin-left: 7.5cm;
+    margin-bottom: 0.125cm;
+    margin-top:0.5cm;
+}
+.img3{
+    margin-left: 16cm;
+    margin-top:0.5cm;
+}
+.row{
+   display: flex;
+  margin-top: 0cm;
+  margin-left: -2.5cm;
+  background-color: black;
+}
+.row2{
+    display: flex;
+    flex-direction: row;
+    margin-left: 2cm; 
+    margin-top: 0.5cm;
+    background-color: black;
+}
+.popup {
+visibility: hidden;
+  opacity: 0;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  margin: 70px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  width: 30%;
+  position: relative;
+  transition: all 1s ease-in-out;
+  width: 500px;
+  height: 500px;
+}
+.button{
+    background-color:rgb(155, 253, 224);
+    color: black;
+    width: 50px;
+    height: 40px;
+    padding: 10px 60px;
+    border-radius: 5px;
+    margin: 10px 0px;
+    cursor: pointer;
+    transition: ease background-color 250ms;
+   
+}
+.buyButton{
+    background-color: aquamarine;
+    color: black;
+    width: 70px;
+    height: 40px;
+    padding: 10px 60px;
+    border-radius: 5px;
+    margin-top: 0cm;
+    margin: 10px 0px;
+    cursor: pointer;
+    transition: ease background-color 250ms;
+   
+}
+.sellButton{
+    background-color: red;
+    color: aliceblue;
+    width: 70px;
+    height: 40px;
+    padding: 10px 60px;
+    border-radius: 5px;
+    margin-top: 0cm;
+    margin: 10px 0px;
+    cursor: pointer;
+    transition: ease background-color 250ms;
+   
+}
+.card{
+    background-color: white;
+    color:black;
+    width: 12cm;
+    height: 7cm;
+    cursor: pointer;
+}
+.graph{
+    position: absolute;
+    top: 50%;
+    bottom: 10%;
+    left: 2%;
+    right: 2%;
+    color: aliceblue;
+    background-color: black;
+}
+.belowGraph{
+    position:relative;
+    top: 90%;
+    bottom: 7%;
+    display: flex;
+    flex-direction: row;
+}
