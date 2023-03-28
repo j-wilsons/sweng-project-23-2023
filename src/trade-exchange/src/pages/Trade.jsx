@@ -15,28 +15,29 @@ import Col from 'react-bootstrap/Col';
 import Button from "react-bootstrap/esm/Button";
 import ApexChart from "../Components/stockChart";
 import axios from 'axios';
-
 var amount = 0;
 var shares = 0;
 
 const buyShares = () => {
-  amount = document.getElementById("amount").value;
-  shares = document.getElementById("shares").value; 
-  console.log("Buying " + amount + " shares of " + shares);
-  var body = {
-    firstName: 'testName',
-    lastName: 'testLastName'
-  };
+  const amount = document.getElementById("amount").value;
+  const shares = document.getElementById("shares").value;
+  
+  const xhr = new XMLHttpRequest();
+    const url = 'http://localhost:1234/ping';
 
-  axios.post('http://localhost:3000/trade/buy', body)
-  .then(function (response) {
-    console.log(response);
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
-}
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          console.log('Data received: ',xhr.responseText);
+        } else {
+          console.error('Error:', xhr.status, xhr.statusText);
+        }
+      }
+    };
 
+    xhr.open('GET', url, true);
+    xhr.send();
+};
 const sellShares = () => {
   amount = document.getElementById("amount").value;
   shares = document.getElementById("shares").value;
@@ -50,11 +51,13 @@ const sellShares = () => {
     amount: amount,
     shares: shares
   });
+  console.log("sent");
   xhr.onreadystatechange= function() {
     if(xhr.readyState===XMLHttpRequest.DONE && xhr.status===200) {
       console.log("Done");
     }
   }
+  xhr.send(payload);
 };
 
 

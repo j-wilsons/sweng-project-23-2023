@@ -18,17 +18,8 @@ void Application::onLogon(const FIX::SessionID& sessionID)
 {
 	std::cout << std::endl << "Logon - SessionID:   " << sessionID << std::endl;
 	sessionId_ = sessionID;
-    /*
-    httplib::Server server;
-    std::cout<<"Server is running on port 3000"<<std::endl;
-    server.Post("/trade/buy", [](const httplib::Request& req, httplib::Response& res) {
-        std::string amount = req.get_param_value("amount");
-        std::string shares = req.get_param_value("shares");
-        std::cout << "Storing " << amount << " shares of " << shares << " in the database." << std::endl;
-        std::string response="200 OK";
-        res.set_content(response, "text/plain");
-    });
-    server.listen("localhost", 3000);*/
+    
+    
 }
 
 void Application::onLogout(const FIX::SessionID& sessionID)

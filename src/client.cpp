@@ -9,8 +9,9 @@
 #include <string>
 #include <string.h>
 #include "quickfix/SocketInitiator.h"
+#include <httplib.h>
 using namespace std;
-
+int a=0;
 std::string userInput(){
     std::string str;
     getline(std::cin, str);              // Taking in user's order
@@ -47,7 +48,19 @@ bool isCorrectForm(string input)
     }
     return false;
 }
-
+void runServer() {
+    httplib::Server server;
+    
+    //Register your request handlers here
+    
+    
+    server.Get("/ping", [](const httplib::Request &, httplib::Response &res) {
+        res.set_content("Hello Back from bACKEND!", "text/plain");
+        cout<<"ping"<<endl;
+    });
+    std::cout << "Server listening on port 3000" << std::endl;
+    server.listen("localhost", 1234);
+}
 int main()
 {
     try
@@ -58,9 +71,12 @@ int main()
         FIX::ScreenLogFactory logFactory(settings);
         FIX::SocketInitiator initiator(application, storeFactory, settings, logFactory);
         initiator.start();
+        //std::thread serverThread(runServer);
+        runServer();
         while (true) {
             string Order;
             do{
+                
                 Order = userInput();
                 if (isCorrectForm(Order))
                 {
