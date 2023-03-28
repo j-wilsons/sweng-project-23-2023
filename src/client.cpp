@@ -55,7 +55,7 @@ void runServer() {
     
     
     server.Get("/ping", [](const httplib::Request &, httplib::Response &res) {
-        res.set_content("Hello Back from bACKEND!", "text/plain");
+        res.set_content("{\"message\": \"Hello Back from Backend!\"}", "application/json");
         cout<<"ping"<<endl;
     });
     std::cout << "Server listening on port 3000" << std::endl;
