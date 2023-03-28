@@ -6,9 +6,14 @@
 #include "quickfix/fix44/ExecutionReport.h"
 #include <quickfix/fix44/NewOrderSingle.h>
 #include <string>
+#include <vector>
 #include "curl/curl.h"
 #include <iostream>
-#include<windows.h>           // for windows for sleeping
+#include "json.hpp"
+#include <windows.h>           // for windows for sleeping
+
+using namespace std;
+
 void Application::onCreate(const FIX::SessionID&)
 {
 
@@ -126,55 +131,48 @@ size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp)
     return size * nmemb;
 }
 
+double extract_key(const string& json_str, string key) {
+    nlohmann::json json = nlohmann::json::parse(json_str);
+    return json["quoteResponse"]["result"][0][key];
+}
 
-int Application::marketData()
+//takes in vector with tickers e,g: AAPL, returns vector of JSON strings containing AAPL stock data
+vector<string> Application::marketData(vector<string> symbols)
 {
+    std::vector<std::string> responseVec;
     try
     {
         std::string url_base = "https://query1.finance.yahoo.com/v7/finance/quote?symbols=";
-        std::vector<std::string> symbols = {"AAPL", "GOOGL", "TSLA", "AMZN","MSFT","META","V","NVDA","BTC-USD","ETH-USD"};
+        std::string response;
 
         for (const auto &symbol : symbols)
         {
             std::string url = url_base + symbol;
-            std::string response;
-
             CURL *curl = curl_easy_init();
             if (curl)
             {
                 curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
                 curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-                curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
                 curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
                 curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
                 CURLcode res = curl_easy_perform(curl);
-                if (res != CURLE_OK)
-                    std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
-                else
-                    std::cout << "Response:" << std::endl << response << std::endl;
+
+                // if (res != CURLE_OK)
+                //     std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
+                // else
+                //     std::cout << "Response:" << std::endl << response << std::endl << std::endl;
                 curl_easy_cleanup(curl);
             }
-        }
 
-        FIX::SessionSettings settings("../../src/server.cfg");
-        Application application;
-        FIX::FileStoreFactory storeFactory(settings);
-        FIX::ScreenLogFactory logFactory(settings);
-        FIX::ThreadedSocketAcceptor acceptor(application, storeFactory, settings, logFactory);
-        acceptor.start();
-        while (true) {
-     
+            responseVec.push_back(response);
         }
-    
-        return 0;
+        return responseVec;
+
     }
     catch (FIX::ConfigError& e)
     { 
         std::cout << e.what();
-        while (true) {
-        }
-        return 1;
+        std::vector<std::string> vec = {"Curl Error"};
+        return vec;
     }
 }
-
-
