@@ -23,13 +23,14 @@ const buyShares = () => {
   const amount = document.getElementById("amount").value;
   const shares = document.getElementById("shares").value;
   console.log("Buying " + amount + " shares of " + shares);
-  fetch('https://api.npms.io/v2/search?q=react') // this will "open the url"
+  fetch('http://localhost:1234/ping', { mode: "no-cors" }) // this will "open the url"
   // to use with localhost, we will need to have ", { mode: "no-cors" }" inside the fetch brackets
-    .then(response => response.json()) // this changes the reponse into useable data
-    .then(data => { // take the data
-      myData = data; // put it in myData
-      console.log(myData); // print it to the console
-    })
+    // .then(response => response.json()) // this changes the reponse into useable data
+    // .then(data => { // take the data
+    //   myData = data; // put it in myData
+    //   console.log(myData); // print it to the console
+    // })
+    // .catch(error => console.log(error)); // if there is an error, print it to the console
 };
 const sellShares = () => {
   amount = document.getElementById("amount").value;
