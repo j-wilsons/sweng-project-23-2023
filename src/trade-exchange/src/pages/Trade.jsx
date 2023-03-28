@@ -23,7 +23,7 @@ const buyShares = () => {
   const amount = document.getElementById("amount").value;
   const shares = document.getElementById("shares").value;
   console.log("Buying " + amount + " shares of " + shares);
-  fetch("https://api.npms.io/v2/", { mode: "no-cors" }) // this will "open the url"
+  fetch("https://api.npms.io/v2/", { mode: "no-cors" }) // this will "open the url" the mode thing is to stop cors errors which is an error do to the browser not allowing you to access the data
     .then((response) => response.json()) // this changes the reponse into useable data
     .then((data) => { // take the data
       myData = data; // put it in myData
