@@ -34,4 +34,7 @@ public:
     FIX44::ExecutionReport Application::partialFillTradeSuccess(const FIX::SessionID& sessionID, int quantity);
     void onMessage(const FIX44::NewOrderSingle& message, const FIX::SessionID& sessionID);
     void fakeExec(std::string& ticker, int quantity, const FIX::SessionID& sessionID);
-};
+    std::vector<std::string> marketData(std::vector<std::string> symbols);
+}; 
+
+double extract_key(const std::string& json_str, std::string key);
