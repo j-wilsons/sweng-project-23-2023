@@ -1,4 +1,4 @@
-## Add test file to CMakeLists.txt
+## Adding test files
 To add a test file, add the following code block to `CMakeLists.txt` in the base folder:
 
 ```
@@ -29,67 +29,37 @@ add_test (
 
 The file itself must either include the header file for the functions to test (in which case, add the function definition to `test_implementations.cpp`) and have a single testing function. This function must be the exact same as the filename itself and must return an integer. If the function returns `0`, that means all tests within have passed. If not, at least one test has failed and the file fails overall. The file should also have a `main` function that calls and returns the test function. Look at current files for examples.
 
+Also, in order for test coverage to work with the added tests, add the following lines to the Makefile in the root directory:
+```
+cd test && g++ [FILE_EXT] test_implementations.cpp --coverage -fprofile-arcs -ftest-coverage -g -O0 -o [EXE_NAME]
+cd test && ./[EXE_NAME] && gcov [EXE_NAME]-[FILE_EXT] -n -r
+```
+The flags in the first line are what allow gcov files to be generated, with `-fprofile-arcs` generating .gcda files. The `gcov` on the second line generates .gcno files. Also note that all names in brackets must be fully replaced without extra characters. For a file named "test_myFunc.cpp", this would look like:
+```
+cd test && g++ test_myFunc.cpp test_implementations.cpp --coverage -fprofile-arcs -ftest-coverage -g -O0 -o covx
+cd test && ./covx && gcov covx-test_myFunc.cpp.cpp -n -r
+```
+where `-n` doesn't create (unecessary) output files and `-r` only checks coverage for local files, i.e. it ignores any files imported with `#include`.
+
 ## Running tests
-Make sure there is no preexisting `build` folder before running. 
-Call the following commands, in order:
-
-First, run 
+To run tests, simply call the line:
 ```
-make
+make test
 ```
-
-to create and write to a new `build` folder. Next,
-
-```
-cd build
-```
-
-to move to that folder. Finally,
-
-```
-ctest -C [build_type]
-```
-
-where `build_type` is either `Release` or `Debug` to actually run the tests.
+to run all tests. The results will appear in the console to check.
 
 If tests are not run, there may be an issue with the tests themselves, or with linking any libraries. Check the log for the third step for any "unresolved external symbols", which may be from libraries not being linked or implemented properly.
 
 
 ## Checking code coverage
 ### gcov
-Code coverage is determined using the `gcov` tool that comes with GCC. To check code coverage, run the above steps and navigate to the `test` directory. From here, you can check coverage of individual test files.
+Code coverage is determined using the `gcov` tool that comes with GCC. We will be using this tool to generate code coverage reports. From here, you can check coverage of all test files.
 
-To start, enter the command 
-
+To check code coverage, simply enter the line:
 ```
-g++ -g -O0 [test_file] test_implementations.cpp --coverage -c
+make coverage
 ```
-
-where `test_file` is the full name of the test file you want to check (e.g., `test_example.cpp`). Linking is avoided deliberately here.
-
-Next, run the same command
-```
-g++ -g -O0 [test_file] test_implementations.o --coverage -o cov
-```
-
-where `test_file` is the full name of the object of the test file you want to check (e.g., `test_example.o`, which will now exist after the previous step). 
-
-Next, run the `cov` executable with:
-
-```
-./cov
-```
-
-Next, run the command `gcov` by doing:
-
-```
-gcov [test_file] -n -r
-```
-
-where `test_file` is the full name of the test file you want to check (e.g., `test_example.cpp`). The `-n` flag prevents output files from being written into the directory and cluttering it up. The `-r` flag ignores any files imported using `#include` in the .cpp files.
-
-
-Following this, you will see the results printed in the console, such as below:
+to generate .gcno and .gcda files. These files can then be used with whatever software of your choice to generate a graphical output. The results of the tests will display in the console, such as below:
 
 ```
 File 'test_example.cpp'
@@ -97,5 +67,19 @@ Lines executed:100.00% of 6
 Lines executed:100.00% of 6
 ```
 
-### lcov
-`lcov` is a tool that allows a graphical representation of coverage results given by `gcov`. 
+### Graphical output
+In terms of graphical output, there are many options available, such as lcov. However, this program uses gcovr to check code coverage. gcovr can be installed through pip, the package installer for Python. You can download Python here: https://www.python.org/downloads/. Make sure to add Python to your PATH environment variable, or else you won't be able to access gcovr without its full path.
+
+To install gcovr, enter the following command on the command line:
+```
+pip install gcovr
+```
+You must have generated the required .gcda and .gcno files using the above `make coverage` command. Once this is done, simply run the command 
+```
+make htmlcov
+```
+to generate a HTML file. This file is located in
+```
+/test/html/tests.details.html
+```
+within this directory and will show the coverage for all tests and their respective functions.
