@@ -10,6 +10,8 @@
 #include <string.h>
 #include "quickfix/SocketInitiator.h"
 #include <httplib.h>
+#include "json.hpp"
+using json = nlohmann::json;
 using namespace std;
 int a=0;
 std::string userInput(){
@@ -48,16 +50,21 @@ bool isCorrectForm(string input)
     }
     return false;
 }
+void handle_ping(const httplib::Request& req, httplib::Response& res) {
+    json j;
+    j["message"] = "pong";
+    res.set_content(j.dump(), "application/json");
+}
 void runServer() {
     httplib::Server server;
     
     //Register your request handlers here
-    
-    
+    server.Get("/ping",handle_ping);
+    /*
     server.Get("/ping", [](const httplib::Request &, httplib::Response &res) {
         res.set_content("{\"message\": \"Hello Back from Backend!\"}", "application/json");
         cout<<"ping"<<endl;
-    });
+    });*/
     std::cout << "Server listening on port 3000" << std::endl;
     server.listen("localhost", 1234);
 }
