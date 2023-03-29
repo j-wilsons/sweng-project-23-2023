@@ -20,10 +20,6 @@ cleantest:
 
 .PHONY: all build clean cleantest test coverage htmlcov 
 
-run:
-	cd build/release && start server.exe &
-	cd build/release && start client.exe &
-
 test:
 	cd build && ctest -C $(CMAKE_BUILD_TYPE)
 
@@ -42,3 +38,11 @@ htmlcov:
 	cd test && gcovr --html-details -o html/tests.details.html 
 # ./test/html/tests.details.html
 # doesn't seem to work on my machine, not sure why
+
+runServer:
+	cd build/release && start server.exe &
+  
+runClient:
+	cd build/release && start client.exe &
+
+run: runClient runServer
