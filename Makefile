@@ -46,3 +46,5 @@ runClient:
 	cd build/release && start client.exe &
 
 run: runClient runServer
+
+freshcov: clean build test coverage htmlcov

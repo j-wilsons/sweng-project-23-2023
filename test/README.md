@@ -83,3 +83,11 @@ to generate a HTML file. This file is located in
 /test/html/tests.details.html
 ```
 within this directory and will show the coverage for all tests and their respective functions.
+
+____
+
+To get graphical coverage from a clean pull, run the command:
+```
+make freshcov
+```
+to run all the above steps in the correct order.
