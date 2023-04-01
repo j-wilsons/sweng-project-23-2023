@@ -24,31 +24,31 @@ const buyShares = () => {
   const shares = document.getElementById("shares").value;
   console.log("Buying " + amount + " shares of " + shares);
   
+  //get data from backend
+  //example for get request
+  //prints out whatever is in the response
   fetch('http://localhost:1234/ping')
   .then(response => response.json())
   .then(data => console.log(JSON.stringify(data)));
-
-  //fetch('http://localhost:1234/ping', { mode: "no-cors" }) // this will "open the url"
-  // to use with localhost, we will need to have ", { mode: "no-cors" }" inside the fetch brackets
-    // .then(response => response.json()) // this changes the reponse into useable data
-    // .then(data => { // take the data
-    //   myData = data; // put it in myData
-    //   console.log(myData); // print it to the console
-    // })
-    // .catch(error => console.log(error)); // if there is an error, print it to the console
 };
 const sellShares = () => {
   amount = document.getElementById("amount").value;
   shares = document.getElementById("shares").value;
   console.log("Selling " + amount + " shares of " + shares);
+
+  //post data to backend
   fetch("http://localhost:1234/sell", {
-    mode: 'no-cors',
-    method: "POST",
+    mode: 'no-cors',      // <---- for CORS, do not delete
+    method: "POST",       // for post request
+
+    //set the body of the request to the data we want to send
+    //key-value pairs
     body: JSON.stringify({
       amount: amount,
       shares: shares,
       completed: "fuuuuuuuuuuuuuuuuuuuuuuck yeah"
     }),
+    //set the content type
     headers: {
       "Content-type": "application/json;"
     }

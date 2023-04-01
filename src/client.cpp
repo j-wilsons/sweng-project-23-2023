@@ -52,34 +52,44 @@ bool isCorrectForm(string input)
 }
 void handle_ping(const httplib::Request& req, httplib::Response& res) {
     std::cout<<"ping"<<std::endl;
-    json j;
-    j["message"] = "pong";
-    res.set_header("Access-Control-Allow-Origin", "*");
-    res.set_content(j.dump(), "application/json");
+
+    // Create a JSON object with a message, and send it back to the client
+    json response;
+    //message is the key, and pong is the value
+    response["message"] = "pong";
+
+    res.status = 200;       //this one is not rly important but thats how the big boys check if the request was successful
+    res.set_header("Access-Control-Allow-Origin", "*"); // This is required for CORS
+    res.set_content(response.dump(), "application/json");    // Set the content of the response to the JSON object
 }
 void handle_post(const httplib::Request& req, httplib::Response& res) {
-    json j = json::parse(req.body);
-    std::cout << j.dump() << std::endl;
-    std::cout<<"sell"<<std::endl;
-    json r;
-    r["message"] = "pong";
+    // Parse the JSON object from the request
+    json request = json::parse(req.body);
+
+    // Print the JSON object to the console
+    std::cout << request.dump() << std::endl;
+
+    //example if we want to get the value of shares
+    std::cout << request["shares"] << std::endl; 
+    // Create a JSON object with a message, and send it back to the client
+    json response;
+    response["message"] = "pong";
     res.set_header("Access-Control-Allow-Origin", "*");
-    res.set_content(r.dump(), "application/json");
-    // Do something with the JSON object
+    res.status = 200;       //this one is not rly important but thats how the big boys check if the request was successful
+    res.set_content(response.dump(), "application/json");
 }
 void runServer() {
     httplib::Server server;
-    server.set_base_dir("./public");
+    server.set_base_dir("./public");    // Set the base directory for the server
     //Register your request handlers here
-    server.Get("/ping",handle_ping);
-    server.Post("/sell", [](const httplib::Request& req, httplib::Response& res) {
+    // This is an example of a GET request, ping is the route, currently for the buy button in trade.jsx line 22-39
+    server.Get("/ping",handle_ping);    
+
+    // This is an example of a POST request, sell is the route, currently for the sell button in trade.jsx line 41-58
+    server.Post("/sell", [](const httplib::Request& req, httplib::Response& res) {      
         handle_post(req, res);
-    });    /*
-    server.Get("/ping", [](const httplib::Request &, httplib::Response &res) {
-        res.set_content("{\"message\": \"Hello Back from Backend!\"}", "application/json");
-        cout<<"ping"<<endl;
-    });*/
-    std::cout << "Server listening on port 3000" << std::endl;
+    });    
+    std::cout << "Server listening on port 1234" << std::endl;
     server.listen("localhost", 1234);
 }
 int main()
