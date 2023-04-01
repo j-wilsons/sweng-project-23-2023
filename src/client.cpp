@@ -57,12 +57,24 @@ void handle_ping(const httplib::Request& req, httplib::Response& res) {
     res.set_header("Access-Control-Allow-Origin", "*");
     res.set_content(j.dump(), "application/json");
 }
+void handle_post(const httplib::Request& req, httplib::Response& res) {
+    json j = json::parse(req.body);
+    std::cout << j.dump() << std::endl;
+    std::cout<<"sell"<<std::endl;
+    json r;
+    r["message"] = "pong";
+    res.set_header("Access-Control-Allow-Origin", "*");
+    res.set_content(r.dump(), "application/json");
+    // Do something with the JSON object
+}
 void runServer() {
     httplib::Server server;
     server.set_base_dir("./public");
     //Register your request handlers here
     server.Get("/ping",handle_ping);
-    /*
+    server.Post("/sell", [](const httplib::Request& req, httplib::Response& res) {
+        handle_post(req, res);
+    });    /*
     server.Get("/ping", [](const httplib::Request &, httplib::Response &res) {
         res.set_content("{\"message\": \"Hello Back from Backend!\"}", "application/json");
         cout<<"ping"<<endl;

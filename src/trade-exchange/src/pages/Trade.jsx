@@ -41,22 +41,19 @@ const sellShares = () => {
   amount = document.getElementById("amount").value;
   shares = document.getElementById("shares").value;
   console.log("Selling " + amount + " shares of " + shares);
-  const xhr = new XMLHttpRequest();
-
-  xhr.open("POST", "http://localhost:3000/api/sell-shares");
-
-  xhr.setRequestHeader("Content-Type", "application/json");
-  const payload = JSON.stringify({
-    amount: amount,
-    shares: shares,
-  });
-  console.log("sent");
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-      console.log("Done");
+  fetch("http://localhost:1234/sell", {
+    mode: 'no-cors',
+    method: "POST",
+    body: JSON.stringify({
+      amount: amount,
+      shares: shares,
+      completed: "fuuuuuuuuuuuuuuuuuuuuuuck yeah"
+    }),
+    headers: {
+      "Content-type": "application/json;"
     }
-  };
-  xhr.send(payload);
+  })
+  
 };
 
 const columns = [
