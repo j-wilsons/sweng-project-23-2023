@@ -51,13 +51,15 @@ bool isCorrectForm(string input)
     return false;
 }
 void handle_ping(const httplib::Request& req, httplib::Response& res) {
+    std::cout<<"ping"<<std::endl;
     json j;
     j["message"] = "pong";
+    res.set_header("Access-Control-Allow-Origin", "*");
     res.set_content(j.dump(), "application/json");
 }
 void runServer() {
     httplib::Server server;
-    
+    server.set_base_dir("./public");
     //Register your request handlers here
     server.Get("/ping",handle_ping);
     /*

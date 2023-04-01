@@ -23,7 +23,12 @@ const buyShares = () => {
   const amount = document.getElementById("amount").value;
   const shares = document.getElementById("shares").value;
   console.log("Buying " + amount + " shares of " + shares);
-  fetch('http://localhost:1234/ping', { mode: "no-cors" }) // this will "open the url"
+  
+  fetch('http://localhost:1234/ping')
+  .then(response => response.json())
+  .then(data => console.log(JSON.stringify(data)));
+
+  //fetch('http://localhost:1234/ping', { mode: "no-cors" }) // this will "open the url"
   // to use with localhost, we will need to have ", { mode: "no-cors" }" inside the fetch brackets
     // .then(response => response.json()) // this changes the reponse into useable data
     // .then(data => { // take the data
