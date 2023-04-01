@@ -42,17 +42,13 @@ throw( FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX
 {
     std::string senderCompID;
     senderCompID = message.getHeader().getField(FIX::FIELD::SenderCompID);
-     if (senderCompID == "CLIENT")
+     if (senderCompID == "SERVER")
     {
+        
+    }else{
         crack( message, sessionID );
         FIX44::ExecutionReport orderReport = tradeSuccessful(sessionID);
         FIX::Session::sendToTarget(orderReport,  sessionID);
-    }
-    else if (senderCompID == "SERVER")
-    {
-       
-    }else{
-        std::cout << std::endl << "UNKNOWN SENDER" << std::endl;
     }
       
 
