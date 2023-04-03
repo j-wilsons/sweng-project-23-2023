@@ -62,15 +62,27 @@ void handle_ping(const httplib::Request& req, httplib::Response& res) {
     res.set_header("Access-Control-Allow-Origin", "*"); // This is required for CORS
     res.set_content(response.dump(), "application/json");    // Set the content of the response to the JSON object
 }
-void handle_post(const httplib::Request& req, httplib::Response& res) {
+void handle_post(const httplib::Request& req, httplib::Response& res, Application app) {
     // Parse the JSON object from the request
     json request = json::parse(req.body);
+    std::cout << "received from frontend" << std::endl;
 
     // Print the JSON object to the console
     std::cout << request.dump() << std::endl;
 
+    string OrderSide = request["side"];
+    string Symbol = request["ticker"];
+    string Quantity = request["amount"];
+    int QuantityInt = std::stoi(Quantity);
+
+    if(OrderSide == "buy"){
+       try{
+                app.run(app.sessionId_, Symbol, QuantityInt);
+            }catch(std::exception & e){
+                std::cout << e.what();
+            }
+    }
     //example if we want to get the value of shares
-    std::cout << request["shares"] << std::endl; 
     // Create a JSON object with a message, and send it back to the client
     json response;
     response["message"] = "pong";
@@ -78,19 +90,18 @@ void handle_post(const httplib::Request& req, httplib::Response& res) {
     res.status = 200;       //this one is not rly important but thats how the big boys check if the request was successful
     res.set_content(response.dump(), "application/json");
 }
-void runServer() {
-    httplib::Server server;
-    server.set_base_dir("./public");    // Set the base directory for the server
+
+void runEndPoint(Application& app) {
+    httplib::Server endPoint;
+    endPoint.set_base_dir("./public");    // Set the base directory for the server
     //Register your request handlers here
-    // This is an example of a GET request, ping is the route, currently for the buy button in trade.jsx line 22-39
-    server.Get("/ping",handle_ping);    
 
     // This is an example of a POST request, sell is the route, currently for the sell button in trade.jsx line 41-58
-    server.Post("/sell", [](const httplib::Request& req, httplib::Response& res) {      
-        handle_post(req, res);
+    endPoint.Post("/trade", [&app](const httplib::Request& req, httplib::Response& res) {      
+        handle_post(req, res, app);
     });    
     std::cout << "Server listening on port 1234" << std::endl;
-    server.listen("localhost", 1234);
+    endPoint.listen("localhost", 1234);
 }
 int main()
 {
@@ -103,7 +114,7 @@ int main()
         FIX::SocketInitiator initiator(application, storeFactory, settings, logFactory);
         initiator.start();
         //std::thread serverThread(runServer);
-        runServer();
+        runEndPoint(application);
         while (true) {
             string Order;
             do{

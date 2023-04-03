@@ -27,9 +27,25 @@ const buyShares = () => {
   //get data from backend
   //example for get request
   //prints out whatever is in the response
-  fetch('http://localhost:1234/ping')
-  .then(response => response.json())
-  .then(data => console.log(JSON.stringify(data)));
+  fetch("http://localhost:1234/trade", {
+    mode: 'no-cors',      // <---- for CORS, do not delete
+    method: "POST",       // for post request
+
+    //set the body of the request to the data we want to send
+    //key-value pairs
+    body: JSON.stringify({
+      side: "buy",
+      ordertype: "Market",
+      amount: amount,
+      ticker: shares,
+      progress: 0,
+      completed: false,
+    }),
+    //set the content type
+    headers: {
+      "Content-type": "application/json;"
+    }
+  })
 };
 const sellShares = () => {
   amount = document.getElementById("amount").value;
@@ -37,16 +53,19 @@ const sellShares = () => {
   console.log("Selling " + amount + " shares of " + shares);
 
   //post data to backend
-  fetch("http://localhost:1234/sell", {
+  fetch("http://localhost:1234/trade", {
     mode: 'no-cors',      // <---- for CORS, do not delete
     method: "POST",       // for post request
 
     //set the body of the request to the data we want to send
     //key-value pairs
     body: JSON.stringify({
+      side: "sell",
+      ordertype: "Market",
       amount: amount,
-      shares: shares,
-      completed: "fuuuuuuuuuuuuuuuuuuuuuuck yeah"
+      ticker: shares,
+      progress: 0,
+      completed: false,
     }),
     //set the content type
     headers: {
