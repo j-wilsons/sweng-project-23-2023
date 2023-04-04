@@ -1,0 +1,86 @@
+/* centre text */
+h1 {
+  text-align: left;
+  font-family: monospace;
+  font-size: 40px;
+  font-weight: 500;
+  margin-top: -0.5cm;
+  margin-bottom: -0.5cm;
+  margin-left: 5cm;
+  color: hsl(0, 0%, 28%);
+}
+h1 {
+  padding: 64px;
+  background: linear-gradient(to right, hsl(0, 0%, 30%) 0, hsl(0, 0%, 100%) 10%, hsl(0, 0%, 30%) 20%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 3s infinite linear;
+}
+@keyframes shine {
+  0% {
+    background-position: 0;
+  }
+  60% {
+    background-position: 600px;
+  }
+  100% {
+    background-position: 900px;
+  }
+}
+.center-text {
+  text-align: center;
+  font-size: 30px;
+  margin-top: -1cm;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+.card-text{
+  margin-top: 0.5cm;
+  text-align: center;
+  font-size: x-large;
+  font-family: sans-serif;
+}
+.main-text{
+  text-align: left;
+  margin-left: 17cm;
+  font-family: sans-serif;
+  font-size: 50px;
+}
+.under-text{
+  text-align: left;
+  margin-left: 12cm;
+  margin-top: -1cm;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: x-large;
+  color: hsl(0, 0%, 78%);
+}
+.mid-text {
+  text-align: left;
+  margin-left: 6cm;
+  margin-top: 0cm;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: x-large;
+  color: aliceblue;
+}
+.left-text{
+  text-align: left;
+  margin-left: -1cm;
+  margin-top: -0.5cm;
+  display: flex;
+  flex-direction: row;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: x-large;
+}
+.smaller-text{
+  text-align: left;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-weight: lighter;
+  margin-left: 5cm;
+  inline-size: 10cm;
+  line-height: 1cm;
+  color: aliceblue;
+  font-size:large;
+}
+
+.split-sent{
+  margin-left: 7cm;
+}

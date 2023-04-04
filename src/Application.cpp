@@ -9,20 +9,24 @@
 #include <vector>
 #include "curl/curl.h"
 #include <iostream>
+#include <httplib.h>
+#include<windows.h>           // for windows for sleeping
 #include "json.hpp"
-#include <windows.h>           // for windows for sleeping
+
 
 using namespace std;
 
 void Application::onCreate(const FIX::SessionID&)
 {
-
+    
 }
 
 void Application::onLogon(const FIX::SessionID& sessionID)
 {
 	std::cout << std::endl << "Logon - SessionID:   " << sessionID << std::endl;
 	sessionId_ = sessionID;
+    
+    
 }
 
 void Application::onLogout(const FIX::SessionID& sessionID)

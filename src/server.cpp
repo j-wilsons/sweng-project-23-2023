@@ -11,10 +11,11 @@
 #include <thread>
 #include <vector>
 #include <cstdio>
+#include <httplib.h>
+#include <string.h>
 #include "curl/curl.h"
 #include <iostream>
 #include <string>
-
 
 int main(int argc, char* argv[]) {
    try
