@@ -133,3 +133,4 @@ test/html
 # Allow 
 # gcov file necessary for testing code coverage
 !/libs/gcov.exe
+.vscode/settings.json

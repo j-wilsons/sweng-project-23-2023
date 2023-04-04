@@ -23,6 +23,7 @@ int main(int argc, char* argv[]) {
         
         FIX::SessionSettings settings("../../src/server.cfg");
         Application application;
+        /*
         std::vector<std::string> symbols = {"AAPL"};
         std::vector<std::string> responses = application.marketData(symbols);
         for (const auto& response : responses) {
@@ -30,6 +31,7 @@ int main(int argc, char* argv[]) {
             std::cout << "Market price : " << MarketPrice << std::endl;
             std::cout << "Response: " << response << std::endl;
         }
+        */
         FIX::FileStoreFactory storeFactory(settings);
         FIX::ScreenLogFactory logFactory(settings);
         FIX::ThreadedSocketAcceptor acceptor(application, storeFactory, settings, logFactory);
