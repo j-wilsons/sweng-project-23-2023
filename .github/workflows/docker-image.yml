@@ -19,7 +19,7 @@ jobs:
     - uses: mr-smithers-excellent/docker-build-push@v6
       name: Build & Push 
       with:
-        image: Sweng-project-23-2023
+        image: ${{ secrets.DOCKER_HUB_USERNAME }}/sweng-project-23-2023
         tags: latest
         registry: docker.io
         dockerfile: ./Dockerfile
