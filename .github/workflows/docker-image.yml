@@ -21,7 +21,7 @@ jobs:
       with:
         image: Sweng-project-23-2023
         tags: latest
-        registery: docker.io
+        registry: docker.io
         dockerfile: ./Dockerfile
         # Username used to log against the Docker registry
         username: ${{ secrets.DOCKER_HUB_USERNAME }}
