@@ -36,8 +36,8 @@ htmlcov:
 	rm -rf test/html
 	cd test && mkdir html
 	cd test && gcovr --html-details -o html/tests.details.html 
-# ./test/html/tests.details.html
-# doesn't seem to work on my machine, not sure why
+	./open_coverage.bat
+
 
 runServer:
 	cd build/release && start server.exe &
