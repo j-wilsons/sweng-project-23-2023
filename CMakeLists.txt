@@ -59,6 +59,22 @@ add_test (
     COMMAND $<TARGET_FILE:test_example>
 )
 
+# test_userInput.cpp
+add_executable(test_userInput test/test_userInput.cpp) # add test file
+target_link_libraries(test_userInput PRIVATE imps)
+add_test (
+    NAME test_userInput
+    COMMAND $<TARGET_FILE:test_userInput>
+)
+
+# test_httpReq.cpp
+add_executable(test_httpReq test/test_httpReq.cpp) # add test file
+target_link_libraries(test_httpReq PRIVATE imps)
+add_test (
+    NAME test_httpReq
+    COMMAND $<TARGET_FILE:test_httpReq>
+)
+
 
 
 # ! AUTOMATIC TESTING, LINKING NOT WORKING, IGNORE
