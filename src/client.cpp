@@ -1,3 +1,4 @@
+
 #include <quickfix/Message.h>
 #include <quickfix/Session.h>
 #include <quickfix/SessionSettings.h>
@@ -77,7 +78,13 @@ void handle_post(const httplib::Request& req, httplib::Response& res, Applicatio
 
     if(OrderSide == "buy"){
        try{
-                app.run(app.sessionId_, Symbol, QuantityInt);
+                app.sendBuyOrder(app.sessionId_, Symbol, QuantityInt);
+            }catch(std::exception & e){
+                std::cout << e.what();
+            }
+    }else if(OrderSide == "sell"){
+        try{
+                app.sendBuyOrder(app.sessionId_, Symbol, QuantityInt);
             }catch(std::exception & e){
                 std::cout << e.what();
             }

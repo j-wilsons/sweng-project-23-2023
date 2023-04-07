@@ -9,24 +9,20 @@
 #include <vector>
 #include "curl/curl.h"
 #include <iostream>
-#include <httplib.h>
-#include<windows.h>           // for windows for sleeping
 #include "json.hpp"
-
+#include <windows.h>           // for windows for sleeping
 
 using namespace std;
 
 void Application::onCreate(const FIX::SessionID&)
 {
-    
+
 }
 
 void Application::onLogon(const FIX::SessionID& sessionID)
 {
 	std::cout << std::endl << "Logon - SessionID:   " << sessionID << std::endl;
 	sessionId_ = sessionID;
-    
-    
 }
 
 void Application::onLogout(const FIX::SessionID& sessionID)
@@ -106,6 +102,18 @@ void Application::fakeExec(std::string& ticker, int quantity, const FIX::Session
 void Application::run(const FIX::SessionID& sessionID,const std::string& Symbol, int Quantity)
 {
     FIX44::NewOrderSingle newOrder = queryNewOrderSingle44(Symbol, Quantity, '1'); // 1 represents buy side, 2 represents sell side
+    FIX::Session::sendToTarget(newOrder,  sessionID);  
+}
+
+void Application::sendBuyOrder(const FIX::SessionID& sessionID,const std::string& Symbol, int Quantity)
+{
+    FIX44::NewOrderSingle newOrder = queryNewOrderSingle44(Symbol, Quantity, '1'); // 1 represents buy side, 2 represents sell side
+    FIX::Session::sendToTarget(newOrder,  sessionID);  
+}
+
+void Application::sendSellOrder(const FIX::SessionID& sessionID,const std::string& Symbol, int Quantity)
+{
+    FIX44::NewOrderSingle newOrder = queryNewOrderSingle44(Symbol, Quantity, '2'); // 1 represents buy side, 2 represents sell side
     FIX::Session::sendToTarget(newOrder,  sessionID);  
 }
 
