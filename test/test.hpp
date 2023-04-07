@@ -8,3 +8,5 @@ std::string userInput();
 bool isNum(string input);
 bool isCorrectForm(string input);
 int sums(int a, int b, int c);
+//void handle_post();
+//void runEndPoint();
