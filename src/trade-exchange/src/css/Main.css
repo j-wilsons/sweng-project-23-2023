@@ -29,8 +29,14 @@ body {
 }
 .right-pos{
     position: absolute;
-    left: 50%;
+    left: 70%;
     right: 0%;
+    background-color: black;
+}
+.left-pos{
+    margin-left: -20cm; 
+    margin-top: -5.5cm;
+    margin-right: 16cm;
     background-color: black;
 }
 img {
