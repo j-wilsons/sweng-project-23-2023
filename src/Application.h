@@ -37,6 +37,7 @@ public:
     void onMessage(const FIX44::NewOrderSingle& message, const FIX::SessionID& sessionID);
     void fakeExec(std::string& ticker, int quantity, const FIX::SessionID& sessionID);
     std::vector<std::string> marketData(std::vector<std::string> symbols);
+    void GetDataFromDatabase();
 }; 
 
 double extract_key(const std::string& json_str, std::string key);
