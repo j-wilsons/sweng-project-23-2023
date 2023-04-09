@@ -11,6 +11,7 @@
 #include <iostream>
 #include "json.hpp"
 #include <windows.h>           // for windows for sleeping
+#include <sqlext.h>
 
 using namespace std;
 
@@ -213,4 +214,47 @@ vector<string> Application::marketData(vector<string> symbols)
         std::vector<std::string> vec = {"Curl Error"};
         return vec;
     }
+
+    
 }
+
+using namespace std;
+
+void Application::GetDataFromDatabase()
+{
+    // Declare variables for connection and statement handles
+    SQLHANDLE henv = SQL_NULL_HANDLE;
+    SQLHANDLE hdbc = SQL_NULL_HANDLE;
+    SQLHANDLE hstmt = SQL_NULL_HANDLE;
+
+    // Connection string for Azure SQL database
+    SQLCHAR* connString = (SQLCHAR*)"DRIVER={ODBC Driver 17 for SQL Server};SERVER=trinity-fixers.database.windows.net;DATABASE=mydatabase;UID=murraydy;PWD=hufxej-qusNi4-nycbiv";
+
+    // Connect to the database
+    SQLRETURN retcode = SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &henv);
+    retcode = SQLSetEnvAttr(henv, SQL_ATTR_ODBC_VERSION, (void*)SQL_OV_ODBC3, 0);
+    retcode = SQLAllocHandle(SQL_HANDLE_DBC, henv, &hdbc);
+    retcode = SQLDriverConnect(hdbc, NULL, connString, SQL_NTS, NULL, 0, NULL, SQL_DRIVER_NOPROMPT);
+
+    // Prepare the SQL statement
+    SQLCHAR* sqlQuery = (SQLCHAR*)"SELECT * FROM  stocks";
+    retcode = SQLAllocHandle(SQL_HANDLE_STMT, hdbc, &hstmt);
+    retcode = SQLPrepare(hstmt, sqlQuery, SQL_NTS);
+
+    // Execute the SQL statement and retrieve the results
+    retcode = SQLExecute(hstmt);
+    SQLINTEGER id;
+    SQLCHAR name[50];
+    while (SQLFetch(hstmt) == SQL_SUCCESS) {
+        SQLGetData(hstmt, 1, SQL_C_LONG, &id, sizeof(SQLINTEGER), NULL);
+        SQLGetData(hstmt, 2, SQL_C_CHAR, name, sizeof(name), NULL);
+        cout << "ID: " << id << ", Name: " << name << endl;
+    }
+
+    // Clean up resources
+    SQLFreeHandle(SQL_HANDLE_STMT, hstmt);
+    SQLDisconnect(hdbc);
+    SQLFreeHandle(SQL_HANDLE_DBC, hdbc);
+    SQLFreeHandle(SQL_HANDLE_ENV, henv);
+}
+
