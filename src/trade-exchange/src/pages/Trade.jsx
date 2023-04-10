@@ -17,11 +17,11 @@ import { Modal } from "react-bootstrap";
 import 'react-awesome-button/dist/styles.css';
 import "@progress/kendo-theme-default/dist/all.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import ToggleButton from 'react-bootstrap/ToggleButton';
 import axios from "axios";
 var amount = 0;
 var shares = 0;
-var nameO = ""
-var orderT = ""
 let myData; // variable to hold response from backend
 
 
@@ -61,6 +61,13 @@ export const Trade = () => {
   const [orderPlList, setOrderPlList] = useState([]);
   const [order, setOrder] = useState(null);
   const [modalShow, setModalShow] = React.useState(false);
+  const [radioValue, setRadioValue] = useState('1');
+
+  const radios = [
+    { name: 'Market', value: '1' },
+    { name: 'Limit', value: '2' },
+   
+  ];
 
   const API_KEY2 = '642170e62900b1.66857007'
   let API_Call2 = `https://eodhistoricaldata.com/api/real-time/${shares}.US?fmt=json&api_token=${API_KEY2}`
@@ -101,7 +108,16 @@ function MyModal(props) {
           
       })
     }
-   
+   const getType =() => {
+    console.log(radioValue)
+    if(radioValue == '1'){
+      getPrice("Limit");
+    }
+    else {
+      getPrice("Market")
+      setIsPriceShown(false)
+    }
+   }
   const buyShares = () => {
     const amount = document.getElementById("amount").value;
     const shares = document.getElementById("shares").value;
@@ -274,9 +290,10 @@ const [chartData, setChartData] = useState({
                 id="shares"
                 placeholder="Select share ..."
                 onChange={() => {
-                  changePriceMkt();}}
+                  changePriceMkt();
+                }}
               />
-            </div>
+            
             
 
       <MyModal
@@ -292,7 +309,7 @@ const [chartData, setChartData] = useState({
      </div> 
      {isPriceShown ? 
       
-     <div>
+     
      <input
         type="text"
         id="price"
@@ -305,25 +322,28 @@ const [chartData, setChartData] = useState({
           
         }}
       />
-    </div>
+    
 : null}
             <br />
-            <div className="row2" 
-            style={{ marginLeft: -2}}>
             <Button
             style={{
               backgroundColor: 'yellow',
               color: 'black',
-              width: 90,
-              height: 40
+              width: 70,
+              height: 40,
+              marginTop: -100,
+              marginLeft: 320
             }}
         onClick={() => {
           getInfo();
           
         }}
       >
-        Info
+        Select
       </Button>
+            <div className="row2" 
+            style={{ marginLeft: -2}}>
+           
               <Button
                 style={{
                   backgroundColor: 'aquamarine',
@@ -350,38 +370,25 @@ const [chartData, setChartData] = useState({
               >
                 Sell
               </Button>
-              <div>
-              <Button
-                style={{
-                  backgroundColor: 'aquamarine',
-                  color: 'black',
-                  width: 90,
-                  height: 40,
-                  marginTop: 50,
-                  marginLeft: -180
-                }}
-                onClick={() => {
-                  getPrice("Limit");
-                 
-                }}
-              >
-                Limit
-              </Button>
-              <Button
-                style={{
-                  backgroundColor: 'red',
-                  color: 'white',
-                  width: 90,
-                  height: 40,
-                  marginTop: 50
-                }}
-                onClick={() => {
-                  getPrice("Market");
-                 setIsPriceShown(false)
-                }}
-              >
-                Market
-              </Button>
+              <div style={{marginTop: 55, marginLeft: -180}}>
+              <ButtonGroup>
+        {radios.map((radio, idx) => (
+          <ToggleButton
+            key={idx}
+            id={`radio-${idx}`}
+            type="radio"
+            variant={idx % 2 ? 'outline-success' : 'outline-danger'}
+            name="radio"
+            value={radio.value}
+            checked={radioValue === radio.value}
+            style={{width: 100}}
+            onChange={(e) => {setRadioValue(e.currentTarget.value); getType()}}
+          >
+            {radio.name}
+          </ToggleButton>
+        ))}
+      </ButtonGroup>
+      </div>
               </div>
             </div>
           </div>
