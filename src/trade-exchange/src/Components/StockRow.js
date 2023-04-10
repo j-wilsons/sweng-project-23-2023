@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import Plot from 'react-plotly.js';
 import { useEffect, useState } from "react";
 
-class StockRow extends Component {
 
+class StockRow extends Component {
+    
     constructor(props){
         super(props)
         this.state = {
@@ -15,6 +16,7 @@ class StockRow extends Component {
             chartYVals: []
         }
     }
+    
     componentDidMount() {
         const pointerToThis = this;
         const API_KEY = '8836a7fc8bmsh1ce2fd16e5ec3dcp1774fajsne4a03e2d8447';
@@ -66,13 +68,14 @@ class StockRow extends Component {
     
   
     render() {
+        
         return (
           
             <tr>
             <td>{this.props.ticker}</td>
             <td>{this.state.price}</td>
             <td>{this.state.change }</td>
-            <td>{'03/04/23'}</td>
+            <td>{'09/04/23'}</td>
             <Plot className="graph"
         data={[
             {
@@ -85,7 +88,7 @@ class StockRow extends Component {
                     
         ]}
         layout={{width: 700, height: 450, title: this.props.ticker}} style={{marginTop: 210, marginLeft: -850, color: 'white', backgroundColor: 'black'}}></Plot>
-          
+
             </tr>
             
             

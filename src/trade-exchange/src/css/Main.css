@@ -2,6 +2,33 @@ body {
     background-color: black;
     
 }
+thead {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.tbody {
+  height: 300px;
+  overflow-x: auto;
+  margin-top: 0px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+th {
+  padding: 20px 15px;
+  text-align: left;
+  font-weight: 500;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+td {
+  padding: 15px;
+  text-align: left;
+  vertical-align: middle;
+  font-weight: 300;
+  font-size: 16px;
+  border-bottom: solid 1px rgba(255, 255, 255, 0.1);
+}
 /* centre div vertically and horizontally*/
 .center {
     position: absolute;
@@ -31,6 +58,13 @@ body {
     position: absolute;
     left: 70%;
     right: 0%;
+    background-color: black;
+}
+.right-corner-pos{
+    position: absolute;
+    left: 70%;
+    right: 0%;
+    top: 40%;
     background-color: black;
 }
 .left-pos{
@@ -100,32 +134,7 @@ visibility: hidden;
     transition: ease background-color 250ms;
    
 }
-.buyButton{
-    background-color: aquamarine;
-    color: black;
-    width: 70px;
-    height: 40px;
-    padding: 10px 60px;
-    border-radius: 5px;
-    margin-top: 0cm;
-    margin: 10px 0px;
-    cursor: pointer;
-    transition: ease background-color 250ms;
-   
-}
-.sellButton{
-    background-color: red;
-    color: aliceblue;
-    width: 70px;
-    height: 40px;
-    padding: 10px 60px;
-    border-radius: 5px;
-    margin-top: 0cm;
-    margin: 10px 0px;
-    cursor: pointer;
-    transition: ease background-color 250ms;
-   
-}
+
 .card{
     background-color: white;
     color:black;

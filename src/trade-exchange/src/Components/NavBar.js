@@ -12,7 +12,7 @@ const NavBar = () => {
       <Nav className="navBar" fixed="top" bg="dark" variant="dark" expand="lg" id="basic-navbar-nav">
         <Nav.Link href="Home">Home</Nav.Link>
         <Nav.Link href="Trade">Trade</Nav.Link>
-        <Nav.Link href="Admin">Admin</Nav.Link>
+  
         {!isAuthenticated && !isLoading &&
           <div>
           <Nav.Link onClick={() => loginWithRedirect()}>Get Started!</Nav.Link>
