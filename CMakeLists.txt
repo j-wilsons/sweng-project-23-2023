@@ -67,36 +67,10 @@ add_test (
     COMMAND $<TARGET_FILE:test_userInput>
 )
 
-# test_httpReq.cpp
-add_executable(test_httpReq test/test_httpReq.cpp) # add test file
-target_link_libraries(test_httpReq PRIVATE imps)
+# test_extract_key.cpp
+add_executable(test_extract_key test/test_extract_key.cpp) # add test file
+target_link_libraries(test_extract_key PRIVATE imps)
 add_test (
-    NAME test_httpReq
-    COMMAND $<TARGET_FILE:test_httpReq>
+    NAME test_extract_key
+    COMMAND $<TARGET_FILE:test_extract_key>
 )
-
-
-
-# ! AUTOMATIC TESTING, LINKING NOT WORKING, IGNORE
-# # add test files here in the format 'add_executable(NAME PATH)'
-# # all tests must return either 0 (pass) or not-zero (fail)
-# # add_executable(cpp_test test/test.cpp) # add first test file
-# enable_testing() # enable testing
-# add_library(imps test/test_implementations.cpp) # add function defintions file
-# create_test_sourcelist(
-#     Tests
-#     AllTests.cpp
-#     test/test_isCorrectForm.cpp
-#     test/test_isNum.cpp
-# )
-# add_executable(AllTests ${Tests}) # add second test file
-# target_link_libraries(AllTests PRIVATE imps)
-# set (ActiveTests ${Tests})
-# remove (ActiveTests AllTests.cpp)
-# foreach (test ${ActiveTests})
-#     get_filename_component (tst ${test} NAME_WE)
-#     add_test (
-#         NAME ${tst}
-#         COMMAND AllTests ${tst}
-#     )
-# endforeach()

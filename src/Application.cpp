@@ -162,8 +162,13 @@ size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp)
 }
 
 double extract_key(const string& json_str, string key) {
-    nlohmann::json json = nlohmann::json::parse(json_str);
-    return json["quoteResponse"]["result"][0][key];
+    try {
+        nlohmann::json json = nlohmann::json::parse(json_str);
+        return json["quoteResponse"]["result"][0][key];
+    } catch (exception e) {
+        cerr << e.what();
+        return NAN;
+    }
 }
 
 //takes in vector with tickers e,g: AAPL, returns vector of JSON strings containing AAPL stock data
