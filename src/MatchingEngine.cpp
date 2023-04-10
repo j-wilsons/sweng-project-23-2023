@@ -13,9 +13,10 @@
 #include <cstdio>
 #include <httplib.h>
 #include <string.h>
-#include "curl/curl.h"
 #include <iostream>
 #include <string>
+#include "json.hpp"
+#include "DataBaseManager.h"
 
 
 
