@@ -5,6 +5,7 @@ import { CategoryScale } from "chart.js";
 import { useState } from "react";
 import { Data } from "../Components/Data";
 import PieChart from "../Components/PieChart";
+import OrderPlotter from "../Components/OrderPlotter"
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 Chart.register(CategoryScale);
@@ -77,6 +78,9 @@ export const Admin = () => {
       </select>
       {console.log(user)}
       <PieChart chartData={chartData} />
+    </div>
+    <div>
+      <OrderPlotter />
     </div>
     </div>
   );
