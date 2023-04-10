@@ -2,85 +2,78 @@ export const equities = [
     {
         symbol: "AAPL",
         name: "Apple Inc",
-        price: "$166.17"
+        price: "$161.49"
     },
     {
         symbol: "AMZN",
         name: "Amazon Inc",
-        price: "$102.41"
+        price: "$101.44"
     },
     {
         symbol: "DIS",
         name: "Walt Disney Co",
-        price: "$99.76"
+        price: "$100.01"
     },
     {
         symbol: "GOOGL",
         name: "Alphabet Inc",
-        price: "$104.36"
+        price: "$105.89"
     },
     {
         symbol: "IBM",
         name: "IBM",
-        price: "$132.04"
+        price: "$130.55"
     },
     {
         symbol: "JNJ",
         name: "Johnson & Johnson",
-        price: "$156.81"
+        price: "$164.16"
     },
     {
         symbol: "KO",
         name: "Coca Cola Co",
-        price: "$62.39"
+        price: "$62.55"
     },
     {
         symbol: "MA",
         name: "Mastercard Inc",
-        price: "$366.24"
+        price: "$359.24"
     },
     {
         symbol: "META",
         name: "Meta Platforms Inc",
-        price: "$213.07"
+        price: "$213.85"
     },
     {
         symbol: "MSFT",
         name: "Microsoft Corp",
-        price: "$287.23"
+        price: "$288.35"
     },
   
     {
         symbol: "NFLX",
         name: "Netflix Inc",
-        price: "$348.28"
+        price: "$337.76"
     },
     {
         symbol: "NKE",
         name: "Nike Inc",
-        price: "$121.65"
+        price: "$121.34"
     },
     {
         symbol: "NVDA",
         name: "NVIDIA Corp",
-        price: "$279.65"
+        price: "$275.19"
     },
     {
         symbol: "SBUX",
         name: "Starbucks Corp",
-        price: "$104.85"
+        price: "$104.59"
     },
     {
         symbol: "TSLA",
         name: "Tesla Inc",
-        price: "$194.77"
+        price: "$182.27"
     },
           ];
-          export const orderType = [
-            {
-                nameO: "Market"
-            },
-            {
-                nameO: "Limit"
-            }
-          ];
+          
