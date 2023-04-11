@@ -259,7 +259,7 @@ const [chartData, setChartData] = useState({
       <NavBar />
       <div className="right-pos">
         <div>
-          <input value={"MAKE A TRADE"}
+          <input value={"           MAKE A TRADE"}
           style={{color: 'black',
            fontFamily: 'cursive', 
            width: "300px", 
