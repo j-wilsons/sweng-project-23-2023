@@ -75,7 +75,7 @@ class StockRow extends Component {
             <td>{this.props.ticker}</td>
             <td>{this.state.price}</td>
             <td>{this.state.change }</td>
-            <td>{'09/04/23'}</td>
+            <td>{'13/04/23'}</td>
             <Plot className="graph"
         data={[
             {
