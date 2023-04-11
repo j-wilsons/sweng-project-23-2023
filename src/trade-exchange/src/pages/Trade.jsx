@@ -59,7 +59,7 @@ export const Trade = () => {
   const [lmtPrice, setlmtPrice] = useState('')
   const [type, setType] = React.useState('Market')
   const [orderPlList, setOrderPlList] = useState([]);
-  const [order, setOrder] = useState(null);
+  const [order, setOrder] = useState('                          Previous Orders');
   const [modalShow, setModalShow] = React.useState(false);
   const [radioValue, setRadioValue] = useState('1');
 
@@ -187,28 +187,28 @@ function MyModal(props) {
 const handleAddOrder = () => {
   const amount = document.getElementById("amount").value;
   shares = document.getElementById("shares").value;
-  setOrder(("  " + shares + "     Mkt Buy    "  + price + "    " + amount + "        13/04/23  "));
+  setOrder((" " + shares + "     Mkt Buy   "  + price + "     " + amount + "       13/04/23  "));
   setOrderPlList([...orderPlList, order]);
   setlmtPrice('')
 };
 const handleAddSellOrder = () => {
   const amount = document.getElementById("amount").value;
   shares = document.getElementById("shares").value;
-  setOrder(("  " + shares + "     Mkt Sell    "  + price + "    " + amount + "        13/04/23  "));
+  setOrder((" " + shares + "     Mkt Sell   "  + price + "     " + amount + "       13/04/23  "));
   setOrderPlList([...orderPlList, order]);
   
 };
 const handleAddLmtOrder = () => {
   const amount = document.getElementById("amount").value;
   shares = document.getElementById("shares").value;
-  setOrder(("  " + shares + "     Lmt Buy    "  + lmtPrice + "    " + amount + "       13/04/23 "));
+  setOrder((" " + shares + "     Lmt Buy   "  + lmtPrice + "     " + amount + "      13/04/23 "));
   setOrderPlList([...orderPlList, order]);
   
 };
 const handleAddSellLmtOrder = () => {
   const amount = document.getElementById("amount").value;
   shares = document.getElementById("shares").value;
-  setOrder(("  " + shares + "     Lmt Sell    "  + lmtPrice + "    " + amount + "       13/04/23   "));
+  setOrder((" " + shares + "     Lmt Sell   "  + lmtPrice + "     " + amount + "      13/04/23   "));
   setOrderPlList([...orderPlList, order]);
   
 };
@@ -435,17 +435,18 @@ const [chartData, setChartData] = useState({
                <th>Status</th>
              </tr>
            </thead>
-           {order ? (
+           {order != null ? (
             <div>
       <input type="text" value={order} onChange={(e) => setOrder(e.target.value)} style={{width: "400px", backgroundColor: 'yellow'}}/>
       <button onClick={() => setModalShow(true)} style={{marginLeft: -60, backgroundColor: 'yellow' }}>Status</button>
         {orderPlList.map((order, index) => (
+          
           <div>
             <input value={order} style={{width: "400px"}} />,
             <button onClick={() => setModalShow(true)} style={{marginLeft: -60}}>Status</button>
-            </div>
+            </div>  
+          
         ))}
-    
         </div>
            ): null }
     </div>
