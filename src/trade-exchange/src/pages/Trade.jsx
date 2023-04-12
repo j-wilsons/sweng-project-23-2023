@@ -469,7 +469,7 @@ export const Trade = () => {
               {orderPlList.map((order, index) => (
                 <div key={index}>
                   <input
-                    value={order === null ? "" : order}
+                    defaultValue={order === null ? "" : order}
                     style={{ width: "400px" }}
                   />
                   ,
