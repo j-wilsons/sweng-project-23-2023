@@ -14,6 +14,10 @@ function PieChart({ chartData }) {
             }
           }
         }}
+        style={{
+          height: 100,
+
+        }}
       />
     </div>
   );

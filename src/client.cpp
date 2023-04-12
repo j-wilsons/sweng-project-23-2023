@@ -19,7 +19,15 @@ using namespace std;
 int a=0;
 std::string userInput(){
     std::string str;
-    getline(std::cin, str);              // Taking in user's order
+    // Taking in user's order
+    getline(std::cin, str);
+
+    // error checking
+    istringstream in(str);
+    std::string tstr;
+    getline(in, tstr);
+    if (in.fail())
+        throw(tstr.c_str());
     return str;
 }
 
@@ -46,7 +54,7 @@ bool isCorrectForm(string input)
         items.push_back(item);
     }
 
-    // checking corret formatting
+    // checking correct formatting
     if (items.size() >= 3 && (items[0] == "Buy" || items[0] == "Sell") && isNum(items[1]))
     {
         return true;
