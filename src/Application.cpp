@@ -215,7 +215,7 @@ double extract_key(const string& json_str, string key) {
         cerr << e.what();
         return NAN;
     }
-
+}
 
 // takes in vector with tickers e,g: AAPL, returns vector of JSON strings containing AAPL stock data
 vector<string> Application::marketData(vector<string> symbols)
