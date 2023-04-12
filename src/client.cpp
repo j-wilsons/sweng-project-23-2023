@@ -12,6 +12,8 @@
 #include "quickfix/SocketInitiator.h"
 #include <httplib.h>
 #include "json.hpp"
+#include "DataBaseManager.h"
+
 using json = nlohmann::json;
 using namespace std;
 int a=0;
@@ -71,6 +73,7 @@ void handle_ping(const httplib::Request& req, httplib::Response& res) {
     res.set_header("Access-Control-Allow-Origin", "*"); // This is required for CORS
     res.set_content(response.dump(), "application/json");    // Set the content of the response to the JSON object
 }
+
 void handle_post(const httplib::Request& req, httplib::Response& res, Application app) {
     // Parse the JSON object from the request
     json request = json::parse(req.body);
@@ -83,16 +86,17 @@ void handle_post(const httplib::Request& req, httplib::Response& res, Applicatio
     string Symbol = request["ticker"];
     string Quantity = request["amount"];
     int QuantityInt = std::stoi(Quantity);
+    double price = 000;
 
     if(OrderSide == "buy"){
        try{
-                app.sendBuyOrder(app.sessionId_, Symbol, QuantityInt);
+                app.sendBuyOrder(app.sessionId_, Symbol, QuantityInt, price);
             }catch(std::exception & e){
                 std::cout << e.what();
             }
     }else if(OrderSide == "sell"){
         try{
-                app.sendBuyOrder(app.sessionId_, Symbol, QuantityInt);
+                app.sendSellOrder(app.sessionId_, Symbol, QuantityInt,price);
             }catch(std::exception & e){
                 std::cout << e.what();
             }
@@ -114,14 +118,18 @@ void runEndPoint(Application& app) {
     // This is an example of a POST request, sell is the route, currently for the sell button in trade.jsx line 41-58
     endPoint.Post("/trade", [&app](const httplib::Request& req, httplib::Response& res) {      
         handle_post(req, res, app);
-    });    
+    }); 
+
+
     std::cout << "Server listening on port 1234" << std::endl;
     endPoint.listen("localhost", 1234);
 }
 int main()
 {
     try
-    {
+    {   
+        connectToDB();
+        pullOrderTable();
         FIX::SessionSettings settings("../../src/client.cfg");
         Application application;
         FIX::FileStoreFactory storeFactory(settings);
