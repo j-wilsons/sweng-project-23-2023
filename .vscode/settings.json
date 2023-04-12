@@ -81,6 +81,9 @@
         "filesystem": "cpp",
         "ranges": "cpp",
         "span": "cpp",
-        "valarray": "cpp"
-    }
+        "valarray": "cpp",
+        "memory": "cpp",
+        "stack": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "enabled"
 }

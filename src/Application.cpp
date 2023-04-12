@@ -41,11 +41,16 @@ void Application::fromApp( const FIX::Message& message, const FIX::SessionID& se
 throw( FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX::UnsupportedMessageType )
 {
     std::string senderCompID;
+    std::string timeId;
     senderCompID = message.getHeader().getField(FIX::FIELD::SenderCompID);
+    timeId = message.getField(FIX::FIELD::TransactTime);
+
+
      if (senderCompID == "CLIENT")
     {
         crack( message, sessionID );
-        FIX44::ExecutionReport orderReport = tradeSuccessful(sessionID);
+        int orderQty = std::stoi(message.getField(FIX::FIELD::OrderQty));
+        FIX44::ExecutionReport orderReport = tradeSuccessful(sessionID, timeId);
         FIX::Session::sendToTarget(orderReport,  sessionID);
     }
     else if (senderCompID == "SERVER")
@@ -90,8 +95,7 @@ void Application::fakeExec(std::string& ticker, int quantity, const FIX::Session
             quantity -= randomNumber;
             printf("%d shares traded\n", randomNumber);
             if(quantity >= 5){
-              FIX44::ExecutionReport orderReport = partialFillTradeSuccess(sessionID, quantity);
-              FIX::Session::sendToTarget(orderReport, sessionID);
+              
             }
         }
         Sleep(1000);//its in miliseconds
@@ -99,27 +103,27 @@ void Application::fakeExec(std::string& ticker, int quantity, const FIX::Session
     printf("All shares executed for %s \n", ticker.c_str());
 }
 
-void Application::run(const FIX::SessionID& sessionID,const std::string& Symbol, int Quantity)
+void Application::run(const FIX::SessionID& sessionID,const std::string& Symbol, int Quantity, std::string id)
 {
-    FIX44::NewOrderSingle newOrder = queryNewOrderSingle44(Symbol, Quantity, '1'); // 1 represents buy side, 2 represents sell side
+    FIX44::NewOrderSingle newOrder = queryNewOrderSingle44(Symbol, Quantity, '1', id); // 1 represents buy side, 2 represents sell side
     FIX::Session::sendToTarget(newOrder,  sessionID);  
 }
 
-void Application::sendBuyOrder(const FIX::SessionID& sessionID,const std::string& Symbol, int Quantity)
+void Application::sendBuyOrder(const FIX::SessionID& sessionID,const std::string& Symbol, int Quantity, std::string id)
 {
-    FIX44::NewOrderSingle newOrder = queryNewOrderSingle44(Symbol, Quantity, '1'); // 1 represents buy side, 2 represents sell side
+    FIX44::NewOrderSingle newOrder = queryNewOrderSingle44(Symbol, Quantity, '1', id); // 1 represents buy side, 2 represents sell side
     FIX::Session::sendToTarget(newOrder,  sessionID);  
 }
 
-void Application::sendSellOrder(const FIX::SessionID& sessionID,const std::string& Symbol, int Quantity)
+void Application::sendSellOrder(const FIX::SessionID& sessionID,const std::string& Symbol, int Quantity, std::string id)
 {
-    FIX44::NewOrderSingle newOrder = queryNewOrderSingle44(Symbol, Quantity, '2'); // 1 represents buy side, 2 represents sell side
+    FIX44::NewOrderSingle newOrder = queryNewOrderSingle44(Symbol, Quantity, '2', id); // 1 represents buy side, 2 represents sell side
     FIX::Session::sendToTarget(newOrder,  sessionID);  
 }
 
-FIX44::NewOrderSingle Application::queryNewOrderSingle44(const std::string& Symbol, int Quantity, char side) // side == 1 represents buy side, 2 represents sell side
+FIX44::NewOrderSingle Application::queryNewOrderSingle44(const std::string& Symbol, int Quantity, char side, std::string id) // side == 1 represents buy side, 2 represents sell side
 {
-    FIX44::NewOrderSingle newOrder(FIX::ClOrdID("12345"), FIX::Side(side), FIX::TransactTime(), FIX::OrdType(FIX::OrdType_LIMIT));
+    FIX44::NewOrderSingle newOrder(FIX::ClOrdID(id), FIX::Side(side), FIX::TransactTime(), FIX::OrdType('2'));
     newOrder.set(FIX::Symbol(Symbol));
     newOrder.set(FIX::OrderQty(Quantity));
     newOrder.set(FIX::Price(100.00));
@@ -128,18 +132,19 @@ FIX44::NewOrderSingle Application::queryNewOrderSingle44(const std::string& Symb
     return newOrder;
 }
 
-FIX44::NewOrderSingle Application::queryNewOrderMarket(const std::string& Symbol, int Quantity, char side) // side == 1 represents buy side, 2 represents sell side
+FIX44::NewOrderSingle Application::queryNewOrderMarket(const std::string& Symbol, int Quantity, char side, std::string id) // side == 1 represents buy side, 2 represents sell side
 {
-    FIX44::NewOrderSingle newOrder(FIX::ClOrdID("12345"), FIX::Side(side), FIX::TransactTime(), FIX::OrdType(FIX::OrdType_MARKET));
+    FIX44::NewOrderSingle newOrder(FIX::ClOrdID(id), FIX::Side(side), FIX::TransactTime(), FIX::OrdType('1'));
     newOrder.set(FIX::Symbol(Symbol));
     newOrder.set(FIX::OrderQty(Quantity));
     newOrder.set(FIX::HandlInst('1'));
     newOrder.set(FIX::TimeInForce(FIX::TimeInForce_DAY));
+    newOrder.set(FIX::TransactTime());
     return newOrder;
 }
 
-FIX44::ExecutionReport Application::tradeSuccessful(const FIX::SessionID& sessionID){
-    FIX44::ExecutionReport orderReport(FIX::OrderID("12345"),
+FIX44::ExecutionReport Application::tradeSuccessful(const FIX::SessionID& sessionID, std::string id){
+    FIX44::ExecutionReport orderReport(FIX::OrderID(id),
                                         FIX::ExecID("I"),
                                         FIX::ExecType('F'),
                                         FIX::OrdStatus('2'),
@@ -150,14 +155,14 @@ FIX44::ExecutionReport Application::tradeSuccessful(const FIX::SessionID& sessio
     std::cout << "\nTrade Successfully Completed\n";
     return orderReport;
 }
-FIX44::ExecutionReport Application::partialFillTradeSuccess(const FIX::SessionID& sessionID, int quantity){
-    FIX44::ExecutionReport orderReport(FIX::OrderID("12345"),
+FIX44::ExecutionReport Application::partialFillTradeSuccess(const FIX::SessionID& sessionID, int quantity, int totalQuant, std::string id){
+    FIX44::ExecutionReport orderReport(FIX::OrderID(id),
                                         FIX::ExecID("I"),
                                         FIX::ExecType('F'),
                                         FIX::OrdStatus('1'),
                                         FIX::Side('1'),
-                                        FIX::LeavesQty(100-quantity),
-                                        FIX::CumQty(100),
+                                        FIX::LeavesQty(totalQuant-quantity),
+                                        FIX::CumQty(quantity),
                                         FIX::AvgPx(5));
     std::cout << "Trade partially filled\n";
     return orderReport;

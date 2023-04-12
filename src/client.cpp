@@ -12,14 +12,27 @@
 #include "quickfix/SocketInitiator.h"
 #include <httplib.h>
 #include "json.hpp"
+#include <iostream>
+#include <algorithm>
 using json = nlohmann::json;
 using namespace std;
+
+struct activeOrder{
+    std::string id;
+    string ticker;
+    int progress;
+};
+
+vector<activeOrder> tracker;
 int a=0;
+
 std::string userInput(){
     std::string str;
     getline(std::cin, str);              // Taking in user's order
     return str;
 }
+
+
 
 bool isNum(string input)
 {
@@ -74,21 +87,58 @@ void handle_post(const httplib::Request& req, httplib::Response& res, Applicatio
     string OrderSide = request["side"];
     string Symbol = request["ticker"];
     string Quantity = request["amount"];
+    std::string id = request["id"];
     int QuantityInt = std::stoi(Quantity);
 
     if(OrderSide == "buy"){
        try{
-                app.sendBuyOrder(app.sessionId_, Symbol, QuantityInt);
+                app.sendBuyOrder(app.sessionId_, Symbol, QuantityInt, id);
             }catch(std::exception & e){
                 std::cout << e.what();
             }
     }else if(OrderSide == "sell"){
         try{
-                app.sendBuyOrder(app.sessionId_, Symbol, QuantityInt);
+                app.sendSellOrder(app.sessionId_, Symbol, QuantityInt, id);
             }catch(std::exception & e){
                 std::cout << e.what();
             }
+    };
+    //example if we want to get the value of shares
+    // Create a JSON object with a message, and send it back to the client
+    json response;
+    response["message"] = "pong";
+    res.set_header("Access-Control-Allow-Origin", "*");
+    res.status = 200;       //this one is not rly important but thats how the big boys check if the request was successful
+    res.set_content(response.dump(), "application/json");
+}
+void handle_update(const httplib::Request& req, httplib::Response& res, Application app){
+    json request = json::parse(req.body);
+    std::cout << request.dump() << std::endl;
+    struct activeOrder order;
+    string OrderSide = request["side"];
+    string Symbol = request["ticker"];
+    string progress = request["amount"];
+    string completed = request["progress"];
+    std::string timeId = request["id"];
+    int progressInt = std::stoi(progress);
+    
+
+    if(progressInt = 0){
+        order.ticker = Symbol;
+        order.id = timeId;
+        order.progress = progressInt;
+        tracker.push_back(order);
     }
+    else if (completed == "true"){
+        auto itr = find(tracker.begin(), tracker.end(), order.id);
+        tracker.erase(itr);
+    }
+    else{
+        order.progress += progressInt;
+    };
+    
+
+    
     //example if we want to get the value of shares
     // Create a JSON object with a message, and send it back to the client
     json response;
@@ -98,6 +148,7 @@ void handle_post(const httplib::Request& req, httplib::Response& res, Applicatio
     res.set_content(response.dump(), "application/json");
 }
 
+
 void runEndPoint(Application& app) {
     httplib::Server endPoint;
     endPoint.set_base_dir("./public");    // Set the base directory for the server
@@ -106,10 +157,15 @@ void runEndPoint(Application& app) {
     // This is an example of a POST request, sell is the route, currently for the sell button in trade.jsx line 41-58
     endPoint.Post("/trade", [&app](const httplib::Request& req, httplib::Response& res) {      
         handle_post(req, res, app);
+    });
+    endPoint.Post("/update", [&app](const httplib::Request& req, httplib::Response& res) {      
+        handle_update(req, res, app);
     });    
     std::cout << "Server listening on port 1234" << std::endl;
     endPoint.listen("localhost", 1234);
 }
+
+
 int main()
 {
     try
@@ -136,13 +192,13 @@ int main()
             } while (true);
 
             string Symbol, Action;
+            std::string id;
             int Quantity;
-
             std::istringstream iss(Order);
-            iss >> Action >> Quantity >> Symbol;
+            iss >> Action >> Quantity >> Symbol >> id;
             
             try{
-                application.run(application.sessionId_, Symbol, Quantity);
+                application.run(application.sessionId_, Symbol, Quantity, id);
             }catch(std::exception & e){
                 std::cout << e.what();
             }

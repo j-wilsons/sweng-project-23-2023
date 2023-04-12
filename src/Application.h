@@ -25,15 +25,15 @@ public:
         throw(FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX::RejectLogon) {}
     void fromApp(const FIX::Message& message, const FIX::SessionID& sessionID)
         throw(FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX::UnsupportedMessageType);
-    void run(const FIX::SessionID& sessionID,const std::string& Symbol, int Quantity);
-    void sendBuyOrder(const FIX::SessionID &sessionID, const std::string &Symbol, int Quantity);
-    void sendSellOrder(const FIX::SessionID &sessionID, const std::string &Symbol, int Quantity);
-    FIX44::NewOrderSingle Application::queryNewOrderSingle44(const std::string &Symbol, int Quantity, char side);
-    FIX44::NewOrderSingle Application::queryNewOrderMarket(const std::string& Symbol, int Quantity, char side);
+    void run(const FIX::SessionID& sessionID,const std::string& Symbol, int Quantity, std::string id);
+    void sendBuyOrder(const FIX::SessionID &sessionID, const std::string &Symbol, int Quantity, std::string id);
+    void sendSellOrder(const FIX::SessionID &sessionID, const std::string &Symbol, int Quantity, std::string id);
+    FIX44::NewOrderSingle Application::queryNewOrderSingle44(const std::string &Symbol, int Quantity, char side, std::string id);
+    FIX44::NewOrderSingle Application::queryNewOrderMarket(const std::string& Symbol, int Quantity, char side, std::string id);
     FIX::SessionID sessionId_;
     FIX44::NewOrderSingle orderSingleMessage;
-    FIX44::ExecutionReport Application::tradeSuccessful(const FIX::SessionID& sessionID);
-    FIX44::ExecutionReport Application::partialFillTradeSuccess(const FIX::SessionID& sessionID, int quantity);
+    FIX44::ExecutionReport Application::tradeSuccessful(const FIX::SessionID& sessionID, std::string id);
+    FIX44::ExecutionReport Application::partialFillTradeSuccess(const FIX::SessionID& sessionID, int quantity, int totalQuant, std::string id);
     void onMessage(const FIX44::NewOrderSingle& message, const FIX::SessionID& sessionID);
     void fakeExec(std::string& ticker, int quantity, const FIX::SessionID& sessionID);
     std::vector<std::string> marketData(std::vector<std::string> symbols);

@@ -27,6 +27,7 @@ const buyShares = () => {
   //get data from backend
   //example for get request
   //prints out whatever is in the response
+  const timestamp = new Date().getTime();
   fetch("http://localhost:1234/trade", {
     mode: 'no-cors',      // <---- for CORS, do not delete
     method: "POST",       // for post request
@@ -40,6 +41,8 @@ const buyShares = () => {
       ticker: shares,
       progress: 0,
       completed: false,
+      id: timestamp,
+
     }),
     //set the content type
     headers: {
@@ -53,6 +56,7 @@ const sellShares = () => {
   console.log("Selling " + amount + " shares of " + shares);
 
   //post data to backend
+  const timestamp = new Date().getTime();
   fetch("http://localhost:1234/trade", {
     mode: 'no-cors',      // <---- for CORS, do not delete
     method: "POST",       // for post request
@@ -66,6 +70,8 @@ const sellShares = () => {
       ticker: shares,
       progress: 0,
       completed: false,
+      id: timestamp,
+
     }),
     //set the content type
     headers: {
