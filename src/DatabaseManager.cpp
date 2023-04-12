@@ -8,7 +8,7 @@
 
 using json = nlohmann::json;
 
-SQLCHAR *connectionString = (SQLCHAR*)"Driver={ODBC Driver 18 for SQL Server};Server=tcp:trinity-fixers-server.database.windows.net,1433;Database=FIX Server Database;Uid=TCDADMIN;Pwd={Password2001};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;";
+SQLCHAR *connectionString = (SQLCHAR *)"Driver={ODBC Driver 18 for SQL Server};Server=tcp:trinity-fixers-server.database.windows.net,1433;Database=FIX Server Database;Uid=TCDADMIN;Pwd={Password2001};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;";
 
 SQLHENV env = NULL;
 SQLHDBC dbc = NULL;
@@ -44,36 +44,53 @@ void deleteOrder(int orderId)
     SQLFreeHandle(SQL_HANDLE_STMT, stmt);
 }
 
-void addOrderToDatabase(int orderId, const std::string& side, double price, int quantity, const std::string& timestamp, const std::string& username, const std::string& ticker)
+void showSQLError(unsigned int handleType, const SQLHANDLE &handle)
 {
-    SQLHSTMT stmt = NULL;
-    SQLCHAR *query = (SQLCHAR *)"INSERT INTO orders (id, side, price, quantity, timestamp, username, ticker) VALUES (?, ?, ?, ?, ?, ?, ?);";
+    SQLCHAR SQLState[1024];
+    SQLCHAR message[1024];
+    SQLINTEGER nativeError;
+    SQLSMALLINT textLength;
 
-    // Allocate a statement handle
-    ret = SQLAllocHandle(SQL_HANDLE_STMT, dbc, &stmt);
+    SQLGetDiagRec(handleType, handle, 1, SQLState, &nativeError, message, sizeof(message), &textLength);
+    printf("SQL Error: %s\nMessage: %s\n", SQLState, message);
+}
 
-    // Bind parameters
-    SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &orderId, 0, NULL);
-    SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, side.size(), 0, (SQLPOINTER)side.c_str(), 0, NULL);
-    SQLBindParameter(stmt, 3, SQL_PARAM_INPUT, SQL_C_DOUBLE, SQL_DOUBLE, 0, 0, &price, 0, NULL);
-    SQLBindParameter(stmt, 4, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &quantity, 0, NULL);
-    SQLBindParameter(stmt, 5, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, timestamp.size(), 0, (SQLPOINTER)timestamp.c_str(), 0, NULL);
-    SQLBindParameter(stmt, 6, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, username.size(), 0, (SQLPOINTER)username.c_str(), 0, NULL);
-    SQLBindParameter(stmt, 7, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, ticker.size(), 0, (SQLPOINTER)ticker.c_str(), 0, NULL);
-
-    // Execute query
-    ret = SQLExecDirect(stmt, query, SQL_NTS);
-    if (SQL_SUCCEEDED(ret))
+void addOrderToDatabase(int orderId, const std::string &side, double price, int quantity, const std::string &timestamp, const std::string &username, const std::string &ticker)
+{
+    try
     {
-        printf("\nOrder added to the database successfully.\n");
-    }
-    else
-    {
-        printf("\nError adding order to the database.\n");
-    }
+        SQLHSTMT stmt = NULL;
+        SQLCHAR *query = (SQLCHAR *)"INSERT INTO orders (side, price, quantity, username, ticker) VALUES (?, ?, ?, ?, ?);";
 
-    // Free statement handle
-    SQLFreeHandle(SQL_HANDLE_STMT, stmt);
+        // Allocate a statement handle
+        ret = SQLAllocHandle(SQL_HANDLE_STMT, dbc, &stmt);
+
+        // Bind parameters
+        SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, side.size(), 0, (SQLPOINTER)side.c_str(), 0, NULL);
+        SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_DOUBLE, SQL_DOUBLE, 0, 0, &price, 0, NULL);
+        SQLBindParameter(stmt, 3, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &quantity, 0, NULL);
+        SQLBindParameter(stmt, 4, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, username.size(), 0, (SQLPOINTER)username.c_str(), 0, NULL);
+        SQLBindParameter(stmt, 5, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, ticker.size(), 0, (SQLPOINTER)ticker.c_str(), 0, NULL);
+
+        // Execute query
+        ret = SQLExecDirect(stmt, query, SQL_NTS);
+        if (SQL_SUCCEEDED(ret))
+        {
+            printf("\nOrder added to the database successfully.\n");
+        }
+        else
+        {
+            printf("\nError adding order to the database.\n");
+            showSQLError(SQL_HANDLE_STMT, stmt); // Display the error message
+        }
+
+        // Free statement handle
+        SQLFreeHandle(SQL_HANDLE_STMT, stmt);
+    }
+    catch (std::exception &e)
+    {
+        std::cout << e.what();
+    }
 }
 
 json pullOrderTable()
@@ -89,7 +106,6 @@ json pullOrderTable()
     {
         printf("\nquery succesful\n");
 
-        
         while (SQLFetch(stmt) == SQL_SUCCESS)
         {
             int orderId;
@@ -107,7 +123,7 @@ json pullOrderTable()
             SQLGetData(stmt, 5, SQL_CHAR, &timestamp, sizeof(timestamp), NULL);
             SQLGetData(stmt, 6, SQL_CHAR, &username, sizeof(username), NULL);
             SQLGetData(stmt, 7, SQL_CHAR, &ticker, sizeof(ticker), NULL);
-            
+
             json order = {
                 {"id", orderId},
                 {"side", side},
@@ -120,15 +136,15 @@ json pullOrderTable()
 
             orders.push_back(order);
         }
-        
+
         // Print orders in JSON format
-        //std::cout << orders.dump(4) << std::endl;
+        // std::cout << orders.dump(4) << std::endl;
     }
     else
     {
         printf("\nError retrieving data from table.\n");
     }
 
-    SQLFreeHandle(SQL_HANDLE_STMT, stmt);\
+    SQLFreeHandle(SQL_HANDLE_STMT, stmt);
     return orders;
 }

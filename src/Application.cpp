@@ -40,40 +40,7 @@ void Application::toApp(FIX::Message &, const FIX::SessionID &) throw(FIX::DoNot
 
 void Application::fromApp(const FIX::Message &message, const FIX::SessionID &sessionID) throw(FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX::UnsupportedMessageType)
 {
-    std::string senderCompID;
-    senderCompID = message.getHeader().getField(FIX::FIELD::SenderCompID);
-    if (senderCompID == "CLIENT")
-    {
-        crack(message, sessionID);
-        try
-        {   
-            // Extract order details from the message
-            int orderId = stoi(message.getField(11));
-            string side = message.getField(54);
-            double price = stod(message.getField(44));
-            int quantity = stoi(message.getField(53));
-            string timestamp = message.getField(60);
-            string username = message.getField(49); // Add your logic to extract username from the message
-            string ticker = message.getField(55);
-            std::cout << "\nSENDING TO DATABASE\n " << std::endl;
-            // Send the order details to the database
-            addOrderToDatabase(orderId, side, price, quantity, timestamp, username, ticker);
-        }
-        catch (const std::exception &e)
-        {
-            std::cout << "Error processing message: " << e.what() << std::endl;
-        }
-        // FIX44::ExecutionReport orderReport = tradeSuccessful(sessionID);
-        // FIX::Session::sendToTarget(orderReport,  sessionID);
-    }
-    else if (senderCompID == "SERVER")
-    {
-    }
-    else
-    {
-        std::cout << std::endl
-                  << "UNKNOWN SENDER" << std::endl;
-    }
+   crack(message, sessionID);
 }
 
 void Application::onMessage(const FIX44::NewOrderSingle &message, const FIX::SessionID &sessionID)
@@ -82,19 +49,36 @@ void Application::onMessage(const FIX44::NewOrderSingle &message, const FIX::Ses
     senderCompID = message.getHeader().getField(FIX::FIELD::SenderCompID);
     if (senderCompID == "CLIENT")
     {
-        crack(message, sessionID);
+
         try
         {   
+            std::cout << "Extracting deets from order "<< std::endl;
             // Extract order details from the message
             int orderId = stoi(message.getField(11));
+            std::cout << "id" << std::endl;
             string side = message.getField(54);
+            if (side == "1")
+            {
+                side = "BUY";
+            }
+            else if (side == "2")
+            {
+                side = "SELL";
+            }
+            std::cout << "side" << std::endl;
             double price = stod(message.getField(44));
-            int quantity = stoi(message.getField(53));
+            std::cout << "price" << std::endl;
+            int quantity = stoi(message.getField(38));
+            std::cout << "quanitty" << std::endl;
             string timestamp = message.getField(60);
-            string username = message.getField(49); // Add your logic to extract username from the message
+            std::cout << "timer" << std::endl;
             string ticker = message.getField(55);
+            std::cout << "ticker" << std::endl;
+            string username = message.getHeader().getField(FIX::FIELD::SenderCompID); // Add your logic to extract username from the message
+            std::cout << "name" << std::endl;
             std::cout << "\nSENDING TO DATABASE\n " << std::endl;
             // Send the order details to the database
+            
             addOrderToDatabase(orderId, side, price, quantity, timestamp, username, ticker);
         }
         catch (const std::exception &e)
@@ -106,6 +90,7 @@ void Application::onMessage(const FIX44::NewOrderSingle &message, const FIX::Ses
     }
     else if (senderCompID == "SERVER")
     {
+        std::cout << "Came from server" << std::endl;
     }
     else
     {
