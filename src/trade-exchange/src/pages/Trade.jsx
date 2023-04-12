@@ -399,7 +399,7 @@ export const Trade = () => {
                         type="radio"
                         variant={idx % 2 ? "outline-success" : "outline-danger"}
                         name="radio"
-                        value={radio.value}
+                        value={radio.value === null ? "" : radio.value}
                         checked={radioValue === radio.value}
                         style={{ width: 100 }}
                         onChange={(e) => {
@@ -456,7 +456,7 @@ export const Trade = () => {
             <div>
               <input
                 type="text"
-                value={order}
+                value={order === null ? "" : order}
                 onChange={(e) => setOrder(e.target.value)}
                 style={{ width: "400px", backgroundColor: "yellow" }}
               />
@@ -468,7 +468,11 @@ export const Trade = () => {
               </button>
               {orderPlList.map((order, index) => (
                 <div key={index}>
-                  <input value={order} style={{ width: "400px" }} />,
+                  <input
+                    value={order === null ? "" : order}
+                    style={{ width: "400px" }}
+                  />
+                  ,
                   <button
                     onClick={() => setModalShow(true)}
                     style={{ marginLeft: -60 }}
