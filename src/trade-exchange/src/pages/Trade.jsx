@@ -118,6 +118,27 @@ function MyModal(props) {
       setIsPriceShown(false)
     }
    }
+  const [intervalId, setIntervalId] = useState(0); // [variable, function to set variable
+  useEffect(() => {
+    const id = setInterval(() => fetchData(), 5000);
+    setIntervalId(id);
+    return () => clearInterval(id);
+  }, []);
+   const fetchData = () => { // function which gets called every n milliseconds
+    fetch("http://localhost:1234/ping",{
+      mode: 'no-cors'      // <---- for CORS, do not delete
+      // method: "GET"       // for post request
+   }
+    )
+    // .then((response) => response.json())
+    // .then((data) => {
+    //   console.log(data);
+    // })
+    .catch((error) => {
+      console.log(error);
+    });
+   }
+
   const buyShares = () => {
     const amount = document.getElementById("amount").value;
     const shares = document.getElementById("shares").value;
