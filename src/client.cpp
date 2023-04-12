@@ -88,7 +88,7 @@ void handle_post(const httplib::Request& req, httplib::Response& res, Applicatio
             }
     }else if(OrderSide == "sell"){
         try{
-                app.sendBuyOrder(app.sessionId_, Symbol, QuantityInt,price);
+                app.sendSellOrder(app.sessionId_, Symbol, QuantityInt,price);
             }catch(std::exception & e){
                 std::cout << e.what();
             }

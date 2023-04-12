@@ -44,6 +44,38 @@ void deleteOrder(int orderId)
     SQLFreeHandle(SQL_HANDLE_STMT, stmt);
 }
 
+void addOrderToDatabase(int orderId, const std::string& side, double price, int quantity, const std::string& timestamp, const std::string& username, const std::string& ticker)
+{
+    SQLHSTMT stmt = NULL;
+    SQLCHAR *query = (SQLCHAR *)"INSERT INTO orders (id, side, price, quantity, timestamp, username, ticker) VALUES (?, ?, ?, ?, ?, ?, ?);";
+
+    // Allocate a statement handle
+    ret = SQLAllocHandle(SQL_HANDLE_STMT, dbc, &stmt);
+
+    // Bind parameters
+    SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &orderId, 0, NULL);
+    SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, side.size(), 0, (SQLPOINTER)side.c_str(), 0, NULL);
+    SQLBindParameter(stmt, 3, SQL_PARAM_INPUT, SQL_C_DOUBLE, SQL_DOUBLE, 0, 0, &price, 0, NULL);
+    SQLBindParameter(stmt, 4, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &quantity, 0, NULL);
+    SQLBindParameter(stmt, 5, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, timestamp.size(), 0, (SQLPOINTER)timestamp.c_str(), 0, NULL);
+    SQLBindParameter(stmt, 6, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, username.size(), 0, (SQLPOINTER)username.c_str(), 0, NULL);
+    SQLBindParameter(stmt, 7, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, ticker.size(), 0, (SQLPOINTER)ticker.c_str(), 0, NULL);
+
+    // Execute query
+    ret = SQLExecDirect(stmt, query, SQL_NTS);
+    if (SQL_SUCCEEDED(ret))
+    {
+        printf("\nOrder added to the database successfully.\n");
+    }
+    else
+    {
+        printf("\nError adding order to the database.\n");
+    }
+
+    // Free statement handle
+    SQLFreeHandle(SQL_HANDLE_STMT, stmt);
+}
+
 json pullOrderTable()
 {
     printf("pulling");
@@ -76,7 +108,6 @@ json pullOrderTable()
             SQLGetData(stmt, 6, SQL_CHAR, &username, sizeof(username), NULL);
             SQLGetData(stmt, 7, SQL_CHAR, &ticker, sizeof(ticker), NULL);
             
-
             json order = {
                 {"id", orderId},
                 {"side", side},
