@@ -135,12 +135,9 @@ void handle_update(const httplib::Request& req, httplib::Response& res, Applicat
         });
         tracker.erase(itr);
     }
-    else{
-        order.progress += progressInt;
-    };
-    
-
-    
+    for (const auto& elem : tracker) {
+            std::cout << "Id: " << elem.id << " Ticker: " << elem.ticker << " Progress: " << elem.progress << std::endl;
+        }    
     //example if we want to get the value of shares
     // Create a JSON object with a message, and send it back to the client
     json response;
@@ -160,7 +157,7 @@ void runEndPoint(Application& app) {
     endPoint.Post("/trade", [&app](const httplib::Request& req, httplib::Response& res) {      
         handle_post(req, res, app);
     });
-    endPoint.Post("/update", [&app](const httplib::Request& req, httplib::Response& res) {      
+    endPoint.Post("/trade", [&app](const httplib::Request& req, httplib::Response& res) {      
         handle_update(req, res, app);
     });    
     std::cout << "Server listening on port 1234" << std::endl;
