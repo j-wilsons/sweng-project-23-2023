@@ -440,16 +440,18 @@ export const Trade = () => {
       <div className="right-corner-pos">
         <div style={{ color: "white" }}>
           <h2>Order Plotter</h2>
-          <thead>
-            <tr>
-              <th>Ticker</th>
-              <th>Type</th>
-              <th>Price</th>
-              <th>Amount</th>
-              <th>Date</th>
-              <th>Status</th>
-            </tr>
-          </thead>
+          <table>
+            <thead>
+              <tr>
+                <th>Ticker</th>
+                <th>Type</th>
+                <th>Price</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+          </table>
           {order ? (
             <div>
               <input
