@@ -156,7 +156,7 @@ export const Trade = () => {
       },
     });
 
-    console.log("Buying " + amount + " shares of " + shares + " at" + price);
+    console.log("Buying " + amount + " shares of " + shares + " at " + price);
     if (lmtPrice != "") {
       handleAddLmtOrder();
     } else {
