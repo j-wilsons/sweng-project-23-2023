@@ -67,7 +67,7 @@ void printOrders(json allOrders)
     }
 }
 
-FIX44::NewOrderSingle queryNewOrderSingle44(const std::string &Symbol, const std::string &Symbol, int Quantity, const std::string side, double Price)
+FIX44::NewOrderSingle queryNewOrderSingle44(std::string ID, const std::string &Symbol, int Quantity, const std::string side, double Price)
 {
     FIX::Side fixSide;
     if (side == "BUY")
@@ -78,7 +78,7 @@ FIX44::NewOrderSingle queryNewOrderSingle44(const std::string &Symbol, const std
     {
         fixSide = FIX::Side(FIX::Side_SELL);
     }
-    FIX44::NewOrderSingle newOrder(FIX::ClOrdID(""), fixSide, FIX::TransactTime(), FIX::OrdType(FIX::OrdType_LIMIT));
+    FIX44::NewOrderSingle newOrder(FIX::ClOrdID(ID), fixSide, FIX::TransactTime(), FIX::OrdType(FIX::OrdType_LIMIT));
     newOrder.set(FIX::Symbol(Symbol));
     newOrder.set(FIX::OrderQty(Quantity));
     newOrder.set(FIX::Price(Price));
@@ -152,6 +152,11 @@ void matchOrders(Stock &stock)
 
                     if (buy_quantity == 0)
                     {
+                        
+                        int orderId = stoi(buy_order.getField(11));
+                        std::cout << "\n deleting order " << orderId << " from DB \n ";
+                        deleteOrder(orderId); // Delete the finished order from the database
+                        
                         highest_buy->second.pop();
                         if (highest_buy->second.empty())
                         {
@@ -166,6 +171,10 @@ void matchOrders(Stock &stock)
 
                     if (sell_quantity == 0)
                     {
+                        int orderId = stoi(sell_order.getField(11));
+                        std::cout << "\n deleting order " << orderId << " from DB \n ";
+                        deleteOrder(orderId); // Delete the finished order from the database
+                        
                         lowest_sell->second.pop();
                         if (lowest_sell->second.empty())
                         {
@@ -184,38 +193,46 @@ void matchOrders(Stock &stock)
     {
         std::cout << e.what();
     }
-}
+};
 
 void processOrders(const json &orders, std::vector<Stock> &stockList)
 {
-    for (const auto &order : orders)
+    try
     {
-        std::string side = order["side"];
-        std::string ticker = order["ticker"];
-        double price = order["price"];
-        int quantity = order["quantity"];
-        FIX44::NewOrderSingle fixOrder = queryNewOrderSingle44(ticker, quantity, side, price);
-
-        // Debug: Print order information
-        std::cout << "Processing order for ticker: " << ticker << ", side: " << side << ", price: " << price << ", quantity: " << quantity << std::endl;
-
-        // Find the stock in stockList by its ticker
-        auto it = std::find_if(stockList.begin(), stockList.end(), [&ticker](const Stock &stock)
-                               { return stock.stock_Ticker == ticker; });
-
-        // If the stock is found in the stockList
-        if (it != stockList.end())
+        for (const auto &order : orders)
         {
-            if (side == "BUY")
+            std::string side = order["side"];
+            std::string ticker = order["ticker"];
+            double price = order["price"];
+            int quantity = order["quantity"];
+            std::string id = to_string(order["id"]);
+            FIX44::NewOrderSingle fixOrder = queryNewOrderSingle44(id, ticker, quantity, side, price);
+
+            // Debug: Print order information
+            std::cout << "Processing order for ticker: " << ticker << ", side: " << side << ", price: " << price << ", quantity: " << quantity << std::endl;
+
+            // Find the stock in stockList by its ticker
+            auto it = std::find_if(stockList.begin(), stockList.end(), [&ticker](const Stock &stock)
+                                   { return stock.stock_Ticker == ticker; });
+
+            // If the stock is found in the stockList
+            if (it != stockList.end())
             {
-                it->buy_orderbook[price].push(fixOrder);
+                if (side == "BUY")
+                {
+                    it->buy_orderbook[price].push(fixOrder);
+                }
+                else if (side == "SELL")
+                {
+                    it->sell_orderbook[price].push(fixOrder);
+                }
+                matchOrders(*it);
             }
-            else if (side == "SELL")
-            {
-                it->sell_orderbook[price].push(fixOrder);
-            }
-            matchOrders(*it);
         }
+    }
+    catch (std::exception &e)
+    {
+        std::cout << e.what();
     }
 }
 

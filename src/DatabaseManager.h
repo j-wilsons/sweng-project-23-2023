@@ -4,3 +4,4 @@ using json = nlohmann::json;
 
 json pullOrderTable();
 void connectToDB();
+void deleteOrder(int orderId);

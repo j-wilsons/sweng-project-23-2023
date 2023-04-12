@@ -23,6 +23,27 @@ void connectToDB()
     printf("connected");
 }
 
+void deleteOrder(int orderId)
+{
+    SQLHSTMT stmt = NULL;
+    SQLCHAR *query = (SQLCHAR *)"DELETE FROM orders WHERE id = ?";
+
+    ret = SQLAllocHandle(SQL_HANDLE_STMT, dbc, &stmt);
+    ret = SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, &orderId, 0, NULL);
+    ret = SQLExecDirect(stmt, query, SQL_NTS);
+
+    if (SQL_SUCCEEDED(ret))
+    {
+        printf("Order with ID %d deleted successfully.\n", orderId);
+    }
+    else
+    {
+        printf("Error deleting order with ID %d.\n", orderId);
+    }
+
+    SQLFreeHandle(SQL_HANDLE_STMT, stmt);
+}
+
 json pullOrderTable()
 {
     printf("pulling");
