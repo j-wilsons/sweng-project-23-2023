@@ -130,7 +130,9 @@ void handle_update(const httplib::Request& req, httplib::Response& res, Applicat
         tracker.push_back(order);
     }
     else if (completed == "true"){
-        auto itr = find(tracker.begin(), tracker.end(), order.id);
+        auto itr = std::find_if(tracker.begin(), tracker.end(), [&order](const activeOrder &o) {
+            return o.id == order.id;
+        });
         tracker.erase(itr);
     }
     else{
