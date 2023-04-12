@@ -467,7 +467,7 @@ export const Trade = () => {
                 Status
               </button>
               {orderPlList.map((order, index) => (
-                <div>
+                <div key={index}>
                   <input value={order} style={{ width: "400px" }} />,
                   <button
                     onClick={() => setModalShow(true)}
