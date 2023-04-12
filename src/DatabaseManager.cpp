@@ -23,9 +23,10 @@ void connectToDB()
     printf("connected");
 }
 
-void pullOrderTable()
+json pullOrderTable()
 {
     printf("pulling");
+    json orders;
     SQLHSTMT stmt = NULL;
     SQLCHAR *query = (SQLCHAR *)"SELECT * FROM orders";
     ret = SQLAllocHandle(SQL_HANDLE_STMT, dbc, &stmt);
@@ -34,7 +35,6 @@ void pullOrderTable()
     if (SQL_SUCCEEDED(ret))
     {
         printf("\nquery succesful\n");
-        json orders;
 
         
         while (SQLFetch(stmt) == SQL_SUCCESS)
@@ -64,19 +64,19 @@ void pullOrderTable()
                 {"timestamp", timestamp},
                 {"username", username},
                 {"ticker", ticker},
-                };
+            };
 
             orders.push_back(order);
         }
         
-
         // Print orders in JSON format
-        std::cout << orders.dump(4) << std::endl;
+        //std::cout << orders.dump(4) << std::endl;
     }
     else
     {
         printf("\nError retrieving data from table.\n");
     }
 
-    SQLFreeHandle(SQL_HANDLE_STMT, stmt);
+    SQLFreeHandle(SQL_HANDLE_STMT, stmt);\
+    return orders;
 }

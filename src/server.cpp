@@ -7,6 +7,7 @@
 #include "quickfix/ThreadedSocketAcceptor.h"
 #include "quickfix/Log.h"
 #include "Application.h"
+#include "MatchingEngine.h"
 #include <chrono>
 #include <thread>
 #include <vector>
@@ -20,7 +21,7 @@
 int main(int argc, char* argv[]) {
    try
     {
-        
+        startEngine();
         FIX::SessionSettings settings("../../src/server.cfg");
         Application application;
         /*

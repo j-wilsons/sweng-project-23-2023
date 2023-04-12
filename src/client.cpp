@@ -78,16 +78,17 @@ void handle_post(const httplib::Request& req, httplib::Response& res, Applicatio
     string Symbol = request["ticker"];
     string Quantity = request["amount"];
     int QuantityInt = std::stoi(Quantity);
+    double price = 000;
 
     if(OrderSide == "buy"){
        try{
-                app.sendBuyOrder(app.sessionId_, Symbol, QuantityInt);
+                app.sendBuyOrder(app.sessionId_, Symbol, QuantityInt, price);
             }catch(std::exception & e){
                 std::cout << e.what();
             }
     }else if(OrderSide == "sell"){
         try{
-                app.sendBuyOrder(app.sessionId_, Symbol, QuantityInt);
+                app.sendBuyOrder(app.sessionId_, Symbol, QuantityInt,price);
             }catch(std::exception & e){
                 std::cout << e.what();
             }

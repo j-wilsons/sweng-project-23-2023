@@ -4,6 +4,8 @@ set(CMAKE_BUILD_TYPE Release)
 
 add_library(Application ${CMAKE_CURRENT_SOURCE_DIR}/src/Application.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/Application.h)
 add_library(DatabaseManager ${CMAKE_CURRENT_SOURCE_DIR}/src/DatabaseManager.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/DatabaseManager.h)
+add_library(MatchingEngine ${CMAKE_CURRENT_SOURCE_DIR}/src/MatchingEngine.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/MatchingEngine.h)
+
 
 #add_library(quickfix STATIC ${CMAKE_CURRENT_SOURCE_DIR}/libs/quickfix.lib)
 set(SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/Client.cpp
@@ -21,6 +23,7 @@ foreach(src_file ${SOURCES})
     target_link_libraries(${exec_name} DatabaseManager)
     target_link_libraries(${exec_name} ${CURL_LIB})
     target_link_libraries(${exec_name} ODBC32.lib)
+    target_link_libraries(${exec_name} MatchingEngine)
 endforeach()
 
 

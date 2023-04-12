@@ -1,4 +1,6 @@
 #pragma once
+#include "json.hpp"
+using json = nlohmann::json;
 
-void pullOrderTable();
+json pullOrderTable();
 void connectToDB();

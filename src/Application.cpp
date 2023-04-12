@@ -101,28 +101,28 @@ void Application::fakeExec(std::string& ticker, int quantity, const FIX::Session
 
 void Application::run(const FIX::SessionID& sessionID,const std::string& Symbol, int Quantity)
 {
-    FIX44::NewOrderSingle newOrder = queryNewOrderSingle44(Symbol, Quantity, '1'); // 1 represents buy side, 2 represents sell side
-    FIX::Session::sendToTarget(newOrder,  sessionID);  
+    //FIX44::NewOrderSingle newOrder = queryNewOrderSingle44(Symbol, Quantity, '1'); // 1 represents buy side, 2 represents sell side
+    //FIX::Session::sendToTarget(newOrder,  sessionID);  
 }
 
-void Application::sendBuyOrder(const FIX::SessionID& sessionID,const std::string& Symbol, int Quantity)
+void Application::sendBuyOrder(const FIX::SessionID& sessionID,const std::string& Symbol, int Quantity, double price)
 {
-    FIX44::NewOrderSingle newOrder = queryNewOrderSingle44(Symbol, Quantity, '1'); // 1 represents buy side, 2 represents sell side
+    FIX44::NewOrderSingle newOrder = queryNewOrderSingle44(Symbol, Quantity, '1', price); // 1 represents buy side, 2 represents sell side
     FIX::Session::sendToTarget(newOrder,  sessionID);  
 }
 
-void Application::sendSellOrder(const FIX::SessionID& sessionID,const std::string& Symbol, int Quantity)
+void Application::sendSellOrder(const FIX::SessionID& sessionID,const std::string& Symbol, int Quantity, double price)
 {
-    FIX44::NewOrderSingle newOrder = queryNewOrderSingle44(Symbol, Quantity, '2'); // 1 represents buy side, 2 represents sell side
+    FIX44::NewOrderSingle newOrder = queryNewOrderSingle44(Symbol, Quantity, '2', price); // 1 represents buy side, 2 represents sell side
     FIX::Session::sendToTarget(newOrder,  sessionID);  
 }
 
-FIX44::NewOrderSingle Application::queryNewOrderSingle44(const std::string& Symbol, int Quantity, char side) // side == 1 represents buy side, 2 represents sell side
+FIX44::NewOrderSingle Application::queryNewOrderSingle44(const std::string& Symbol, int Quantity, char side, double Price) // side == 1 represents buy side, 2 represents sell side
 {
     FIX44::NewOrderSingle newOrder(FIX::ClOrdID("12345"), FIX::Side(side), FIX::TransactTime(), FIX::OrdType(FIX::OrdType_LIMIT));
     newOrder.set(FIX::Symbol(Symbol));
     newOrder.set(FIX::OrderQty(Quantity));
-    newOrder.set(FIX::Price(100.00));
+    newOrder.set(FIX::Price(Price));
     newOrder.set(FIX::HandlInst('1'));
     newOrder.set(FIX::TimeInForce(FIX::TimeInForce_DAY));
     return newOrder;
