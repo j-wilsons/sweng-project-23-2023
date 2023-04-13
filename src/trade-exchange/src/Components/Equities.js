@@ -2,78 +2,78 @@ export const equities = [
     {
         symbol: "AAPL",
         name: "Apple Inc",
-        price: "$161.49"
+        price: "$160.10"
     },
     {
         symbol: "AMZN",
         name: "Amazon Inc",
-        price: "$101.44"
+        price: "$97.83"
     },
     {
         symbol: "DIS",
         name: "Walt Disney Co",
-        price: "$100.01"
+        price: "$97.94"
     },
     {
         symbol: "GOOGL",
         name: "Alphabet Inc",
-        price: "$105.89"
+        price: "$104.64"
     },
     {
         symbol: "IBM",
         name: "IBM",
-        price: "$130.55"
+        price: "$128.54"
     },
     {
         symbol: "JNJ",
         name: "Johnson & Johnson",
-        price: "$164.16"
+        price: "$163.92"
     },
     {
         symbol: "KO",
         name: "Coca Cola Co",
-        price: "$62.55"
+        price: "$62.69"
     },
     {
         symbol: "MA",
         name: "Mastercard Inc",
-        price: "$359.24"
+        price: "$361.78"
     },
     {
         symbol: "META",
         name: "Meta Platforms Inc",
-        price: "$213.85"
+        price: "$214.00"
     },
     {
         symbol: "MSFT",
         name: "Microsoft Corp",
-        price: "$288.35"
+        price: "$283.49"
     },
   
     {
         symbol: "NFLX",
         name: "Netflix Inc",
-        price: "$337.76"
+        price: "$331.03"
     },
     {
         symbol: "NKE",
         name: "Nike Inc",
-        price: "$121.34"
+        price: "$123.66"
     },
     {
         symbol: "NVDA",
         name: "NVIDIA Corp",
-        price: "$275.19"
+        price: "$264.95"
     },
     {
         symbol: "SBUX",
         name: "Starbucks Corp",
-        price: "$104.59"
+        price: "$105.60"
     },
     {
         symbol: "TSLA",
         name: "Tesla Inc",
-        price: "$182.27"
+        price: "$180.54"
     },
           ];
           
