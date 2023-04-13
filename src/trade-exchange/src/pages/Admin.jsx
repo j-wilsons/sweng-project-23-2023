@@ -1,6 +1,6 @@
 import "../App.css";
 import Chart from "chart.js/auto";
-import NavBar from "../Components/NavBar";
+// import NavBar from "../Components/NavBar";
 import { CategoryScale } from "chart.js";
 import { useState } from "react";
 import { Data } from "../Components/Data";
@@ -62,7 +62,7 @@ export const Admin = () => {
   });
   return (
     <div className="home">
-    <NavBar/>
+    {/* <NavBar/> */}
     <div className="center">
       <h1 className="text-center">Admin</h1>
       <p className="text-center">Transactions</p>

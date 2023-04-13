@@ -1,10 +1,11 @@
 import React from "react";
 import "../css/Main.css";
 import "../css/Text.css";
-import NavBar from "../Components/NavBar";
+import "../css/Flex.css";
 import TradeCard from "../Components/TradeCard";
 import StockRow from "../Components/StockRow";
 import PieChart from "../Components/PieChart";
+import Graph from "../Components/Graph";
 import OrderPlotter from "../Components/OrderPlotter";
 // import PropTypes from "prop-types";
 import { useState } from "react";
@@ -20,8 +21,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import axios from "axios";
+
 var amount = 0;
-var shares = 0;
 let myData; // variable to hold response from backend
 
 const columns = [
@@ -42,19 +43,25 @@ const columns = [
   },
 ];
 
-
+const orderTypes = [
+  {
+    field: "nameO",
+    header: "Order Type",
+    width: "300px",
+  },
+];
 
 export const Trade = () => {
   const [isShown, setIsShown] = useState(false);
   const [isPriceShown, setIsPriceShown] = useState(false);
-
-  const [price, setPrice] = useState(0)
-  const [lmtPrice, setlmtPrice] = useState(0)
-  const [type, setType] = React.useState('Market')
+  const [price, setPrice] = useState("");
+  const [lmtPrice, setlmtPrice] = useState("");
+  const [type, setType] = React.useState("Market");
   const [orderPlList, setOrderPlList] = useState([]);
-  const [order, setOrder] = useState('                          Previous Orders');
+  const [order, setOrder] = useState(null);
   const [modalShow, setModalShow] = React.useState(false);
   const [radioValue, setRadioValue] = useState("1");
+  const [shares, setShares] = useState("");
 
   const radios = [
     { name: "Market", value: "1" },
@@ -127,7 +134,7 @@ export const Trade = () => {
 
   const buyShares = () => {
     const amount = document.getElementById("amount").value;
-    const shares = document.getElementById("shares").value;
+    setShares(document.getElementById("shares").value);
     //get data from backend
     //example for get request
     //prints out whatever is in the response
@@ -135,26 +142,24 @@ export const Trade = () => {
       mode: "no-cors", // <---- for CORS, do not delete
       method: "POST", // for post request
 
+      //set the body of the request to the data we want to send
+      //key-value pairs
+      body: JSON.stringify({
+        side: "buy",
+        ordertype: "Market",
+        amount: amount,
+        ticker: shares,
+        progress: 0,
+        completed: false,
+      }),
+      //set the content type
+      headers: {
+        "Content-type": "application/json;",
+      },
+    });
 
-    //set the body of the request to the data we want to send
-    //key-value pairs
-    body: JSON.stringify({
-      side: "buy",
-      ordertype: "Limit",
-      amount: amount,
-      ticker: shares,
-      price: lmtPrice,
-      progress: 0,
-      completed: false,
-    }),
-    //set the content type
-    headers: {
-      "Content-type": "application/json;"
-    }
-  })
-    
-    console.log("Buying " + amount + " shares of " + shares + " at" + price);
-    if(lmtPrice != ""){
+    console.log("Buying " + amount + " shares of " + shares + " at " + price);
+    if (lmtPrice != "") {
       handleAddLmtOrder();
     } else {
       handleAddOrder();
@@ -162,7 +167,7 @@ export const Trade = () => {
   };
   const sellShares = () => {
     amount = document.getElementById("amount").value;
-    shares = document.getElementById("shares").value;
+    setShares(document.getElementById("shares").value);
     console.log("Selling " + amount + " shares of " + shares);
 
     //post data to backend
@@ -174,10 +179,9 @@ export const Trade = () => {
       //key-value pairs
       body: JSON.stringify({
         side: "sell",
-        ordertype: "Limit",
+        ordertype: "Market",
         amount: amount,
         ticker: shares,
-        price: lmtPrice,
         progress: 0,
         completed: false,
       }),
@@ -194,7 +198,7 @@ export const Trade = () => {
   };
   const handleAddOrder = () => {
     const amount = document.getElementById("amount").value;
-    shares = document.getElementById("shares").value;
+    setShares(document.getElementById("shares").value);
     setOrder(
       "  " +
         shares +
@@ -202,14 +206,14 @@ export const Trade = () => {
         price +
         "    " +
         amount +
-        "        13/04/23    Filled"
+        "        10/04/23    Filled"
     );
     setOrderPlList([...orderPlList, order]);
     setlmtPrice("");
   };
   const handleAddSellOrder = () => {
     const amount = document.getElementById("amount").value;
-    shares = document.getElementById("shares").value;
+    setShares(document.getElementById("shares").value);
     setOrder(
       "  " +
         shares +
@@ -217,13 +221,13 @@ export const Trade = () => {
         price +
         "    " +
         amount +
-        "        13/04/23    Filled"
+        "        10/04/23    Filled"
     );
     setOrderPlList([...orderPlList, order]);
   };
   const handleAddLmtOrder = () => {
     const amount = document.getElementById("amount").value;
-    shares = document.getElementById("shares").value;
+    setShares(document.getElementById("shares").value);
     setOrder(
       "  " +
         shares +
@@ -231,13 +235,13 @@ export const Trade = () => {
         lmtPrice +
         "    " +
         amount +
-        "        13/04/23    Filled"
+        "        10/04/23    Filled"
     );
     setOrderPlList([...orderPlList, order]);
   };
   const handleAddSellLmtOrder = () => {
     const amount = document.getElementById("amount").value;
-    shares = document.getElementById("shares").value;
+    setShares(document.getElementById("shares").value);
     setOrder(
       "  " +
         shares +
@@ -245,14 +249,15 @@ export const Trade = () => {
         lmtPrice +
         "    " +
         amount +
-        "        13/04/23    Filled"
+        "        10/04/23    Filled"
     );
     setOrderPlList([...orderPlList, order]);
   };
 
-  const getInfo = (event) => {
-    shares = document.getElementById("shares").value;
-    setIsShown((current) => !current);
+  const getInfo = () => {
+    setShares(document.getElementById("shares").value);
+    // setIsShown(false);
+    // setIsShown(true);
   };
   const getPrice = (event) => {
     if (event === "Limit") {
@@ -287,210 +292,199 @@ export const Trade = () => {
   }, []);
 
   return (
-    <div className="home">
-      <NavBar />
-      <div className="right-pos">
-        <div>
-        <input value={"           MAKE A TRADE"}
-          style={{color: 'black',
-           fontFamily: 'cursive', 
-           width: "300px", 
-           fontSize: 20, 
-           backgroundColor: `#f0f8ff`}}/>
+    <div className="home" style={{ backgroundColor: "black" }}>
+      <div className="flex-container">
+        <div className="item text-center main-background-box">
           <div>
-            <input
-              type="text"
-              id="amount"
-              placeholder="Select quantity ..."
-              rounded={rounded}
-              style={{
-                width: "300px",
-                height: "27px",
-                fontSize: 15,
-              }}
-            />
-            <div
-              style={{
-                justifyContent: "space-around",
-              }}
-            >
-              <MultiColumnComboBox
+            <h2 className="text-white text-center">MAKE A TRADE</h2>
+            <div>
+              <input
+                type="text"
+                id="amount"
+                placeholder="Select quantity ..."
+                rounded={rounded}
                 style={{
                   width: "300px",
-                }}
-                data={equities}
-                columns={columns}
-                textField={"symbol"}
-                size={size}
-                fillMode={fillMode}
-                rounded={rounded}
-                id="shares"
-                placeholder="Select share ..."
-                onChange={() => {
-                  changePriceMkt();
+                  height: "27px",
+                  fontSize: 15,
                 }}
               />
-
-              <MyModal show={modalShow} onHide={() => setModalShow(false)} />
               <div
                 style={{
                   justifyContent: "space-around",
                 }}
-              ></div>
-              {isPriceShown ? (
-                <input
-                  type="text"
-                  id="price"
-                  placeholder="Select price..."
-                  onChange={(e) => setlmtPrice(e.target.value)}
+              >
+                <MultiColumnComboBox
                   style={{
                     width: "300px",
-                    height: "27px",
-                    fontSize: 15,
+                  }}
+                  data={equities}
+                  columns={columns}
+                  textField={"name"}
+                  valueField={"symbol"}
+                  size={size}
+                  fillMode={fillMode}
+                  rounded={rounded}
+                  id="shares"
+                  placeholder="Select share ..."
+                  onChange={(event) => {
+                    if (event === null || event.value === null) {
+                      console.log("null");
+                      setIsShown(false);
+                    } else {
+                      setShares(event.value.symbol);
+                      setIsShown(false);
+                      setIsShown(true);
+                    }
                   }}
                 />
-              ) : null}
-              <br />
-              <Button
-                style={{
-                  backgroundColor: "yellow",
-                  color: "black",
-                  width: 70,
-                  height: 40,
-                  marginTop: -100,
-                  marginLeft: 320,
-                }}
-                onClick={() => {
-                  getInfo();
-                }}
-              >
-                Select
-              </Button>
-              <div className="row2" style={{ marginLeft: -2 }}>
-                <Button
+
+                <MyModal show={modalShow} onHide={() => setModalShow(false)} />
+                <div
                   style={{
-                    backgroundColor: "aquamarine",
-                    color: "black",
-                    width: 90,
-                    height: 40,
+                    justifyContent: "space-around",
                   }}
-                  onClick={() => {
-                    buyShares();
-                  }}
-                >
-                  Buy
-                </Button>
-                <Button
-                  style={{
-                    backgroundColor: "red",
-                    color: "white",
-                    width: 90,
-                    height: 40,
-                  }}
-                  onClick={() => {
-                    sellShares();
-                  }}
-                >
-                  Sell
-                </Button>
-                <div style={{ marginTop: 55, marginLeft: -180 }}>
-                  <ButtonGroup>
-                    {radios.map((radio, idx) => (
-                      <ToggleButton
-                        key={idx}
-                        id={`radio-${idx}`}
-                        type="radio"
-                        variant={idx % 2 ? "outline-success" : "outline-danger"}
-                        name="radio"
-                        value={radio.value === null ? "" : radio.value}
-                        checked={radioValue === radio.value}
-                        style={{ width: 100 }}
-                        onChange={(e) => {
-                          setRadioValue(e.currentTarget.value);
-                          getType();
-                        }}
-                      >
-                        {radio.name}
-                      </ToggleButton>
-                    ))}
-                  </ButtonGroup>
+                ></div>
+                {isPriceShown ? (
+                  <input
+                    type="text"
+                    id="price"
+                    placeholder="Select price..."
+                    onChange={(e) => setlmtPrice(e.target.value)}
+                    style={{
+                      width: "300px",
+                      height: "27px",
+                      fontSize: 15,
+                    }}
+                  />
+                ) : null}
+                <br />
+                <div className="" style={{}}>
+                  <Button className="margin-right-small"
+                    style={{
+                      backgroundColor: "#B2CEB7",
+                      border: "none",
+                      color: "black",
+                      width: 90,
+                      height: 40,
+                    }}
+                    onClick={() => {
+                      buyShares();
+                    }}
+                  >
+                    Buy
+                  </Button>
+                  <Button
+                    style={{
+                      backgroundColor: "#ceb2b2",
+                      border: "none",
+                      color: "black",
+                      width: 90,
+                      height: 40,
+                    }}
+                    onClick={() => {
+                      sellShares();
+                    }}
+                  >
+                    Sell
+                  </Button>
+                  <div className="margin-top-small">
+                    <ButtonGroup>
+                      {radios.map((radio, idx) => (
+                        <ToggleButton
+                          key={idx}
+                          id={`radio-${idx}`}
+                          type="radio"
+                          variant={
+                            idx % 2 ? "outline-success" : "outline-danger"
+                          }
+                          name="radio"
+                          value={radio.value === null ? "" : radio.value}
+                          checked={radioValue === radio.value}
+                          style={{ width: 100 }}
+                          onChange={(e) => {
+                            setRadioValue(e.currentTarget.value);
+                            getType();
+                          }}
+                        >
+                          {radio.name}
+                        </ToggleButton>
+                      ))}
+                    </ButtonGroup>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {isShown ? (
-          <div className="left-pos">
-            <div className="container">
-              <table className="table mt-3" style={{ color: "white" }}>
-                <thead>
-                  <tr>
-                    <th>Ticker</th>
-                    <th>Price</th>
-                    <th>Change</th>
-                    <th>Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <StockRow ticker={shares} />
-                </tbody>
-              </table>
-            </div>
-          </div>
-        ) : null}
-      </div>
-      <div className="right-corner-pos">
-        <div style={{ color: "white" }}>
-        <input value={"            Current Orders"} 
-        style={{
-        width: "400px", 
-        fontSize: 25, 
-        backgroundColor: `#f0f8ff`, 
-        fontFamily: 'cursive'}}/>
-          <table>
-            <thead>
-              <tr>
-                <th>Ticker</th>
-                <th>Type</th>
-                <th>Price</th>
-                <th>Amount</th>
-                <th>Date</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-          </table>
-          {order ? (
-            <div>
-              <input
-                type="text"
-                value={order === null ? "" : order}
-                onChange={(e) => setOrder(e.target.value)}
-                style={{ width: "400px", backgroundColor: "yellow" }}
-              />
-              <button
-                onClick={() => setModalShow(true)}
-                style={{ marginLeft: -60, backgroundColor: "yellow" }}
-              >
-                Status
-              </button>
-              {orderPlList.map((order, index) => (
-                <div key={index}>
-                  <input
-                    defaultValue={order === null ? "" : order}
-                    style={{ width: "400px" }}
-                  />
-                  ,
-                  <button
-                    onClick={() => setModalShow(true)}
-                    style={{ marginLeft: -60 }}
-                  >
-                    Status
-                  </button>
-                </div>
-              ))}
+          {isShown ? (
+            <div className="item">
+              <div className="">
+                <table className="table mt-3" style={{ color: "white" }}>
+                  <thead>
+                    <tr>
+                      <th>Ticker</th>
+                      <th>Price</th>
+                      <th>Change</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <StockRow ticker={shares} />
+                  </tbody>
+                </table>
+                <Graph ticker={shares} className="" />
+              </div>
             </div>
           ) : null}
+        </div>
+        <div className="item main-background-box">
+          <div className="text-white text-center">
+            <h2>Your Trades</h2>
+            <table className="center-horizontally">
+              <thead>
+                <tr>
+                  <th>Ticker</th>
+                  <th>Type</th>
+                  <th>Price</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+            </table>
+            {order ? (
+              <div>
+                <input
+                  type="text"
+                  value={order === null ? "" : order}
+                  onChange={(e) => setOrder(e.target.value)}
+                  style={{ width: "400px", backgroundColor: "yellow" }}
+                />
+                <button
+                  onClick={() => setModalShow(true)}
+                  style={{ marginLeft: -60, backgroundColor: "yellow" }}
+                >
+                  Status
+                </button>
+                {orderPlList.map((order, index) => (
+                  <div key={index}>
+                    <input
+                      defaultValue={order === null ? "" : order}
+                      style={{ width: "400px" }}
+                    />
+                    ,
+                    <button
+                      onClick={() => setModalShow(true)}
+                      style={{ marginLeft: -60 }}
+                    >
+                      Status
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
     </div>
