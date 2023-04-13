@@ -32,11 +32,11 @@ h2{
     background-position: 900px;
   }
 }
-.center-text {
+.text-center {
   text-align: center;
-  font-size: 30px;
-  margin-top: -1cm;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  /* font-size: 30px; */
+  /* margin-top: -1cm; */
+  /* font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; */
 }
 .card-text{
   margin-top: 0.5cm;

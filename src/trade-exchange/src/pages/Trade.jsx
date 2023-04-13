@@ -298,11 +298,9 @@ export const Trade = () => {
   return (
     <div className="home" style={{ backgroundColor: "black" }}>
       <div className="container">
-        <div className="item">
+        <div className="item text-center main-background-box">
           <div>
-            <h2 style={{ size: "100%" }} className="text-white">
-              MAKE A TRADE
-            </h2>
+            <h2 className="text-white text-center">MAKE A TRADE</h2>
             <div>
               <input
                 type="text"
@@ -334,9 +332,6 @@ export const Trade = () => {
                   id="shares"
                   placeholder="Select share ..."
                   onChange={(event) => {
-                    // console.log(event.value.symbol);
-                    // getInfo();
-                    // console.log(event.value.symbol);
                     if (event === null || event.value === null) {
                       console.log("null");
                       setIsShown(false);
@@ -345,7 +340,6 @@ export const Trade = () => {
                       setIsShown(false);
                       setIsShown(true);
                     }
-                    // changePriceMkt();
                   }}
                 />
 
@@ -369,22 +363,7 @@ export const Trade = () => {
                   />
                 ) : null}
                 <br />
-                {/* <Button
-                  style={{
-                    backgroundColor: "yellow",
-                    color: "black",
-                    width: 70,
-                    height: 40,
-                    marginTop: -100,
-                    marginLeft: 320,
-                  }}
-                  onClick={() => {
-                    getInfo();
-                  }}
-                >
-                  Select
-                </Button> */}
-                <div className="row2" style={{ marginLeft: -2 }}>
+                <div className="" style={{}}>
                   <Button
                     style={{
                       backgroundColor: "aquamarine",
@@ -411,7 +390,7 @@ export const Trade = () => {
                   >
                     Sell
                   </Button>
-                  <div style={{ marginTop: 55, marginLeft: -180 }}>
+                  <div className="margin-top-small">
                     <ButtonGroup>
                       {radios.map((radio, idx) => (
                         <ToggleButton
@@ -456,7 +435,7 @@ export const Trade = () => {
                     <StockRow ticker={shares} />
                   </tbody>
                 </table>
-              <Graph ticker={shares} className=""/>
+                <Graph ticker={shares} className="" />
               </div>
             </div>
           ) : null}

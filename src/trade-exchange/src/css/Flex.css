@@ -13,7 +13,8 @@
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: 350px;
-    margin-bottom: 5%;
+    justify-content: center;
+    /* margin-bottom: 5%;
     margin-left: 1vw;
-    margin-right: 1vw;
+    margin-right: 1vw; */
 }

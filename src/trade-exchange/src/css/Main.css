@@ -162,3 +162,16 @@ img {
   display: flex;
   flex-direction: row;
 }
+
+.margin-top-small{
+  margin-top: 0.5rem;
+}
+
+.main-background-box {
+  background-color: #52555a;
+  /* width: 100%; */
+  /* height: 100%; */
+  border-radius: 10px;
+  margin: 1%;
+  padding: 1%;
+}
