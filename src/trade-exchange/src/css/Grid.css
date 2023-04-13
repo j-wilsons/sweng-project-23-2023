@@ -7,7 +7,7 @@
 
 .grid-six-columns {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   grid-template-areas: "one two three four five six";
   grid-gap: 0vh 0vw;
 }
