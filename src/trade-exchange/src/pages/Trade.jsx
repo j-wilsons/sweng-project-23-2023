@@ -55,8 +55,8 @@ const orderTypes = [
 export const Trade = () => {
   const [isShown, setIsShown] = useState(false);
   const [isPriceShown, setIsPriceShown] = useState(false);
-  const [price, setPrice] = useState('')
-  const [lmtPrice, setlmtPrice] = useState('')
+  const [price, setPrice] = useState(0)
+  const [lmtPrice, setlmtPrice] = useState(0)
   const [type, setType] = React.useState('Market')
   const [orderPlList, setOrderPlList] = useState([]);
   const [order, setOrder] = useState(null);
@@ -135,6 +135,7 @@ function MyModal(props) {
       ordertype: "Market",
       amount: amount,
       ticker: shares,
+      price: price,
       progress: 0,
       completed: false,
     }),
@@ -169,6 +170,7 @@ function MyModal(props) {
         ordertype: "Market",
         amount: amount,
         ticker: shares,
+        price: price,
         progress: 0,
         completed: false,
       }),
