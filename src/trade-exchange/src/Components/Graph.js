@@ -56,10 +56,10 @@ const Graph = (props) => {
           marker: { color: "blue" },
         },
       ]}
-      layout={{title: props.ticker }}
+      layout={{ title: props.ticker }}
+      // responsive={true}
+      useResizeHandler={true}
       style={{
-        // marginTop: 210,
-        // marginLeft: -850,
         color: "white",
       }}
     ></Plot>

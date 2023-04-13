@@ -362,7 +362,8 @@ export const Trade = () => {
                 ) : null}
                 <br />
                 <div className="" style={{}}>
-                  <Button className="margin-right-small"
+                  <Button
+                    className="margin-right-small"
                     style={{
                       backgroundColor: "#B2CEB7",
                       border: "none",
