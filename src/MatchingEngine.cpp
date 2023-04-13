@@ -1,12 +1,5 @@
-#include <quickfix/Application.h>
-#include <quickfix/Message.h>
-#include <quickfix/Session.h>
-#include <quickfix/SessionSettings.h>
-#include <quickfix/FileStore.h>
-#include "quickfix/SocketInitiator.h"
-#include "quickfix/ThreadedSocketAcceptor.h"
-#include "quickfix/Log.h"
 #include "Application.h"
+#include "DatabaseManager.h"
 #include <chrono>
 #include <thread>
 #include <vector>
@@ -16,7 +9,6 @@
 #include <iostream>
 #include <string>
 #include "json.hpp"
-#include "DataBaseManager.h"
 #include <algorithm>
 
 using json = nlohmann::json;
@@ -67,7 +59,7 @@ void printOrders(json allOrders)
     }
 }
 
-FIX44::NewOrderSingle queryNewOrderSingle44(std::string ID, const std::string &Symbol, int Quantity, const std::string side, double Price)
+FIX44::NewOrderSingle createNewOrderSingle44(std::string ID, const std::string &Symbol, int Quantity, const std::string side, double Price)
 {
     FIX::Side fixSide;
     if (side == "BUY")
@@ -206,7 +198,7 @@ void processOrders(const json &orders, std::vector<Stock> &stockList)
             double price = order["price"];
             int quantity = order["quantity"];
             std::string id = to_string(order["id"]);
-            FIX44::NewOrderSingle fixOrder = queryNewOrderSingle44(id, ticker, quantity, side, price);
+            FIX44::NewOrderSingle fixOrder = createNewOrderSingle44(id, ticker, quantity, side, price);
 
             // Debug: Print order information
             std::cout << "Processing order for ticker: " << ticker << ", side: " << side << ", price: " << price << ", quantity: " << quantity << std::endl;

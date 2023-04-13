@@ -1,8 +1,7 @@
-#include <windows.h>
+#include "MatchingEngine.h"
 #include <sql.h>
 #include <sqlext.h>
 #include <cstdio>
-#include "DataBaseManager.h"
 #include "json.hpp"
 #include <iostream>
 
@@ -77,6 +76,8 @@ void addOrderToDatabase(int orderId, const std::string &side, double price, int 
         if (SQL_SUCCEEDED(ret))
         {
             printf("\nOrder added to the database successfully.\n");
+            printf("\nMatching Engine searching...\n");
+            startEngine();
         }
         else
         {

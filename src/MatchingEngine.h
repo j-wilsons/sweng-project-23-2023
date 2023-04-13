@@ -1,11 +1,6 @@
+#ifndef MATCHING_ENGINE_H
+#define MATCHING_ENGINE_H
 #include <quickfix/Application.h>
-#include <quickfix/Message.h>
-#include <quickfix/Session.h>
-#include <quickfix/SessionSettings.h>
-#include <quickfix/FileStore.h>
-#include <quickfix/SocketInitiator.h>
-#include <quickfix/ThreadedSocketAcceptor.h>
-#include <quickfix/Log.h>
 #include "Application.h"
 #include <chrono>
 #include <thread>
@@ -34,3 +29,5 @@ void printOrders(json allOrders);
 void processOrders(const json& orders, std::vector<Stock>& stockList);
 void startEngine();
 std::vector<Stock> createStockList();
+
+#endif MATCHING_ENGINE_H
