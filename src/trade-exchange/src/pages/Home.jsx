@@ -1,6 +1,6 @@
 import "../App.css";
 import logo from "../logo.svg";
-import NavBar from "../Components/NavBar";
+// import NavBar from "../Components/NavBar";
 import tradeImg from "../images/tradingimage.jpg"
 import capImg from "../images/cap.jpg"
 import graphImg from "../images/graph.jpg"
@@ -9,7 +9,7 @@ export const Home = () => {
   
   return (
     <div className="home">
-      <NavBar />
+      {/* <NavBar /> */}
       <div >
         <h1>
         Get started into trading without risking <div className="split-sent">your own money.</div>

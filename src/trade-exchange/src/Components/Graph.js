@@ -42,7 +42,7 @@ const Graph = (props) => {
         setPrice(data2.close);
         setChange(data2.change);
       });
-  }, []);
+  }, [props.ticker]);
 
   return (
     <Plot
