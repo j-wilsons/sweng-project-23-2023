@@ -175,3 +175,9 @@ img {
   margin: 1%;
   padding: 1%;
 }
+
+.center-horizontally{
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}

@@ -291,10 +291,6 @@ export const Trade = () => {
     console.log(element);
   }, []);
 
-  // useEffect(() => {
-  //   console.log(shares);
-  // }, [shares]);
-
   return (
     <div className="home" style={{ backgroundColor: "black" }}>
       <div className="container">
@@ -440,10 +436,10 @@ export const Trade = () => {
             </div>
           ) : null}
         </div>
-        <div className="item">
-          <div style={{ color: "white" }}>
-            <h2>Order Plotter</h2>
-            <table>
+        <div className="item main-background-box">
+          <div className="text-white text-center">
+            <h2>Your Trades</h2>
+            <table className="center-horizontally">
               <thead>
                 <tr>
                   <th>Ticker</th>
