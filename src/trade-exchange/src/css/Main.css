@@ -21,7 +21,7 @@ th {
 }
 
 td {
-  min-width: calc(100% / 7)
+  min-width: calc(100% / 7);
   /* text-align: left;
   vertical-align: middle;
   font-weight: 300;
@@ -46,6 +46,16 @@ table {
   margin-right: auto;
   width: 50%; */
 }
+
+/* .center-in-div-vertically {
+  display: flex;
+  align-items: center;
+}
+
+.place-div-right {
+  display: flex;
+  justify-content: flex-end;
+} */
 
 /* .home {
   background-color: black;

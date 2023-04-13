@@ -474,7 +474,7 @@ export const Trade = () => {
                 {orderPlList.length !== 0 ? (
                   <>
                     <thead>
-                      <tr className="grid-six-columns grid-item">
+                      <tr className="grid-seven-columns grid-item">
                         {Object.keys(orderPlList[0]).map((key) => (
                           <th>{key}</th>
                         ))}
@@ -482,7 +482,7 @@ export const Trade = () => {
                     </thead>
                     <tbody>
                       {orderPlList.map((order) => (
-                        <tr className="grid-six-columns grid-item">
+                        <tr className="grid-seven-columns grid-item">
                           {Object.values(order).map((value) => (
                             <td>{value}</td>
                           ))}

@@ -5,9 +5,16 @@
   grid-gap: 0vh 0vw;
 }
 
-.grid-six-columns {
+.grid-seven-columns {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  grid-template-areas: "one two three four five six";
+  grid-gap: 0vh 0vw;
+}
+
+.grid-seven-columns-left-small {
+  display: grid;
+  grid-template-columns: repeat(5, 0.5fr) repeat(2, 1.5fr);
   grid-template-areas: "one two three four five six";
   grid-gap: 0vh 0vw;
 }
@@ -17,7 +24,12 @@
   align-self: center;
 }
 
-/* .grid-six-columns > *{
+.grid-item > *{
+  justify-self: center;
+  align-self: center;
+}
+
+/* .grid-seven-columns > *{
 
 } */
 
