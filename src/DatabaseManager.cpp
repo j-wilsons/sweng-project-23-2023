@@ -1,8 +1,7 @@
-#include <windows.h>
+#include "MatchingEngine.h"
 #include <sql.h>
 #include <sqlext.h>
 #include <cstdio>
-#include "DataBaseManager.h"
 #include "json.hpp"
 #include <iostream>
 
@@ -14,6 +13,17 @@ SQLHENV env = NULL;
 SQLHDBC dbc = NULL;
 SQLRETURN ret = SQL_SUCCESS;
 
+void showSQLError(unsigned int handleType, const SQLHANDLE &handle)
+{
+    SQLCHAR SQLState[1024];
+    SQLCHAR message[1024];
+    SQLINTEGER nativeError;
+    SQLSMALLINT textLength;
+
+    SQLGetDiagRec(handleType, handle, 1, SQLState, &nativeError, message, sizeof(message), &textLength);
+    printf("SQL Error: %s\nMessage: %s\n", SQLState, message);
+}
+
 void connectToDB()
 {
     ret = SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &env);
@@ -21,6 +31,48 @@ void connectToDB()
     ret = SQLAllocHandle(SQL_HANDLE_DBC, env, &dbc);
     ret = SQLDriverConnect(dbc, NULL, connectionString, SQL_NTS, NULL, 0, NULL, SQL_DRIVER_NOPROMPT);
     printf("connected");
+}
+
+void updateOrderQuantity(int orderId, int newQuantity)
+{
+    SQLHSTMT stmt = NULL;
+    SQLCHAR* query = (SQLCHAR*)"UPDATE orders SET quantity = ? WHERE id = ?";
+    ret = SQLAllocHandle(SQL_HANDLE_STMT, dbc, &stmt);
+    if (!SQL_SUCCEEDED(ret))
+    {
+        showSQLError(SQL_HANDLE_DBC, dbc);
+        return;
+    }
+    ret = SQLPrepare(stmt, query, SQL_NTS);
+    if (!SQL_SUCCEEDED(ret))
+    {
+        showSQLError(SQL_HANDLE_STMT, stmt);
+        SQLFreeHandle(SQL_HANDLE_STMT, stmt);
+        return;
+    }
+    ret = SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, &newQuantity, sizeof(newQuantity), NULL);
+    if (!SQL_SUCCEEDED(ret))
+    {
+        showSQLError(SQL_HANDLE_STMT, stmt);
+        SQLFreeHandle(SQL_HANDLE_STMT, stmt);
+        return;
+    }
+    ret = SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, &orderId, sizeof(orderId), NULL);
+    if (!SQL_SUCCEEDED(ret))
+    {
+        showSQLError(SQL_HANDLE_STMT, stmt);
+        SQLFreeHandle(SQL_HANDLE_STMT, stmt);
+        return;
+    }
+    ret = SQLExecute(stmt);
+    if (!SQL_SUCCEEDED(ret))
+    {
+        showSQLError(SQL_HANDLE_STMT, stmt);
+        SQLFreeHandle(SQL_HANDLE_STMT, stmt);
+        return;
+    }
+    printf("Order quantity updated successfully\n");
+    SQLFreeHandle(SQL_HANDLE_STMT, stmt);
 }
 
 void deleteOrder(int orderId)
@@ -42,17 +94,6 @@ void deleteOrder(int orderId)
     }
 
     SQLFreeHandle(SQL_HANDLE_STMT, stmt);
-}
-
-void showSQLError(unsigned int handleType, const SQLHANDLE &handle)
-{
-    SQLCHAR SQLState[1024];
-    SQLCHAR message[1024];
-    SQLINTEGER nativeError;
-    SQLSMALLINT textLength;
-
-    SQLGetDiagRec(handleType, handle, 1, SQLState, &nativeError, message, sizeof(message), &textLength);
-    printf("SQL Error: %s\nMessage: %s\n", SQLState, message);
 }
 
 void addOrderToDatabase(int orderId, const std::string &side, double price, int quantity, const std::string &timestamp, const std::string &username, const std::string &ticker)
@@ -77,6 +118,8 @@ void addOrderToDatabase(int orderId, const std::string &side, double price, int 
         if (SQL_SUCCEEDED(ret))
         {
             printf("\nOrder added to the database successfully.\n");
+            printf("\nMatching Engine searching...\n");
+            startEngine();
         }
         else
         {
@@ -110,7 +153,6 @@ json pullOrderTable()
         {
             int orderId;
             char side[256];
-            char timestamp[256];
             char username[256];
             char ticker[256];
             double price;
@@ -120,16 +162,14 @@ json pullOrderTable()
             SQLGetData(stmt, 2, SQL_CHAR, side, sizeof(side), NULL);
             SQLGetData(stmt, 3, SQL_C_DOUBLE, &price, sizeof(price), NULL);
             SQLGetData(stmt, 4, SQL_INTEGER, &quantity, sizeof(quantity), NULL);
-            SQLGetData(stmt, 5, SQL_CHAR, &timestamp, sizeof(timestamp), NULL);
-            SQLGetData(stmt, 6, SQL_CHAR, &username, sizeof(username), NULL);
-            SQLGetData(stmt, 7, SQL_CHAR, &ticker, sizeof(ticker), NULL);
-
+            SQLGetData(stmt, 5, SQL_CHAR, &username, sizeof(username), NULL);
+            SQLGetData(stmt, 6, SQL_CHAR, &ticker, sizeof(ticker), NULL);
+            
             json order = {
                 {"id", orderId},
                 {"side", side},
                 {"price", price},
                 {"quantity", quantity},
-                {"timestamp", timestamp},
                 {"username", username},
                 {"ticker", ticker},
             };

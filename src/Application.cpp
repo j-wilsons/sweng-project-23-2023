@@ -1,3 +1,4 @@
+#include "curl/curl.h"
 #include <quickfix/SessionID.h>
 #include <quickfix/Message.h>
 #include <quickfix/Session.h>
@@ -7,10 +8,8 @@
 #include <quickfix/fix44/NewOrderSingle.h>
 #include <string>
 #include <vector>
-#include "curl/curl.h"
 #include <iostream>
 #include "json.hpp"
-#include <windows.h> // for windows for sleeping
 #include "DataBaseManager.h"
 
 using namespace std;
@@ -90,7 +89,7 @@ void Application::onMessage(const FIX44::NewOrderSingle &message, const FIX::Ses
     }
     else if (senderCompID == "SERVER")
     {
-        std::cout << "Came from server" << std::endl;
+       // std::cout << "Came from server" << std::endl;
     }
     else
     {
@@ -215,7 +214,7 @@ double extract_key(const string& json_str, string key) {
         cerr << e.what();
         return NAN;
     }
-
+}
 
 // takes in vector with tickers e,g: AAPL, returns vector of JSON strings containing AAPL stock data
 vector<string> Application::marketData(vector<string> symbols)

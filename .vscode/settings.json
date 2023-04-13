@@ -83,6 +83,7 @@
         "span": "cpp",
         "valarray": "cpp",
         "coroutine": "cpp",
-        "source_location": "cpp"
+        "source_location": "cpp",
+        "memory": "cpp"
     }
 }

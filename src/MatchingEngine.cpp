@@ -1,12 +1,5 @@
-#include <quickfix/Application.h>
-#include <quickfix/Message.h>
-#include <quickfix/Session.h>
-#include <quickfix/SessionSettings.h>
-#include <quickfix/FileStore.h>
-#include "quickfix/SocketInitiator.h"
-#include "quickfix/ThreadedSocketAcceptor.h"
-#include "quickfix/Log.h"
 #include "Application.h"
+#include "DatabaseManager.h"
 #include <chrono>
 #include <thread>
 #include <vector>
@@ -16,7 +9,6 @@
 #include <iostream>
 #include <string>
 #include "json.hpp"
-#include "DataBaseManager.h"
 #include <algorithm>
 
 using json = nlohmann::json;
@@ -60,14 +52,13 @@ void printOrders(json allOrders)
         std::cout << "Side: " << order["side"] << std::endl;
         std::cout << "Price: " << order["price"] << std::endl;
         std::cout << "Quantity: " << order["quantity"] << std::endl;
-        std::cout << "Timestamp: " << order["timestamp"] << std::endl;
         std::cout << "Username: " << order["username"] << std::endl;
         std::cout << "Ticker: " << order["ticker"] << std::endl;
         std::cout << "-----------------------" << std::endl;
     }
 }
 
-FIX44::NewOrderSingle queryNewOrderSingle44(std::string ID, const std::string &Symbol, int Quantity, const std::string side, double Price)
+FIX44::NewOrderSingle createNewOrderSingle44(std::string ID, const std::string &Symbol, int Quantity, const std::string side, double Price)
 {
     FIX::Side fixSide;
     if (side == "BUY")
@@ -134,11 +125,18 @@ void matchOrders(Stock &stock)
 
                 if (highest_buy->first >= lowest_sell->first)
                 {
+                    auto &buy_order = highest_buy->second.front();
+                    auto &sell_order = lowest_sell->second.front();
+
+                     if (buy_order.getField(49) == sell_order.getField(49))
+                    {
+                        // Skip the current order and continue with the next
+                        continue;
+                    }
+                    
                     matchFound = true;
                     std::cout << "\n\nMATCH FOUND "
                               << "\n";
-                    auto &buy_order = highest_buy->second.front();
-                    auto &sell_order = lowest_sell->second.front();
                     std::cout << " buy OrderQuantity: " << buy_order.getField(38) << ", ";
                     std::cout << " sell OrderQuantity: " << sell_order.getField(38) << ", ";
 
@@ -166,7 +164,10 @@ void matchOrders(Stock &stock)
                     }
                     else
                     {
-                        buy_order.setField(FIX::OrderQty(buy_quantity));
+                        int orderId = stoi(buy_order.getField(11));
+                        std::cout << "\n reducing quantity to  " << buy_quantity << " for order "<< orderId ;
+                        sell_order.setField(FIX::OrderQty(buy_quantity));
+                        updateOrderQuantity(orderId, buy_quantity);
                     }
 
                     if (sell_quantity == 0)
@@ -183,7 +184,10 @@ void matchOrders(Stock &stock)
                     }
                     else
                     {
+                        int orderId = stoi(sell_order.getField(11));
+                        std::cout << "\n reducing quantity to  " << sell_quantity << " for order "<< orderId ;
                         sell_order.setField(FIX::OrderQty(sell_quantity));
+                        updateOrderQuantity(orderId, sell_quantity);
                     }
                 }
             }
@@ -206,7 +210,7 @@ void processOrders(const json &orders, std::vector<Stock> &stockList)
             double price = order["price"];
             int quantity = order["quantity"];
             std::string id = to_string(order["id"]);
-            FIX44::NewOrderSingle fixOrder = queryNewOrderSingle44(id, ticker, quantity, side, price);
+            FIX44::NewOrderSingle fixOrder = createNewOrderSingle44(id, ticker, quantity, side, price);
 
             // Debug: Print order information
             std::cout << "Processing order for ticker: " << ticker << ", side: " << side << ", price: " << price << ", quantity: " << quantity << std::endl;
@@ -274,8 +278,8 @@ void startEngine()
 {
     connectToDB();
     json allOrders = pullOrderTable();
-    printOrders(allOrders);
+    //printOrders(allOrders);
     std::vector<Stock> stockList = createStockList();
     processOrders(allOrders, stockList);
-    print_ibm_orderbook_keys(stockList);
+    //print_ibm_orderbook_keys(stockList);
 }
