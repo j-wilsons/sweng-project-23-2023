@@ -16,6 +16,11 @@ h1 {
   -webkit-text-fill-color: transparent;
   animation: shine 3s infinite linear;
 }
+
+h2{
+  display: inline-block;
+}
+
 @keyframes shine {
   0% {
     background-position: 0;

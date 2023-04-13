@@ -21,7 +21,6 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import axios from "axios";
 var amount = 0;
-var shares = 0;
 let myData; // variable to hold response from backend
 
 const columns = [
@@ -60,6 +59,7 @@ export const Trade = () => {
   const [order, setOrder] = useState(null);
   const [modalShow, setModalShow] = React.useState(false);
   const [radioValue, setRadioValue] = useState("1");
+  const [shares, setShares] = useState("");
 
   const radios = [
     { name: "Market", value: "1" },
@@ -132,7 +132,7 @@ export const Trade = () => {
 
   const buyShares = () => {
     const amount = document.getElementById("amount").value;
-    const shares = document.getElementById("shares").value;
+    setShares(document.getElementById("shares").value);
     //get data from backend
     //example for get request
     //prints out whatever is in the response
@@ -165,7 +165,7 @@ export const Trade = () => {
   };
   const sellShares = () => {
     amount = document.getElementById("amount").value;
-    shares = document.getElementById("shares").value;
+    setShares(document.getElementById("shares").value);
     console.log("Selling " + amount + " shares of " + shares);
 
     //post data to backend
@@ -196,7 +196,7 @@ export const Trade = () => {
   };
   const handleAddOrder = () => {
     const amount = document.getElementById("amount").value;
-    shares = document.getElementById("shares").value;
+    setShares(document.getElementById("shares").value);
     setOrder(
       "  " +
         shares +
@@ -211,7 +211,7 @@ export const Trade = () => {
   };
   const handleAddSellOrder = () => {
     const amount = document.getElementById("amount").value;
-    shares = document.getElementById("shares").value;
+    setShares(document.getElementById("shares").value);
     setOrder(
       "  " +
         shares +
@@ -225,7 +225,7 @@ export const Trade = () => {
   };
   const handleAddLmtOrder = () => {
     const amount = document.getElementById("amount").value;
-    shares = document.getElementById("shares").value;
+    setShares(document.getElementById("shares").value);
     setOrder(
       "  " +
         shares +
@@ -239,7 +239,7 @@ export const Trade = () => {
   };
   const handleAddSellLmtOrder = () => {
     const amount = document.getElementById("amount").value;
-    shares = document.getElementById("shares").value;
+    setShares(document.getElementById("shares").value);
     setOrder(
       "  " +
         shares +
@@ -252,9 +252,10 @@ export const Trade = () => {
     setOrderPlList([...orderPlList, order]);
   };
 
-  const getInfo = (event) => {
-    shares = document.getElementById("shares").value;
-    setIsShown((current) => !current);
+  const getInfo = () => {
+    setShares(document.getElementById("shares").value);
+    // setIsShown(false);
+    // setIsShown(true);
   };
   const getPrice = (event) => {
     if (event === "Limit") {
@@ -291,9 +292,11 @@ export const Trade = () => {
   return (
     <div className="home" style={{ backgroundColor: "black" }}>
       <div className="container">
-        <div className="item ">
+        <div className="item">
           <div>
-            <h2 className="text-white">MAKE A TRADE</h2>
+            <h2 style={{ size: "100%" }} className="text-white">
+              MAKE A TRADE
+            </h2>
             <div>
               <input
                 type="text"
@@ -317,13 +320,17 @@ export const Trade = () => {
                   }}
                   data={equities}
                   columns={columns}
-                  textField={"symbol"}
+                  textField={"name"}
+                  valueField={"symbol"}
                   size={size}
                   fillMode={fillMode}
                   rounded={rounded}
                   id="shares"
                   placeholder="Select share ..."
-                  onChange={() => {
+                  onChange={(event) => {
+                    // console.log(event.value.symbol);
+                    // getInfo();
+                    setShares(event.value.symbol);
                     changePriceMkt();
                   }}
                 />
@@ -348,7 +355,7 @@ export const Trade = () => {
                   />
                 ) : null}
                 <br />
-                <Button
+                {/* <Button
                   style={{
                     backgroundColor: "yellow",
                     color: "black",
@@ -362,7 +369,7 @@ export const Trade = () => {
                   }}
                 >
                   Select
-                </Button>
+                </Button> */}
                 <div className="row2" style={{ marginLeft: -2 }}>
                   <Button
                     style={{
@@ -419,7 +426,7 @@ export const Trade = () => {
             </div>
           </div>
 
-          {isShown ? (
+          {/* {isShown ? ( */}
             <div className="item">
               <div className="container">
                 <table className="table mt-3" style={{ color: "white" }}>
@@ -437,7 +444,7 @@ export const Trade = () => {
                 </table>
               </div>
             </div>
-          ) : null}
+          {/* ) : null} */}
         </div>
         <div className="item">
           <div style={{ color: "white" }}>
