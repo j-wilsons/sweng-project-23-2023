@@ -148,6 +148,7 @@ export const Trade = () => {
         side: "buy",
         ordertype: "Market",
         amount: amount,
+        price: price,
         ticker: shares,
         progress: 0,
         completed: false,
@@ -181,6 +182,7 @@ export const Trade = () => {
         side: "sell",
         ordertype: "Market",
         amount: amount,
+        price: price,
         ticker: shares,
         progress: 0,
         completed: false,
@@ -333,8 +335,8 @@ export const Trade = () => {
                       setIsShown(false);
                     } else {
                       setShares(event.value.symbol);
-                      setIsShown(false);
                       setIsShown(true);
+                      changePriceMkt();
                     }
                   }}
                 />

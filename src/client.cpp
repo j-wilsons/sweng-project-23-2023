@@ -88,8 +88,8 @@ void handle_post(const httplib::Request& req, httplib::Response& res, Applicatio
     string Symbol = request["ticker"];
     string Quantity = request["amount"];
     int QuantityInt = std::stoi(Quantity);
-    string priceString = request["price"];
-    double price = std::stoi(priceString);
+    double price = request["price"];
+    // double price = std::stoi(priceString);
     std::cout << "orderside" << OrderSide << std::endl; 
     if(OrderSide == "buy"){
        try{
