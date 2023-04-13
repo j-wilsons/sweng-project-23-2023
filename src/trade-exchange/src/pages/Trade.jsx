@@ -132,10 +132,10 @@ function MyModal(props) {
     //key-value pairs
     body: JSON.stringify({
       side: "buy",
-      ordertype: "Market",
+      ordertype: "Limit",
       amount: amount,
       ticker: shares,
-      price: price,
+      price: lmtPrice,
       progress: 0,
       completed: false,
     }),
@@ -167,10 +167,10 @@ function MyModal(props) {
       //key-value pairs
       body: JSON.stringify({
         side: "sell",
-        ordertype: "Market",
+        ordertype: "Limit",
         amount: amount,
         ticker: shares,
-        price: price,
+        price: lmtPrice,
         progress: 0,
         completed: false,
       }),

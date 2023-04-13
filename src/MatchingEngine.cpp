@@ -125,11 +125,18 @@ void matchOrders(Stock &stock)
 
                 if (highest_buy->first >= lowest_sell->first)
                 {
+                    auto &buy_order = highest_buy->second.front();
+                    auto &sell_order = lowest_sell->second.front();
+
+                     if (buy_order.getField(49) == sell_order.getField(49))
+                    {
+                        // Skip the current order and continue with the next
+                        continue;
+                    }
+                    
                     matchFound = true;
                     std::cout << "\n\nMATCH FOUND "
                               << "\n";
-                    auto &buy_order = highest_buy->second.front();
-                    auto &sell_order = lowest_sell->second.front();
                     std::cout << " buy OrderQuantity: " << buy_order.getField(38) << ", ";
                     std::cout << " sell OrderQuantity: " << sell_order.getField(38) << ", ";
 
@@ -157,7 +164,10 @@ void matchOrders(Stock &stock)
                     }
                     else
                     {
-                        buy_order.setField(FIX::OrderQty(buy_quantity));
+                        int orderId = stoi(buy_order.getField(11));
+                        std::cout << "\n reducing quantity to  " << buy_quantity << " for order "<< orderId ;
+                        sell_order.setField(FIX::OrderQty(buy_quantity));
+                        updateOrderQuantity(orderId, buy_quantity);
                     }
 
                     if (sell_quantity == 0)
@@ -174,7 +184,10 @@ void matchOrders(Stock &stock)
                     }
                     else
                     {
+                        int orderId = stoi(sell_order.getField(11));
+                        std::cout << "\n reducing quantity to  " << sell_quantity << " for order "<< orderId ;
                         sell_order.setField(FIX::OrderQty(sell_quantity));
+                        updateOrderQuantity(orderId, sell_quantity);
                     }
                 }
             }
@@ -265,8 +278,8 @@ void startEngine()
 {
     connectToDB();
     json allOrders = pullOrderTable();
-    printOrders(allOrders);
+    //printOrders(allOrders);
     std::vector<Stock> stockList = createStockList();
     processOrders(allOrders, stockList);
-    print_ibm_orderbook_keys(stockList);
+    //print_ibm_orderbook_keys(stockList);
 }

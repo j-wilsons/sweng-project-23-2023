@@ -81,15 +81,19 @@ void handle_post(const httplib::Request& req, httplib::Response& res, Applicatio
 
     // Print the JSON object to the console
     std::cout << request.dump() << std::endl;
-
-    string OrderSide = request["side"];
+    try
+    {
+        /* code */
+        string OrderSide = request["side"];
     string Symbol = request["ticker"];
     string Quantity = request["amount"];
     int QuantityInt = std::stoi(Quantity);
-    double price = 000;
-
+    string priceString = request["price"];
+    double price = std::stoi(priceString);
+    std::cout << "orderside" << OrderSide << std::endl; 
     if(OrderSide == "buy"){
        try{
+                std::cout << "buy order came through" << std::endl;
                 app.sendBuyOrder(app.sessionId_, Symbol, QuantityInt, price);
             }catch(std::exception & e){
                 std::cout << e.what();
@@ -108,6 +112,13 @@ void handle_post(const httplib::Request& req, httplib::Response& res, Applicatio
     res.set_header("Access-Control-Allow-Origin", "*");
     res.status = 200;       //this one is not rly important but thats how the big boys check if the request was successful
     res.set_content(response.dump(), "application/json");
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+    
+
 }
 
 void runEndPoint(Application& app) {
