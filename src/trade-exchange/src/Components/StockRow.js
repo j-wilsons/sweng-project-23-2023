@@ -32,7 +32,7 @@ class StockRow extends Component {
           chartXValsFunction.push(key);
           chartYValsFunction.push(data["Time Series (Daily)"][key]["1. open"]);
         }
-        console.log(this.state.chartXVals);
+        // console.log(this.state.chartXVals);
         pointerToThis.setState({
           chartXVals: chartXValsFunction,
           chartYVals: chartYValsFunction,
@@ -48,7 +48,7 @@ class StockRow extends Component {
       .then((response) => response.json())
 
       .then((data2) => {
-        console.log(data2);
+        // console.log(data2);
         this.setState({
           price: data2.close,
           change: data2.change,

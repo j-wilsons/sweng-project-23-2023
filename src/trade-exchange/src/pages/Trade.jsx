@@ -62,7 +62,7 @@ export const Trade = () => {
   const [orderPlList, setOrderPlList] = useState([]);
   const addOrder = (newOrder) => {
     setOrderPlList((prevData) => [...prevData, newOrder]);
-    console.log(orderPlList);
+    // console.log(orderPlList);
   };
   const [order, setOrder] = useState(null);
   const [modalShow, setModalShow] = React.useState(false);
@@ -315,7 +315,7 @@ export const Trade = () => {
 
   useEffect(() => {
     const element = document.querySelector("#EqList");
-    console.log(element);
+    // console.log(element);
   }, []);
 
   return (
@@ -471,28 +471,30 @@ export const Trade = () => {
             <h2>Your Trades</h2>
             <div className="center-div">
               <table>
-                {orderPlList.length !== 0 ? (
-                  <>
-                    <thead>
-                      <tr className="grid-seven-columns grid-item">
-                        {Object.keys(orderPlList[0]).map((key) => (
-                          <th>{key}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {orderPlList.map((order) => (
-                        <tr className="grid-seven-columns grid-item">
-                          {Object.values(order).map((value) => (
-                            <td>{value}</td>
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </>
-                ) : (
-                  console.log("no orders")
-                )}
+                <>
+                  <thead>
+                    <tr className="grid-seven-columns grid-item">
+                      <th>Ticker</th>
+                      <th>Type</th>
+                      <th>Side</th>
+                      <th>Price</th>
+                      <th>Amount</th>
+                      <th>Date</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orderPlList.length !== 0
+                      ? orderPlList.map((order) => (
+                          <tr className="grid-seven-columns grid-item">
+                            {Object.values(order).map((value) => (
+                              <td>{value}</td>
+                            ))}
+                          </tr>
+                        ))
+                      : null}
+                  </tbody>
+                </>
               </table>
             </div>
           </div>

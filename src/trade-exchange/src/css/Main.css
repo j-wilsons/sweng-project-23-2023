@@ -41,11 +41,11 @@ table {
   transform: translate(-50%, -50%);
 }
 
-.center-horizontally {
+/* .center-horizontally { */
   /* margin-left: auto;
   margin-right: auto;
   width: 50%; */
-}
+/* } */
 
 /* .center-in-div-vertically {
   display: flex;

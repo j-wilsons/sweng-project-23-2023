@@ -25,7 +25,7 @@ const Graph = (props) => {
           chartXValsFunction.push(key);
           chartYValsFunction.push(data["Time Series (Daily)"][key]["1. open"]);
         }
-        console.log(chartXVals);
+        // console.log(chartXVals);
         setChartXVals(chartXValsFunction);
         setChartYVals(chartYValsFunction);
         setData({
@@ -38,7 +38,7 @@ const Graph = (props) => {
     fetch(API_Call2)
       .then((response) => response.json())
       .then((data2) => {
-        console.log(data2);
+        // console.log(data2);
         setPrice(data2.close);
         setChange(data2.change);
       });
