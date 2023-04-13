@@ -42,13 +42,7 @@ const columns = [
   },
 ];
 
-const orderTypes = [
-  {
-    field: "nameO",
-    header: "Order Type",
-    width: "300px",
-  },
-];
+
 
 export const Trade = () => {
   const [isShown, setIsShown] = useState(false);
@@ -58,7 +52,7 @@ export const Trade = () => {
   const [lmtPrice, setlmtPrice] = useState(0)
   const [type, setType] = React.useState('Market')
   const [orderPlList, setOrderPlList] = useState([]);
-  const [order, setOrder] = useState(null);
+  const [order, setOrder] = useState('                          Previous Orders');
   const [modalShow, setModalShow] = React.useState(false);
   const [radioValue, setRadioValue] = useState("1");
 
@@ -208,7 +202,7 @@ export const Trade = () => {
         price +
         "    " +
         amount +
-        "        10/04/23    Filled"
+        "        13/04/23    Filled"
     );
     setOrderPlList([...orderPlList, order]);
     setlmtPrice("");
@@ -223,7 +217,7 @@ export const Trade = () => {
         price +
         "    " +
         amount +
-        "        10/04/23    Filled"
+        "        13/04/23    Filled"
     );
     setOrderPlList([...orderPlList, order]);
   };
@@ -237,7 +231,7 @@ export const Trade = () => {
         lmtPrice +
         "    " +
         amount +
-        "        10/04/23    Filled"
+        "        13/04/23    Filled"
     );
     setOrderPlList([...orderPlList, order]);
   };
@@ -251,7 +245,7 @@ export const Trade = () => {
         lmtPrice +
         "    " +
         amount +
-        "        10/04/23    Filled"
+        "        13/04/23    Filled"
     );
     setOrderPlList([...orderPlList, order]);
   };
@@ -297,7 +291,12 @@ export const Trade = () => {
       <NavBar />
       <div className="right-pos">
         <div>
-          <h2>MAKE A TRADE</h2>
+        <input value={"           MAKE A TRADE"}
+          style={{color: 'black',
+           fontFamily: 'cursive', 
+           width: "300px", 
+           fontSize: 20, 
+           backgroundColor: `#f0f8ff`}}/>
           <div>
             <input
               type="text"
@@ -443,7 +442,12 @@ export const Trade = () => {
       </div>
       <div className="right-corner-pos">
         <div style={{ color: "white" }}>
-          <h2>Order Plotter</h2>
+        <input value={"            Current Orders"} 
+        style={{
+        width: "400px", 
+        fontSize: 25, 
+        backgroundColor: `#f0f8ff`, 
+        fontFamily: 'cursive'}}/>
           <table>
             <thead>
               <tr>
