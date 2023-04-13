@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Data } from "../Components/Data";
 import PieChart from "../Components/PieChart";
 import OrderPlotter from "../Components/OrderPlotter"
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
 Chart.register(CategoryScale);
 

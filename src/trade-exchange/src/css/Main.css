@@ -1,7 +1,7 @@
 body {
-  height: 100%;
   background-color: black;
 }
+
 thead {
   background-color: rgba(255, 255, 255, 0.3);
 }
@@ -43,12 +43,12 @@ td {
   width: 50%; */
 }
 
-.home {
+/* .home {
   background-color: black;
   position: absolute;
   height: 100%;
   width: 100%;
-}
+} */
 
 .container-pos {
   background-color: rgb(48, 48, 48);
@@ -163,11 +163,11 @@ img {
   flex-direction: row;
 }
 
-.margin-top-small{
+.margin-top-small {
   margin-top: 0.5rem;
 }
 
-.margin-right-small{
+.margin-right-small {
   margin-right: 0.5rem;
 }
 
@@ -180,7 +180,7 @@ img {
   padding: 1%;
 }
 
-.center-horizontally{
+.center-horizontally {
   margin-left: auto;
   margin-right: auto;
   width: 50%;

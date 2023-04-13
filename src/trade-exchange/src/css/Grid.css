@@ -1,0 +1,88 @@
+.grid-left-middle-right {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-areas: "left middle right";
+  grid-gap: 0vh 0vw;
+}
+
+.grid-six-columns {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-areas: "one two three four five six";
+  grid-gap: 0vh 0vw;
+}
+
+.grid-item > *{
+  justify-self: center;
+  align-self: center;
+}
+
+/* .grid-six-columns > *{
+
+} */
+
+.grid{
+  display: grid;
+}
+.grid-days > *{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-areas: "one two three four five six seven";
+  grid-gap: 0vh 0vw;
+}
+
+.grid-center{
+  /* justify-content: space-around; */
+  justify-items: center;
+}
+
+.one{
+  grid-area: one;
+}
+
+.two{
+  grid-area: two;
+}
+
+.three{
+  grid-area: three;
+}
+
+.four{
+  grid-area: four;
+}
+
+.five{
+  grid-area: five;
+}
+
+.six{
+  grid-area: six;
+}
+
+.seven{
+  grid-area: seven;
+}
+
+.grid-gap-days > *{
+  grid-gap: 1vw;
+}
+
+.grid-left {
+  grid-area: left;
+}
+
+.grid-middle {
+  grid-area: middle;
+}
+
+.grid-right {
+  grid-area: right;
+}
+
+.row-one {
+  grid-row: 1;
+}
+.row-two {
+  grid-row: 2;
+}

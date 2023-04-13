@@ -1,5 +1,5 @@
 import "../App.css";
-import logo from "../logo.svg";
+// import logo from "../logo.svg";
 // import NavBar from "../Components/NavBar";
 import tradeImg from "../images/tradingimage.jpg"
 import capImg from "../images/cap.jpg"

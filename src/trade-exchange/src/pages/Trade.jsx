@@ -1,7 +1,12 @@
 import React from "react";
+import "react-awesome-button/dist/styles.css";
+import "@progress/kendo-theme-default/dist/all.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/Main.css";
 import "../css/Text.css";
 import "../css/Flex.css";
+import "../css/Grid.css";
+// import "../css/Button.css";
 import TradeCard from "../Components/TradeCard";
 import StockRow from "../Components/StockRow";
 import PieChart from "../Components/PieChart";
@@ -15,9 +20,6 @@ import { equities } from "../Components/Equities";
 import { orderType } from "../Components/Equities";
 import { Button } from "react-bootstrap";
 import { Modal } from "react-bootstrap";
-import "react-awesome-button/dist/styles.css";
-import "@progress/kendo-theme-default/dist/all.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import axios from "axios";
@@ -58,6 +60,9 @@ export const Trade = () => {
   const [lmtPrice, setlmtPrice] = useState("");
   const [type, setType] = React.useState("Market");
   const [orderPlList, setOrderPlList] = useState([]);
+  const addOrder = (newOrder) => {
+    setOrderPlList((prevData) => [...prevData, newOrder]);
+  };
   const [order, setOrder] = useState(null);
   const [modalShow, setModalShow] = React.useState(false);
   const [radioValue, setRadioValue] = useState("1");
@@ -106,9 +111,11 @@ export const Trade = () => {
     console.log(radioValue);
     if (radioValue == "1") {
       getPrice("Limit");
+      setType("Limit");
     } else {
       getPrice("Market");
       setIsPriceShown(false);
+      setType("Market");
     }
   };
   const [intervalId, setIntervalId] = useState(0); // [variable, function to set variable
@@ -146,7 +153,7 @@ export const Trade = () => {
       //key-value pairs
       body: JSON.stringify({
         side: "buy",
-        ordertype: "Market",
+        ordertype: type,
         amount: amount,
         price: price,
         ticker: shares,
@@ -180,7 +187,7 @@ export const Trade = () => {
       //key-value pairs
       body: JSON.stringify({
         side: "sell",
-        ordertype: "Market",
+        ordertype: type,
         amount: amount,
         price: price,
         ticker: shares,
@@ -201,16 +208,16 @@ export const Trade = () => {
   const handleAddOrder = () => {
     const amount = document.getElementById("amount").value;
     setShares(document.getElementById("shares").value);
-    setOrder(
-      "  " +
-        shares +
-        "     Mkt Buy    " +
-        price +
-        "    " +
-        amount +
-        "        10/04/23    Filled"
-    );
-    setOrderPlList([...orderPlList, order]);
+    addOrder({
+      ticker: shares,
+      type: type,
+      side: "Buy",
+      price: price,
+      amount: amount,
+      date: new Date().toISOString(),
+      status: "",
+    });
+    // setOrderPlList([...orderPlList, order]);
     setlmtPrice("");
   };
   const handleAddSellOrder = () => {
@@ -258,8 +265,6 @@ export const Trade = () => {
 
   const getInfo = () => {
     setShares(document.getElementById("shares").value);
-    // setIsShown(false);
-    // setIsShown(true);
   };
   const getPrice = (event) => {
     if (event === "Limit") {
@@ -294,7 +299,7 @@ export const Trade = () => {
   }, []);
 
   return (
-    <div className="home" style={{ backgroundColor: "black" }}>
+    <div className="" style={{ backgroundColor: "black" }}>
       <div className="flex-container">
         <div className="item text-center main-background-box">
           <div>
@@ -444,49 +449,51 @@ export const Trade = () => {
         <div className="item main-background-box">
           <div className="text-white text-center">
             <h2>Your Trades</h2>
-            <table className="center-horizontally">
-              <thead>
-                <tr>
-                  <th>Ticker</th>
-                  <th>Type</th>
-                  <th>Price</th>
-                  <th>Amount</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-            </table>
-            {order ? (
-              <div>
-                <input
-                  type="text"
-                  value={order === null ? "" : order}
-                  onChange={(e) => setOrder(e.target.value)}
-                  style={{ width: "400px", backgroundColor: "yellow" }}
-                />
-                <button
-                  onClick={() => setModalShow(true)}
-                  style={{ marginLeft: -60, backgroundColor: "yellow" }}
-                >
-                  Status
-                </button>
-                {orderPlList.map((order, index) => (
-                  <div key={index}>
-                    <input
-                      defaultValue={order === null ? "" : order}
-                      style={{ width: "400px" }}
-                    />
-                    ,
-                    <button
-                      onClick={() => setModalShow(true)}
-                      style={{ marginLeft: -60 }}
-                    >
-                      Status
-                    </button>
-                  </div>
-                ))}
-              </div>
-            ) : null}
+            <div className="center-div">
+              <table>
+                <thead>
+                  <tr className="grid-six-columns grid-item">
+                    <th>Ticker</th>
+                    <th>Type</th>
+                    <th>Price</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th >Status</th>
+                  </tr>
+                </thead>
+              </table>
+              {order ? (
+                <div>
+                  <input
+                    type="text"
+                    value={order === null ? "" : order}
+                    onChange={(e) => setOrder(e.target.value)}
+                    style={{ width: "400px", backgroundColor: "yellow" }}
+                  />
+                  <button
+                    onClick={() => setModalShow(true)}
+                    style={{ marginLeft: -60, backgroundColor: "yellow" }}
+                  >
+                    Status
+                  </button>
+                  {orderPlList.map((order, index) => (
+                    <div key={index}>
+                      <input
+                        defaultValue={order === null ? "" : order}
+                        style={{ width: "400px" }}
+                      />
+                      ,
+                      <button
+                        onClick={() => setModalShow(true)}
+                        style={{ marginLeft: -60 }}
+                      >
+                        Status
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+            </div>
           </div>
         </div>
       </div>
