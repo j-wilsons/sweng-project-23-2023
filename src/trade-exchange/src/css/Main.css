@@ -1,6 +1,6 @@
 body {
-    background-color: black;
-    
+  height: 100%;
+  background-color: black;
 }
 thead {
   background-color: rgba(255, 255, 255, 0.3);
@@ -31,79 +31,84 @@ td {
 }
 /* centre div vertically and horizontally*/
 .center {
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-.home{
-    background-color: black;
-    position: absolute;
-    height: 100%;
-    width: 100%;
+.center-horizontally {
+  /* margin-left: auto;
+  margin-right: auto;
+  width: 50%; */
 }
 
-.container-pos{
-    background-color:rgb(48, 48, 48);
-    width: 200px;
-    height: 40px;
-    font-size: x-large;
-    color: #e2d9d9;
-    text-align: center;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+.home {
+  background-color: black;
+  position: absolute;
+  height: 100%;
+  width: 100%;
 }
-.right-pos{
-    position: absolute;
-    left: 70%;
-    right: 0%;
-    background-color: black;
+
+.container-pos {
+  background-color: rgb(48, 48, 48);
+  width: 200px;
+  height: 40px;
+  font-size: x-large;
+  color: #e2d9d9;
+  text-align: center;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
 }
-.right-corner-pos{
-    position: absolute;
-    left: 70%;
-    right: 0%;
-    top: 40%;
-    background-color: black;
+.right-pos {
+  position: absolute;
+  left: 70%;
+  right: 0%;
+  background-color: black;
 }
-.left-pos{
-    margin-left: -20cm; 
-    margin-top: -5.5cm;
-    margin-right: 16cm;
-    background-color: black;
+.right-corner-pos {
+  position: absolute;
+  left: 70%;
+  right: 0%;
+  top: 40%;
+  background-color: black;
+}
+.left-pos {
+  margin-left: -20cm;
+  margin-top: -5.5cm;
+  margin-right: 16cm;
+  background-color: black;
 }
 img {
-    width: 1300px;
-    height: 400px;
-    margin-top: 0cm;
-    margin-left: 2.5cm;
-   
+  width: 1300px;
+  height: 400px;
+  margin-top: 0cm;
+  margin-left: 2.5cm;
 }
-.img2{
-    margin-left: 7.5cm;
-    margin-bottom: 0.125cm;
-    margin-top:0.5cm;
+.img2 {
+  margin-left: 7.5cm;
+  margin-bottom: 0.125cm;
+  margin-top: 0.5cm;
 }
-.img3{
-    margin-left: 16cm;
-    margin-top:0.5cm;
+.img3 {
+  margin-left: 16cm;
+  margin-top: 0.5cm;
 }
-.row{
-   display: flex;
+.row {
+  display: flex;
   margin-top: 0cm;
   margin-left: -2.5cm;
   background-color: black;
 }
-.row2{
-    display: flex;
-    flex-direction: row;
-    margin-left: 2cm; 
-    margin-top: 0.5cm;
-    background-color: black;
+.row2 {
+  display: flex;
+  flex-direction: row;
+  margin-left: 2cm;
+  margin-top: 0.5cm;
+  background-color: black;
 }
 .popup {
-visibility: hidden;
+  visibility: hidden;
   opacity: 0;
   position: fixed;
   top: 0;
@@ -114,7 +119,7 @@ visibility: hidden;
   transition: opacity 500ms;
   margin: 70px auto;
   padding: 20px;
-  background: #fff;
+  /* background: #fff; */
   border-radius: 5px;
   width: 30%;
   position: relative;
@@ -122,39 +127,38 @@ visibility: hidden;
   width: 500px;
   height: 500px;
 }
-.button{
-    background-color:rgb(155, 253, 224);
-    color: black;
-    width: 50px;
-    height: 40px;
-    padding: 10px 60px;
-    border-radius: 5px;
-    margin: 10px 0px;
-    cursor: pointer;
-    transition: ease background-color 250ms;
-   
+.button {
+  background-color: rgb(155, 253, 224);
+  color: black;
+  width: 50px;
+  height: 40px;
+  padding: 10px 60px;
+  border-radius: 5px;
+  margin: 10px 0px;
+  cursor: pointer;
+  transition: ease background-color 250ms;
 }
 
-.card{
-    background-color: white;
-    color:black;
-    width: 12cm;
-    height: 7cm;
-    cursor: pointer;
+.card {
+  background-color: white;
+  color: black;
+  width: 12cm;
+  height: 7cm;
+  cursor: pointer;
 }
-.graph{
-    position: absolute;
-    top: 50%;
-    bottom: 10%;
-    left: 2%;
-    right: 2%;
-    color: aliceblue;
-    background-color: black;
+.graph {
+  position: absolute;
+  top: 50%;
+  bottom: 10%;
+  left: 2%;
+  right: 2%;
+  color: aliceblue;
+  background-color: black;
 }
-.belowGraph{
-    position:relative;
-    top: 90%;
-    bottom: 7%;
-    display: flex;
-    flex-direction: row;
+.belowGraph {
+  position: relative;
+  top: 90%;
+  bottom: 7%;
+  display: flex;
+  flex-direction: row;
 }

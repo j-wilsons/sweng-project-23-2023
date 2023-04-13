@@ -4,6 +4,8 @@
     margin-left: 2vw;
     margin-right: 2vw;
     flex-direction: row;
+    /* justify-content: center; */
+    /* align-items: center; */
 }
 
 .item{

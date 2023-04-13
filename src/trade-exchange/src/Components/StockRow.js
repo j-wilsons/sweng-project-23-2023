@@ -63,27 +63,6 @@ class StockRow extends Component {
         <td>{this.state.price}</td>
         <td>{this.state.change}</td>
         <td>{"09/04/23"}</td>
-        {/* <td>
-          <Plot
-            className="graph"
-            data={[
-              {
-                x: this.state.chartXVals,
-                y: this.state.chartYVals,
-                type: "scatter",
-                mode: "linemarkers",
-                marker: { color: "blue" },
-              },
-            ]}
-            layout={{ width: 700, height: 450, title: this.props.ticker }}
-            style={{
-              marginTop: 210,
-              marginLeft: -850,
-              color: "white",
-              backgroundColor: "black",
-            }}
-          ></Plot>
-        </td> */}
       </tr>
     );
   }

@@ -5,6 +5,7 @@ import "../css/Flex.css";
 import TradeCard from "../Components/TradeCard";
 import StockRow from "../Components/StockRow";
 import PieChart from "../Components/PieChart";
+import Graph from "../Components/Graph";
 import OrderPlotter from "../Components/OrderPlotter";
 // import PropTypes from "prop-types";
 import { useState } from "react";
@@ -20,6 +21,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import axios from "axios";
+
 var amount = 0;
 let myData; // variable to hold response from backend
 
@@ -289,6 +291,10 @@ export const Trade = () => {
     console.log(element);
   }, []);
 
+  // useEffect(() => {
+  //   console.log(shares);
+  // }, [shares]);
+
   return (
     <div className="home" style={{ backgroundColor: "black" }}>
       <div className="container">
@@ -330,8 +336,16 @@ export const Trade = () => {
                   onChange={(event) => {
                     // console.log(event.value.symbol);
                     // getInfo();
-                    setShares(event.value.symbol);
-                    changePriceMkt();
+                    // console.log(event.value.symbol);
+                    if (event === null || event.value === null) {
+                      console.log("null");
+                      setIsShown(false);
+                    } else {
+                      setShares(event.value.symbol);
+                      setIsShown(false);
+                      setIsShown(true);
+                    }
+                    // changePriceMkt();
                   }}
                 />
 
@@ -426,9 +440,9 @@ export const Trade = () => {
             </div>
           </div>
 
-          {/* {isShown ? ( */}
+          {isShown ? (
             <div className="item">
-              <div className="container">
+              <div className="">
                 <table className="table mt-3" style={{ color: "white" }}>
                   <thead>
                     <tr>
@@ -442,9 +456,10 @@ export const Trade = () => {
                     <StockRow ticker={shares} />
                   </tbody>
                 </table>
+              <Graph ticker={shares} className=""/>
               </div>
             </div>
-          {/* ) : null} */}
+          ) : null}
         </div>
         <div className="item">
           <div style={{ color: "white" }}>
