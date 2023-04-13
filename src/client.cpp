@@ -69,8 +69,8 @@ void handle_ping(const httplib::Request& req, httplib::Response& res) {
     //message is the key, and pong is the value
     response["message"] = "pong";
 
-    res.status = 200;       //this one is not rly important but thats how the big boys check if the request was successful
     res.set_header("Access-Control-Allow-Origin", "*"); // This is required for CORS
+    res.status = 200;       //this one is not rly important but thats how the big boys check if the request was successful
     res.set_content(response.dump(), "application/json");    // Set the content of the response to the JSON object
 }
 
@@ -129,8 +129,8 @@ void runEndPoint(Application& app) {
     // This is an example of a POST request, sell is the route, currently for the sell button in trade.jsx line 41-58
     endPoint.Post("/trade", [&app](const httplib::Request& req, httplib::Response& res) {      
         handle_post(req, res, app);
-    }); 
-
+    });    
+    endPoint.Get("/ping", handle_ping);
 
     std::cout << "Server listening on port 1234" << std::endl;
     endPoint.listen("localhost", 1234);
