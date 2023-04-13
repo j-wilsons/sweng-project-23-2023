@@ -167,6 +167,10 @@ img {
   margin-top: 0.5rem;
 }
 
+.margin-right-small{
+  margin-right: 0.5rem;
+}
+
 .main-background-box {
   background-color: #52555a;
   /* width: 100%; */
