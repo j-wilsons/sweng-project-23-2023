@@ -53,9 +53,10 @@ const orderTypes = [
 export const Trade = () => {
   const [isShown, setIsShown] = useState(false);
   const [isPriceShown, setIsPriceShown] = useState(false);
-  const [price, setPrice] = useState("");
-  const [lmtPrice, setlmtPrice] = useState("");
-  const [type, setType] = React.useState("Market");
+
+  const [price, setPrice] = useState(0)
+  const [lmtPrice, setlmtPrice] = useState(0)
+  const [type, setType] = React.useState('Market')
   const [orderPlList, setOrderPlList] = useState([]);
   const [order, setOrder] = useState(null);
   const [modalShow, setModalShow] = React.useState(false);
@@ -140,24 +141,26 @@ export const Trade = () => {
       mode: "no-cors", // <---- for CORS, do not delete
       method: "POST", // for post request
 
-      //set the body of the request to the data we want to send
-      //key-value pairs
-      body: JSON.stringify({
-        side: "buy",
-        ordertype: "Market",
-        amount: amount,
-        ticker: shares,
-        progress: 0,
-        completed: false,
-      }),
-      //set the content type
-      headers: {
-        "Content-type": "application/json;",
-      },
-    });
 
-    console.log("Buying " + amount + " shares of " + shares + " at " + price);
-    if (lmtPrice != "") {
+    //set the body of the request to the data we want to send
+    //key-value pairs
+    body: JSON.stringify({
+      side: "buy",
+      ordertype: "Limit",
+      amount: amount,
+      ticker: shares,
+      price: lmtPrice,
+      progress: 0,
+      completed: false,
+    }),
+    //set the content type
+    headers: {
+      "Content-type": "application/json;"
+    }
+  })
+    
+    console.log("Buying " + amount + " shares of " + shares + " at" + price);
+    if(lmtPrice != ""){
       handleAddLmtOrder();
     } else {
       handleAddOrder();
@@ -177,9 +180,10 @@ export const Trade = () => {
       //key-value pairs
       body: JSON.stringify({
         side: "sell",
-        ordertype: "Market",
+        ordertype: "Limit",
         amount: amount,
         ticker: shares,
+        price: lmtPrice,
         progress: 0,
         completed: false,
       }),

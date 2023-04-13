@@ -81,6 +81,9 @@
         "filesystem": "cpp",
         "ranges": "cpp",
         "span": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "coroutine": "cpp",
+        "source_location": "cpp",
+        "memory": "cpp"
     }
 }
