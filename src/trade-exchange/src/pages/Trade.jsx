@@ -1,7 +1,7 @@
 import React from "react";
 import "../css/Main.css";
 import "../css/Text.css";
-import NavBar from "../Components/NavBar";
+import "../css/Flex.css";
 import TradeCard from "../Components/TradeCard";
 import StockRow from "../Components/StockRow";
 import PieChart from "../Components/PieChart";
@@ -289,200 +289,203 @@ export const Trade = () => {
   }, []);
 
   return (
-    <div className="home">
-      <NavBar />
-      <div className="right-pos">
-        <div>
-          <h2>MAKE A TRADE</h2>
+    <div className="home" style={{ backgroundColor: "black" }}>
+      <div className="container">
+        <div className="item ">
           <div>
-            <input
-              type="text"
-              id="amount"
-              placeholder="Select quantity ..."
-              rounded={rounded}
-              style={{
-                width: "300px",
-                height: "27px",
-                fontSize: 15,
-              }}
-            />
-            <div
-              style={{
-                justifyContent: "space-around",
-              }}
-            >
-              <MultiColumnComboBox
+            <h2 className="text-white">MAKE A TRADE</h2>
+            <div>
+              <input
+                type="text"
+                id="amount"
+                placeholder="Select quantity ..."
+                rounded={rounded}
                 style={{
                   width: "300px",
-                }}
-                data={equities}
-                columns={columns}
-                textField={"symbol"}
-                size={size}
-                fillMode={fillMode}
-                rounded={rounded}
-                id="shares"
-                placeholder="Select share ..."
-                onChange={() => {
-                  changePriceMkt();
+                  height: "27px",
+                  fontSize: 15,
                 }}
               />
-
-              <MyModal show={modalShow} onHide={() => setModalShow(false)} />
               <div
                 style={{
                   justifyContent: "space-around",
                 }}
-              ></div>
-              {isPriceShown ? (
-                <input
-                  type="text"
-                  id="price"
-                  placeholder="Select price..."
-                  onChange={(e) => setlmtPrice(e.target.value)}
+              >
+                <MultiColumnComboBox
                   style={{
                     width: "300px",
-                    height: "27px",
-                    fontSize: 15,
+                  }}
+                  data={equities}
+                  columns={columns}
+                  textField={"symbol"}
+                  size={size}
+                  fillMode={fillMode}
+                  rounded={rounded}
+                  id="shares"
+                  placeholder="Select share ..."
+                  onChange={() => {
+                    changePriceMkt();
                   }}
                 />
-              ) : null}
-              <br />
-              <Button
-                style={{
-                  backgroundColor: "yellow",
-                  color: "black",
-                  width: 70,
-                  height: 40,
-                  marginTop: -100,
-                  marginLeft: 320,
-                }}
-                onClick={() => {
-                  getInfo();
-                }}
-              >
-                Select
-              </Button>
-              <div className="row2" style={{ marginLeft: -2 }}>
+
+                <MyModal show={modalShow} onHide={() => setModalShow(false)} />
+                <div
+                  style={{
+                    justifyContent: "space-around",
+                  }}
+                ></div>
+                {isPriceShown ? (
+                  <input
+                    type="text"
+                    id="price"
+                    placeholder="Select price..."
+                    onChange={(e) => setlmtPrice(e.target.value)}
+                    style={{
+                      width: "300px",
+                      height: "27px",
+                      fontSize: 15,
+                    }}
+                  />
+                ) : null}
+                <br />
                 <Button
                   style={{
-                    backgroundColor: "aquamarine",
+                    backgroundColor: "yellow",
                     color: "black",
-                    width: 90,
+                    width: 70,
                     height: 40,
+                    marginTop: -100,
+                    marginLeft: 320,
                   }}
                   onClick={() => {
-                    buyShares();
+                    getInfo();
                   }}
                 >
-                  Buy
+                  Select
                 </Button>
-                <Button
-                  style={{
-                    backgroundColor: "red",
-                    color: "white",
-                    width: 90,
-                    height: 40,
-                  }}
-                  onClick={() => {
-                    sellShares();
-                  }}
-                >
-                  Sell
-                </Button>
-                <div style={{ marginTop: 55, marginLeft: -180 }}>
-                  <ButtonGroup>
-                    {radios.map((radio, idx) => (
-                      <ToggleButton
-                        key={idx}
-                        id={`radio-${idx}`}
-                        type="radio"
-                        variant={idx % 2 ? "outline-success" : "outline-danger"}
-                        name="radio"
-                        value={radio.value === null ? "" : radio.value}
-                        checked={radioValue === radio.value}
-                        style={{ width: 100 }}
-                        onChange={(e) => {
-                          setRadioValue(e.currentTarget.value);
-                          getType();
-                        }}
-                      >
-                        {radio.name}
-                      </ToggleButton>
-                    ))}
-                  </ButtonGroup>
+                <div className="row2" style={{ marginLeft: -2 }}>
+                  <Button
+                    style={{
+                      backgroundColor: "aquamarine",
+                      color: "black",
+                      width: 90,
+                      height: 40,
+                    }}
+                    onClick={() => {
+                      buyShares();
+                    }}
+                  >
+                    Buy
+                  </Button>
+                  <Button
+                    style={{
+                      backgroundColor: "red",
+                      color: "white",
+                      width: 90,
+                      height: 40,
+                    }}
+                    onClick={() => {
+                      sellShares();
+                    }}
+                  >
+                    Sell
+                  </Button>
+                  <div style={{ marginTop: 55, marginLeft: -180 }}>
+                    <ButtonGroup>
+                      {radios.map((radio, idx) => (
+                        <ToggleButton
+                          key={idx}
+                          id={`radio-${idx}`}
+                          type="radio"
+                          variant={
+                            idx % 2 ? "outline-success" : "outline-danger"
+                          }
+                          name="radio"
+                          value={radio.value === null ? "" : radio.value}
+                          checked={radioValue === radio.value}
+                          style={{ width: 100 }}
+                          onChange={(e) => {
+                            setRadioValue(e.currentTarget.value);
+                            getType();
+                          }}
+                        >
+                          {radio.name}
+                        </ToggleButton>
+                      ))}
+                    </ButtonGroup>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {isShown ? (
-          <div className="left-pos">
-            <div className="container">
-              <table className="table mt-3" style={{ color: "white" }}>
-                <thead>
-                  <tr>
-                    <th>Ticker</th>
-                    <th>Price</th>
-                    <th>Change</th>
-                    <th>Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <StockRow ticker={shares} />
-                </tbody>
-              </table>
-            </div>
-          </div>
-        ) : null}
-      </div>
-      <div className="right-corner-pos">
-        <div style={{ color: "white" }}>
-          <h2>Order Plotter</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Ticker</th>
-                <th>Type</th>
-                <th>Price</th>
-                <th>Amount</th>
-                <th>Date</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-          </table>
-          {order ? (
-            <div>
-              <input
-                type="text"
-                value={order === null ? "" : order}
-                onChange={(e) => setOrder(e.target.value)}
-                style={{ width: "400px", backgroundColor: "yellow" }}
-              />
-              <button
-                onClick={() => setModalShow(true)}
-                style={{ marginLeft: -60, backgroundColor: "yellow" }}
-              >
-                Status
-              </button>
-              {orderPlList.map((order, index) => (
-                <div key={index}>
-                  <input
-                    defaultValue={order === null ? "" : order}
-                    style={{ width: "400px" }}
-                  />
-                  ,
-                  <button
-                    onClick={() => setModalShow(true)}
-                    style={{ marginLeft: -60 }}
-                  >
-                    Status
-                  </button>
-                </div>
-              ))}
+          {isShown ? (
+            <div className="item">
+              <div className="container">
+                <table className="table mt-3" style={{ color: "white" }}>
+                  <thead>
+                    <tr>
+                      <th>Ticker</th>
+                      <th>Price</th>
+                      <th>Change</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <StockRow ticker={shares} />
+                  </tbody>
+                </table>
+              </div>
             </div>
           ) : null}
+        </div>
+        <div className="item">
+          <div style={{ color: "white" }}>
+            <h2>Order Plotter</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Ticker</th>
+                  <th>Type</th>
+                  <th>Price</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+            </table>
+            {order ? (
+              <div>
+                <input
+                  type="text"
+                  value={order === null ? "" : order}
+                  onChange={(e) => setOrder(e.target.value)}
+                  style={{ width: "400px", backgroundColor: "yellow" }}
+                />
+                <button
+                  onClick={() => setModalShow(true)}
+                  style={{ marginLeft: -60, backgroundColor: "yellow" }}
+                >
+                  Status
+                </button>
+                {orderPlList.map((order, index) => (
+                  <div key={index}>
+                    <input
+                      defaultValue={order === null ? "" : order}
+                      style={{ width: "400px" }}
+                    />
+                    ,
+                    <button
+                      onClick={() => setModalShow(true)}
+                      style={{ marginLeft: -60 }}
+                    >
+                      Status
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
     </div>
