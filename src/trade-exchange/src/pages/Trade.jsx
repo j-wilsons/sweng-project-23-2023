@@ -293,7 +293,7 @@ export const Trade = () => {
 
   return (
     <div className="home" style={{ backgroundColor: "black" }}>
-      <div className="container">
+      <div className="flex-container">
         <div className="item text-center main-background-box">
           <div>
             <h2 className="text-white text-center">MAKE A TRADE</h2>
