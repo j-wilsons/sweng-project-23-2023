@@ -56,7 +56,7 @@ const Graph = (props) => {
           marker: { color: "blue" },
         },
       ]}
-      layout={{ width: 700, height: 450, title: props.ticker }}
+      layout={{title: props.ticker }}
       style={{
         // marginTop: 210,
         // marginLeft: -850,
