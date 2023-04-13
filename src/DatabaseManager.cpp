@@ -111,7 +111,6 @@ json pullOrderTable()
         {
             int orderId;
             char side[256];
-            char timestamp[256];
             char username[256];
             char ticker[256];
             double price;
@@ -121,16 +120,14 @@ json pullOrderTable()
             SQLGetData(stmt, 2, SQL_CHAR, side, sizeof(side), NULL);
             SQLGetData(stmt, 3, SQL_C_DOUBLE, &price, sizeof(price), NULL);
             SQLGetData(stmt, 4, SQL_INTEGER, &quantity, sizeof(quantity), NULL);
-            SQLGetData(stmt, 5, SQL_CHAR, &timestamp, sizeof(timestamp), NULL);
-            SQLGetData(stmt, 6, SQL_CHAR, &username, sizeof(username), NULL);
-            SQLGetData(stmt, 7, SQL_CHAR, &ticker, sizeof(ticker), NULL);
-
+            SQLGetData(stmt, 5, SQL_CHAR, &username, sizeof(username), NULL);
+            SQLGetData(stmt, 6, SQL_CHAR, &ticker, sizeof(ticker), NULL);
+            
             json order = {
                 {"id", orderId},
                 {"side", side},
                 {"price", price},
                 {"quantity", quantity},
-                {"timestamp", timestamp},
                 {"username", username},
                 {"ticker", ticker},
             };

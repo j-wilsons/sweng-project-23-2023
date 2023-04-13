@@ -52,7 +52,6 @@ void printOrders(json allOrders)
         std::cout << "Side: " << order["side"] << std::endl;
         std::cout << "Price: " << order["price"] << std::endl;
         std::cout << "Quantity: " << order["quantity"] << std::endl;
-        std::cout << "Timestamp: " << order["timestamp"] << std::endl;
         std::cout << "Username: " << order["username"] << std::endl;
         std::cout << "Ticker: " << order["ticker"] << std::endl;
         std::cout << "-----------------------" << std::endl;
