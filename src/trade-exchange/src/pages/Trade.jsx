@@ -230,7 +230,7 @@ export const Trade = () => {
       ticker: shares,
       type: type,
       side: "Buy",
-      price: lmtPrice,
+      price: price,
       amount: amount,
       date: new Date().toLocaleDateString(),
       status: "Not Filled",
@@ -247,7 +247,7 @@ export const Trade = () => {
       ticker: shares,
       type: type,
       side: "Sell",
-      price: lmtPrice,
+      price: price,
       amount: amount,
       date: new Date().toLocaleDateString(),
       status: "Not Filled",
@@ -507,9 +507,11 @@ export const Trade = () => {
                     {orderPlList.length !== 0
                       ? orderPlList.map((order) => (
                           <tr className="grid-seven-columns grid-item">
-                            {Object.values(order).map((value) => (
-                              <td>{value}</td>
-                            ))}
+                            {Object.entries(order).map(([key, value]) => {
+                              if (key !== "orderID") {
+                                return <td>{value}</td>;
+                              }
+                            })}
                           </tr>
                         ))
                       : null}
