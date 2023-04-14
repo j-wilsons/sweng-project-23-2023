@@ -10,6 +10,7 @@
 #include <string>
 #include "json.hpp"
 #include <algorithm>
+#include "quickfix/fix44/ExecutionReport.h"
 
 using json = nlohmann::json;
 
@@ -105,7 +106,26 @@ void print_ibm_orderbook_keys(const std::vector<Stock> &stockList)
     }
 }
 
-void matchOrders(Stock &stock)
+FIX44::ExecutionReport tradeSuccessful(const FIX::SessionID &sessionID, int CumQty, double price)
+{
+    FIX44::ExecutionReport orderReport(FIX::OrderID("12345"),
+                                       FIX::ExecID("I"),
+                                       FIX::ExecType('F'),
+                                       FIX::OrdStatus('2'),
+                                       FIX::Side('1'),
+                                       FIX::LeavesQty(0),
+                                       FIX::CumQty(CumQty),
+                                       FIX::AvgPx(price));
+    std::cout << "\nTrade Successfully Completed\n";
+    return orderReport;
+}
+
+void onMatch(FIX::SessionID &sessionID, int cumQty, double price){
+    FIX44::ExecutionReport orderReport = tradeSuccessful(sessionID, cumQty, price);
+    FIX::Session::sendToTarget(orderReport, sessionID);
+}
+
+void matchOrders(Stock &stock, FIX::SessionID &sessionID)
 {
     try
     {
@@ -125,14 +145,18 @@ void matchOrders(Stock &stock)
 
                 if (highest_buy->first >= lowest_sell->first)
                 {
+                    double matchedPrice = static_cast<double>(lowest_sell->first);
                     auto &buy_order = highest_buy->second.front();
                     auto &sell_order = lowest_sell->second.front();
 
+                    /*
                      if (buy_order.getField(49) == sell_order.getField(49))
                     {
                         // Skip the current order and continue with the next
                         continue;
                     }
+                    */
+                    
                     
                     matchFound = true;
                     std::cout << "\n\nMATCH FOUND "
@@ -161,6 +185,7 @@ void matchOrders(Stock &stock)
                             auto key_to_erase = highest_buy->first;
                             buy_orderbook.erase(key_to_erase);
                         }
+                        onMatch(sessionID, buy_quantity, matchedPrice);
                     }
                     else
                     {
@@ -181,6 +206,7 @@ void matchOrders(Stock &stock)
                         {
                             sell_orderbook.erase(lowest_sell->first);
                         }
+                        onMatch(sessionID, buy_quantity, matchedPrice);
                     }
                     else
                     {
@@ -199,7 +225,7 @@ void matchOrders(Stock &stock)
     }
 };
 
-void processOrders(const json &orders, std::vector<Stock> &stockList)
+void processOrders(const json &orders, std::vector<Stock> &stockList, FIX::SessionID &sessionID)
 {
     try
     {
@@ -230,7 +256,7 @@ void processOrders(const json &orders, std::vector<Stock> &stockList)
                 {
                     it->sell_orderbook[price].push(fixOrder);
                 }
-                matchOrders(*it);
+                matchOrders(*it, sessionID);
             }
         }
     }
@@ -274,12 +300,12 @@ void display_ibm_orders(const std::vector<Stock> &stockList)
     }
 }
 
-void startEngine()
+void startEngine(FIX::SessionID &sessionID)
 {
     connectToDB();
     json allOrders = pullOrderTable();
     //printOrders(allOrders);
     std::vector<Stock> stockList = createStockList();
-    processOrders(allOrders, stockList);
+    processOrders(allOrders, stockList, sessionID);
     //print_ibm_orderbook_keys(stockList);
 }

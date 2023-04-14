@@ -96,7 +96,7 @@ void deleteOrder(int orderId)
     SQLFreeHandle(SQL_HANDLE_STMT, stmt);
 }
 
-void addOrderToDatabase(int orderId, const std::string &side, double price, int quantity, const std::string &timestamp, const std::string &username, const std::string &ticker)
+void addOrderToDatabase(int orderId, const std::string &side, double price, int quantity, const std::string &timestamp, const std::string &username, const std::string &ticker, FIX::SessionID &sessionID)
 {
     try
     {
@@ -119,7 +119,7 @@ void addOrderToDatabase(int orderId, const std::string &side, double price, int 
         {
             printf("\nOrder added to the database successfully.\n");
             printf("\nMatching Engine searching...\n");
-            startEngine();
+            startEngine(sessionID);
         }
         else
         {

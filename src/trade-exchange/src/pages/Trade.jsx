@@ -188,6 +188,7 @@ export const Trade = () => {
       //set the body of the request to the data we want to send
       //key-value pairs
       body: JSON.stringify({
+
         side: "sell",
         ordertype: type,
         amount: amount,

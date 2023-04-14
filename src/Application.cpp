@@ -11,11 +11,14 @@
 #include <iostream>
 #include "json.hpp"
 #include "DataBaseManager.h"
+#include "MatchingEngine.h"
 
 using namespace std;
-
-void Application::onCreate(const FIX::SessionID &)
+FIX::SessionID appSessionID;
+void Application::onCreate(const FIX::SessionID &sesID)
 {
+    appSessionID = sesID;
+    startEngine(appSessionID);
 }
 
 void Application::onLogon(const FIX::SessionID &sessionID)
@@ -41,6 +44,16 @@ void Application::fromApp(const FIX::Message &message, const FIX::SessionID &ses
 {
    crack(message, sessionID);
 }
+
+
+void Application::onMessage(const FIX44::ExecutionReport& message, const FIX::SessionID &sessionID)
+{
+    std::string senderCompID;
+    senderCompID = message.getHeader().getField(FIX::FIELD::SenderCompID);
+    std::cout << "Execution report handled" << std::endl;
+    
+}
+
 
 void Application::onMessage(const FIX44::NewOrderSingle &message, const FIX::SessionID &sessionID)
 {
@@ -78,7 +91,7 @@ void Application::onMessage(const FIX44::NewOrderSingle &message, const FIX::Ses
             std::cout << "\nSENDING TO DATABASE\n " << std::endl;
             // Send the order details to the database
             
-            addOrderToDatabase(orderId, side, price, quantity, timestamp, username, ticker);
+            addOrderToDatabase(orderId, side, price, quantity, timestamp, username, ticker, appSessionID);
         }
         catch (const std::exception &e)
         {
