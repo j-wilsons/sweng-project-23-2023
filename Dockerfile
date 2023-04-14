@@ -37,12 +37,8 @@ COPY . C:/app/
 # Build the application.
 RUN \
     # Set working directory
-    cd C:/app/
+    cd C:/app/ \
     # Run CMake
     && cmake . \
     # Build the application
     && cmake --build . --config Release
-
-# Define the entry point for the docker container.
-# This entry point launches the application.
-ENTRYPOINT ["C:\\app\\bin\\MyApp.exe"]
