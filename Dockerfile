@@ -4,6 +4,12 @@ FROM mcr.microsoft.com/windows/servercore:ltsc2022
 # Restore the default Windows shell for correct batch processing.
 SHELL ["cmd", "/S", "/C"]
 
+# Install Chocolatey
+RUN powershell.exe -Command "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"
+
+# Install curl using Chocolatey
+RUN powershell.exe -Command "choco install curl -y"
+
 # Install curl
 RUN powershell.exe -Command Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force ; \
     powershell.exe -Command Install-Package -Name curl
