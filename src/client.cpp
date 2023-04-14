@@ -84,6 +84,7 @@ void handle_post(const httplib::Request& req, httplib::Response& res, Applicatio
     try
     {
         /* code */
+    string customOrderID = request["orderID"];
     string OrderSide = request["side"];
     std::cout << "side" << std::endl;
     string Symbol = request["ticker"];
@@ -99,13 +100,13 @@ void handle_post(const httplib::Request& req, httplib::Response& res, Applicatio
     if(OrderSide == "buy"){
        try{
                 std::cout << "buy order came through" << std::endl;
-                app.sendBuyOrder(app.sessionId_, Symbol, QuantityInt, Dprice);
+                app.sendBuyOrder(app.sessionId_, Symbol, QuantityInt, Dprice, customOrderID);
             }catch(std::exception & e){
                 std::cout << e.what();
             }
     }else if(OrderSide == "sell"){
         try{
-                app.sendSellOrder(app.sessionId_, Symbol, QuantityInt,Dprice);
+                app.sendSellOrder(app.sessionId_, Symbol, QuantityInt,Dprice, customOrderID);
             }catch(std::exception & e){
                 std::cout << e.what();
             }
