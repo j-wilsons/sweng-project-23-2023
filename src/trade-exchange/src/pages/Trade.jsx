@@ -127,6 +127,17 @@ export const Trade = () => {
     setIntervalId(id);
     return () => clearInterval(id);
   }, []);
+
+  const updateOrders = (filledIds) => {
+    setOrderPlList((prevData) =>
+      prevData.map((order) =>
+        filledIds.includes(order.orderID)
+          ? { ...order, status: "Filled" }
+          : order
+      )
+    );
+  };
+
   const fetchData = () => {
     // function which gets called every n milliseconds
     fetch("http://localhost:1234/ping", {
@@ -135,7 +146,8 @@ export const Trade = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data.message);
+        console.log(data);
+        updateOrders(data.filled);
       })
       // .then((response) => response.json())
       // .then((data) => {
@@ -175,10 +187,6 @@ export const Trade = () => {
       headers: {
         "Content-type": "application/json;",
       },
-    })
-    // .then((response) => response.txt())
-    .then((data) => {
-      console.log(data);
     });
 
     console.log(
