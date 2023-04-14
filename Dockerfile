@@ -9,10 +9,10 @@ RUN powershell.exe -Command Install-PackageProvider -Name NuGet -MinimumVersion 
     powershell.exe -Command Install-Package -Name curl
 
 # Install the Visual Studio Build Tools.
-RUN `
+RUN \
     # Download the Build Tools bootstrapper.
     curl -SL --output vs_buildtools.exe https://aka.ms/vs/17/release/vs_buildtools.exe \
-    `
+    \
     # Install Build Tools with the Microsoft.VisualStudio.Workload.AzureBuildTools workload, excluding workloads and components with known issues.
     && (start /w vs_buildtools.exe --quiet --wait --norestart --nocache \
         --installPath "%ProgramFiles(x86)%\Microsoft Visual Studio\2022\BuildTools" \
