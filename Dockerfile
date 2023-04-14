@@ -29,7 +29,7 @@ RUN \
     && del /q vs_buildtools.exe
 
 # Install CMake
-RUN choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
+RUN  powershell.exe -Command choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System -y'
 
 # Copy the source code to the container.
 COPY . C:/app/
