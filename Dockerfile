@@ -1,35 +1,52 @@
-# Use an official Windows Server Core image as a parent image
-FROM mcr.microsoft.com/windows/servercore:ltsc2019
+# Use the latest Windows Server Core 2022 image.
+FROM mcr.microsoft.com/windows/servercore:ltsc2022
 
-# Set the working directory to C:\app
-WORKDIR C:\app
+# Restore the default Windows shell for correct batch processing.
+SHELL ["cmd", "/S", "/C"]
 
-# Install the Visual Studio Build Tools
-ADD https://aka.ms/vs/16/release/vs_buildtools.exe C:\TEMP\vs_buildtools.exe
-RUN C:\TEMP\vs_buildtools.exe --quiet --wait --norestart --nocache `
-    --installPath C:\BuildTools `
-    --add Microsoft.VisualStudio.Workload.VCTools `
-    --add Microsoft.VisualStudio.Component.VC.CMake.Project `
-    --add Microsoft.VisualStudio.Component.Windows10SDK.18362 `
-    --add Microsoft.VisualStudio.Component.Windows10SDK.19041 `
-    || IF "%ERRORLEVEL%"=="3010" EXIT 0
+# Install curl
+RUN powershell.exe -Command Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force ; `
+    powershell.exe -Command Install-Package -Name curl
 
-# Set the Visual Studio Build Tools environment variables
-RUN setx /M PATH "%PATH%;C:\BuildTools\VC\Auxiliary\Build"
+# Install the Visual Studio Build Tools.
+RUN `
+    # Download the Build Tools bootstrapper.
+    curl -SL --output vs_buildtools.exe https://aka.ms/vs/17/release/vs_buildtools.exe `
+    `
+    # Install Build Tools with the Microsoft.VisualStudio.Workload.AzureBuildTools workload, excluding workloads and components with known issues.
+    && (start /w vs_buildtools.exe --quiet --wait --norestart --nocache `
+        --installPath "%ProgramFiles(x86)%\Microsoft Visual Studio\2022\BuildTools" `
+        --add Microsoft.VisualStudio.Workload.AzureBuildTools `
+        --remove Microsoft.VisualStudio.Component.Windows10SDK.10240 `
+        --remove Microsoft.VisualStudio.Component.Windows10SDK.10586 `
+        --remove Microsoft.VisualStudio.Component.Windows10SDK.14393 `
+        --remove Microsoft.VisualStudio.Component.Windows81SDK `
+        || IF "%ERRORLEVEL%"=="3010" EXIT 0) `
+    `
+    # Cleanup
+    && del /q vs_buildtools.exe
 
-# Download and install CMake
-ADD https://github.com/Kitware/CMake/releases/download/v3.21.3/cmake-3.21.3-windows-x86_64.zip C:\TEMP\cmake.zip
-RUN powershell -Command Expand-Archive -Path C:\TEMP\cmake.zip -DestinationPath C:\ && `
-    setx /M PATH "%PATH%;C:\cmake-3.21.3-win64-x64\bin"
+# Install CMake
+RUN `
+    # Download CMake
+    curl -SL --output cmake_installer.exe https://github.com/Kitware/CMake/releases/download/v3.22.0/cmake-3.22.0-windows-x86_64.exe `
+    # Install CMake
+    && cmake_installer.exe --quiet --skip-license `
+    # Cleanup
+    && del /q cmake_installer.exe
 
-# Copy the project directory into the container at C:\app
+# Copy the source code to the container.
 COPY . C:\app
 
-# Use CMake to build the project
-RUN C:\BuildTools\VC\Auxiliary\Build\vcvars64.bat && `
-    mkdir build && cd build && `
-    cmake -G "Visual Studio 16 2019" .. && `
-    cmake --build . --config Release
+# Build the application.
+RUN `
+    # Set working directory
+    cd C:\app `
+    # Run CMake
+    && cmake . `
+    # Build the application
+    && cmake --build . --config Release
 
-# Set the default command to run when the container starts
-CMD ["myapp.exe"]
+# Define the entry point for the docker container.
+# This entry point launches the application.
+ENTRYPOINT ["C:\\app\\bin\\MyApp.exe"]
