@@ -79,6 +79,7 @@ void Application::onMessage(const FIX44::NewOrderSingle &message, const FIX::Ses
             }
             std::cout << "side" << std::endl;
             double price = stod(message.getField(44));
+            string CustomOrderID = message.getField(9000);
             std::cout << "price" << std::endl;
             int quantity = stoi(message.getField(38));
             std::cout << "quanitty" << std::endl;
@@ -91,7 +92,7 @@ void Application::onMessage(const FIX44::NewOrderSingle &message, const FIX::Ses
             std::cout << "\nSENDING TO DATABASE\n " << std::endl;
             // Send the order details to the database
             
-            addOrderToDatabase(orderId, side, price, quantity, timestamp, username, ticker, appSessionID);
+            addOrderToDatabase(orderId, side, price, quantity, timestamp, username, ticker, appSessionID, CustomOrderID);
         }
         catch (const std::exception &e)
         {
@@ -139,19 +140,19 @@ void Application::run(const FIX::SessionID &sessionID, const std::string &Symbol
     // FIX::Session::sendToTarget(newOrder,  sessionID);
 }
 
-void Application::sendBuyOrder(const FIX::SessionID &sessionID, const std::string &Symbol, int Quantity, double price)
+void Application::sendBuyOrder(const FIX::SessionID &sessionID, const std::string &Symbol, int Quantity, double price, std::string CustomOrderID)
 {
-    FIX44::NewOrderSingle newOrder = queryNewOrderSingle44(Symbol, Quantity, '1', price); // 1 represents buy side, 2 represents sell side
+    FIX44::NewOrderSingle newOrder = queryNewOrderSingle44(Symbol, Quantity, '1', price, CustomOrderID); // 1 represents buy side, 2 represents sell side
     FIX::Session::sendToTarget(newOrder, sessionID);
 }
 
-void Application::sendSellOrder(const FIX::SessionID &sessionID, const std::string &Symbol, int Quantity, double price)
+void Application::sendSellOrder(const FIX::SessionID &sessionID, const std::string &Symbol, int Quantity, double price, std::string CustomOrderID)
 {
-    FIX44::NewOrderSingle newOrder = queryNewOrderSingle44(Symbol, Quantity, '2', price); // 1 represents buy side, 2 represents sell side
+    FIX44::NewOrderSingle newOrder = queryNewOrderSingle44(Symbol, Quantity, '2', price, CustomOrderID); // 1 represents buy side, 2 represents sell side
     FIX::Session::sendToTarget(newOrder, sessionID);
 }
 
-FIX44::NewOrderSingle Application::queryNewOrderSingle44(const std::string &Symbol, int Quantity, char side, double Price) // side == 1 represents buy side, 2 represents sell side
+FIX44::NewOrderSingle Application::queryNewOrderSingle44(const std::string &Symbol, int Quantity, char side, double Price, std::string CustomOrderID) // side == 1 represents buy side, 2 represents sell side
 {
     FIX::Side fix_side;
     if (side == '1')
@@ -173,6 +174,10 @@ FIX44::NewOrderSingle Application::queryNewOrderSingle44(const std::string &Symb
     newOrder.set(FIX::Price(Price));
     newOrder.set(FIX::HandlInst('1'));
     newOrder.set(FIX::TimeInForce(FIX::TimeInForce_DAY));
+
+    const int CustomOrderIDTag = 9000;
+    FIX::StringField customOrderIDField(CustomOrderIDTag, CustomOrderID);
+    newOrder.setField(customOrderIDField);
     return newOrder;
 }
 

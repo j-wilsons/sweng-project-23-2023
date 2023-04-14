@@ -5,7 +5,7 @@ using json = nlohmann::json;
 
 void connectToDB();
 void deleteOrder(int orderId);
-void addOrderToDatabase(int orderId, const std::string& side, double price, int quantity, const std::string& timestamp, const std::string& username, const std::string& ticker, FIX::SessionID &sessionID);
+void addOrderToDatabase(int orderId, const std::string& side, double price, int quantity, const std::string& timestamp, const std::string& username, const std::string& ticker, FIX::SessionID &sessionID, std::string& customOrderID);
 json pullOrderTable();
 void updateOrderQuantity(int orderId, int newQuantity);
 

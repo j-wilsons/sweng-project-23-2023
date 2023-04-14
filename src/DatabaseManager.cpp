@@ -96,12 +96,12 @@ void deleteOrder(int orderId)
     SQLFreeHandle(SQL_HANDLE_STMT, stmt);
 }
 
-void addOrderToDatabase(int orderId, const std::string &side, double price, int quantity, const std::string &timestamp, const std::string &username, const std::string &ticker, FIX::SessionID &sessionID)
+void addOrderToDatabase(int orderId, const std::string &side, double price, int quantity, const std::string &timestamp, const std::string &username, const std::string &ticker, FIX::SessionID &sessionID, std::string &CustomOrderID)
 {
     try
     {
         SQLHSTMT stmt = NULL;
-        SQLCHAR *query = (SQLCHAR *)"INSERT INTO orders (side, price, quantity, username, ticker) VALUES (?, ?, ?, ?, ?);";
+        SQLCHAR *query = (SQLCHAR *)"INSERT INTO orders (side, price, quantity, username, ticker, timestamp) VALUES (?, ?, ?, ?, ?, ?);";
 
         // Allocate a statement handle
         ret = SQLAllocHandle(SQL_HANDLE_STMT, dbc, &stmt);
@@ -112,6 +112,7 @@ void addOrderToDatabase(int orderId, const std::string &side, double price, int 
         SQLBindParameter(stmt, 3, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &quantity, 0, NULL);
         SQLBindParameter(stmt, 4, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, username.size(), 0, (SQLPOINTER)username.c_str(), 0, NULL);
         SQLBindParameter(stmt, 5, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, ticker.size(), 0, (SQLPOINTER)ticker.c_str(), 0, NULL);
+        SQLBindParameter(stmt, 6, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, CustomOrderID.size(), 0, (SQLPOINTER)CustomOrderID.c_str(), 0, NULL);
 
         // Execute query
         ret = SQLExecDirect(stmt, query, SQL_NTS);
@@ -157,6 +158,7 @@ json pullOrderTable()
             char ticker[256];
             double price;
             int quantity;
+            char CustomOrderID[256];
 
             SQLGetData(stmt, 1, SQL_INTEGER, &orderId, sizeof(orderId), NULL);
             SQLGetData(stmt, 2, SQL_CHAR, side, sizeof(side), NULL);
@@ -164,6 +166,8 @@ json pullOrderTable()
             SQLGetData(stmt, 4, SQL_INTEGER, &quantity, sizeof(quantity), NULL);
             SQLGetData(stmt, 5, SQL_CHAR, &username, sizeof(username), NULL);
             SQLGetData(stmt, 6, SQL_CHAR, &ticker, sizeof(ticker), NULL);
+            SQLGetData(stmt, 7, SQL_CHAR, &CustomOrderID, sizeof(CustomOrderID), NULL);
+
             
             json order = {
                 {"id", orderId},
@@ -172,6 +176,7 @@ json pullOrderTable()
                 {"quantity", quantity},
                 {"username", username},
                 {"ticker", ticker},
+                {"CustomOrderID", CustomOrderID}
             };
 
             orders.push_back(order);
