@@ -120,6 +120,9 @@ FIX44::ExecutionReport tradeSuccessful(const FIX::SessionID &sessionID, int CumQ
                                        FIX::CumQty(CumQty),
                                        FIX::AvgPx(price));
     std::cout << "\nTrade Successfully Completed\n";
+    const int CustomOrderIDTag = 9000;
+    FIX::StringField customOrderIDField(CustomOrderIDTag, CustomOrderID);
+    orderReport.setField(customOrderIDField);
     return orderReport;
 }
 
@@ -211,7 +214,7 @@ void matchOrders(Stock &stock, FIX::SessionID &sessionID)
                         {
                             sell_orderbook.erase(lowest_sell->first);
                         }
-                        onMatch(sessionID, buy_quantity, matchedPrice, CustomOrderID);
+                        onMatch(sessionID, sell_quantity, matchedPrice, CustomOrderID);
                     }
                     else
                     {

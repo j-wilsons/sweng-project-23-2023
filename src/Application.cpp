@@ -12,6 +12,7 @@
 #include "json.hpp"
 #include "DataBaseManager.h"
 #include "MatchingEngine.h"
+#include "OrderStatus.h"
 
 using namespace std;
 FIX::SessionID appSessionID;
@@ -51,6 +52,9 @@ void Application::onMessage(const FIX44::ExecutionReport& message, const FIX::Se
     std::string senderCompID;
     senderCompID = message.getHeader().getField(FIX::FIELD::SenderCompID);
     std::cout << "Execution report handled" << std::endl;
+
+    std::string CustomOrderID = message.getField(9000);
+    orderStatusMap[CustomOrderID] = "Filled";
     
 }
 

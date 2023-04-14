@@ -13,7 +13,9 @@
 #include <httplib.h>
 #include "json.hpp"
 #include "DataBaseManager.h"
+#include "OrderStatus.h"
 
+std::unordered_map<std::string, std::string> orderStatusMap;
 using json = nlohmann::json;
 using namespace std;
 int a=0;
@@ -61,13 +63,45 @@ bool isCorrectForm(string input)
     }
     return false;
 }
+std::vector<std::string> unorderedMapKeysToList(const std::unordered_map<std::string, string>& input_map) {
+    std::vector<std::string> keys_list;
+    keys_list.reserve(input_map.size());
+
+    for (const auto& pair : input_map) {
+        keys_list.push_back(pair.first);
+    }
+
+    return keys_list;
+}
+
+json convertMapToJson(const std::unordered_map<std::string, std::string>& orderStatusMap) {
+
+    json jsonObject;
+
+    for (const auto& entry : orderStatusMap) {
+        jsonObject[entry.first] = entry.second;
+    }
+
+    return jsonObject;
+}
+
+json listToJson(const std::vector<std::string>& list) {
+    nlohmann::json json_list = nlohmann::json::array();
+
+    for (const auto& item : list) {
+        json_list.push_back(item);
+    }
+
+    return json_list;
+}
+
 void handle_ping(const httplib::Request& req, httplib::Response& res) {
     std::cout<<"ping"<<std::endl;
-
+    std::vector<std::string> keys = unorderedMapKeysToList(orderStatusMap);
     // Create a JSON object with a message, and send it back to the client
-    json response;
+    json response = listToJson(keys);
     //message is the key, and pong is the value
-    response["message"] = "pong";
+     std::cout << "Converted JSON: " << response.dump() << std::endl;
 
     res.set_header("Access-Control-Allow-Origin", "*"); // This is required for CORS
     res.status = 200;       //this one is not rly important but thats how the big boys check if the request was successful
