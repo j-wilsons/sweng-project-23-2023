@@ -522,10 +522,13 @@ export const Trade = () => {
                   <tbody>
                     {orderPlList.length !== 0
                       ? orderPlList.map((order) => (
-                          <tr className="grid-seven-columns grid-item">
+                          <tr
+                            className="grid-seven-columns grid-item"
+                            key={order.orderID}
+                          >
                             {Object.entries(order).map(([key, value]) => {
                               if (key !== "orderID") {
-                                return <td>{value}</td>;
+                                return <td key={key}>{value}</td>;
                               }
                             })}
                           </tr>
