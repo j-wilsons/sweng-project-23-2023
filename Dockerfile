@@ -29,7 +29,7 @@ RUN \
     && del /q vs_buildtools.exe
 
 # Install CMake
-RUN  choco install -y cmake
+RUN  powershell.exe -Command "choco install -y cmake"
 
 # Copy the source code to the container.
 COPY . C:/app/
