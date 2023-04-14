@@ -21,7 +21,6 @@
 int main(int argc, char* argv[]) {
    try
     {
-        startEngine();
         FIX::SessionSettings settings("../../src/server.cfg");
         Application application;
         FIX::FileStoreFactory storeFactory(settings);

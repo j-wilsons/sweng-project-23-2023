@@ -1,7 +1,12 @@
 import React from "react";
+import "react-awesome-button/dist/styles.css";
+import "@progress/kendo-theme-default/dist/all.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/Main.css";
 import "../css/Text.css";
 import "../css/Flex.css";
+import "../css/Grid.css";
+// import "../css/Button.css";
 import TradeCard from "../Components/TradeCard";
 import StockRow from "../Components/StockRow";
 import PieChart from "../Components/PieChart";
@@ -15,15 +20,13 @@ import { equities } from "../Components/Equities";
 import { orderType } from "../Components/Equities";
 import { Button } from "react-bootstrap";
 import { Modal } from "react-bootstrap";
-import "react-awesome-button/dist/styles.css";
-import "@progress/kendo-theme-default/dist/all.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import axios from "axios";
 
 var amount = 0;
 let myData; // variable to hold response from backend
+let orderId = 1;
 
 const columns = [
   {
@@ -58,6 +61,10 @@ export const Trade = () => {
   const [lmtPrice, setlmtPrice] = useState("");
   const [type, setType] = React.useState("Market");
   const [orderPlList, setOrderPlList] = useState([]);
+  const addOrder = (newOrder) => {
+    setOrderPlList((prevData) => [...prevData, newOrder]);
+    // console.log(orderPlList);
+  };
   const [order, setOrder] = useState(null);
   const [modalShow, setModalShow] = React.useState(false);
   const [radioValue, setRadioValue] = useState("1");
@@ -100,15 +107,18 @@ export const Trade = () => {
 
       .then((data2) => {
         setPrice(data2.close);
+        // console.log(price);
       });
   }
   const getType = () => {
     console.log(radioValue);
     if (radioValue == "1") {
       getPrice("Limit");
+      setType("Limit");
     } else {
       getPrice("Market");
       setIsPriceShown(false);
+      setType("Market");
     }
   };
   const [intervalId, setIntervalId] = useState(0); // [variable, function to set variable
@@ -117,12 +127,30 @@ export const Trade = () => {
     setIntervalId(id);
     return () => clearInterval(id);
   }, []);
+
+  const updateOrders = (filledIds) => {
+    setOrderPlList((prevData) =>
+      prevData.map((order) =>
+        filledIds.includes(order.orderID)
+          ? { ...order, status: "Filled" }
+          : order
+      )
+    );
+  };
+
   const fetchData = () => {
     // function which gets called every n milliseconds
     fetch("http://localhost:1234/ping", {
-      mode: "no-cors", // <---- for CORS, do not delete
+      // mode: "no-cors", // <---- for CORS, do not delete
       // method: "GET"       // for post request
     })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data.filled) {
+          updateOrders(data.filled);
+        }
+      })
       // .then((response) => response.json())
       // .then((data) => {
       //   console.log(data);
@@ -132,9 +160,12 @@ export const Trade = () => {
       });
   };
 
+  const randomNumber = () => {
+    return Math.floor(Math.random() * 20);
+  };
   const buyShares = () => {
     const amount = document.getElementById("amount").value;
-    setShares(document.getElementById("shares").value);
+    // setShares(document.getElementById("shares").value);
     //get data from backend
     //example for get request
     //prints out whatever is in the response
@@ -145,9 +176,11 @@ export const Trade = () => {
       //set the body of the request to the data we want to send
       //key-value pairs
       body: JSON.stringify({
+        orderID: orderId.toString(),
         side: "buy",
-        ordertype: "Market",
+        ordertype: type,
         amount: amount,
+        price: lmtPrice,
         ticker: shares,
         progress: 0,
         completed: false,
@@ -158,16 +191,25 @@ export const Trade = () => {
       },
     });
 
-    console.log("Buying " + amount + " shares of " + shares + " at " + price);
+    console.log(
+      "ID: " +
+        orderId +
+        " Buying " +
+        amount +
+        " shares of " +
+        shares +
+        " at " +
+        price
+    );
     if (lmtPrice != "") {
       handleAddLmtOrder();
     } else {
       handleAddOrder();
     }
+    orderId++;
   };
   const sellShares = () => {
     amount = document.getElementById("amount").value;
-    setShares(document.getElementById("shares").value);
     console.log("Selling " + amount + " shares of " + shares);
 
     //post data to backend
@@ -178,9 +220,11 @@ export const Trade = () => {
       //set the body of the request to the data we want to send
       //key-value pairs
       body: JSON.stringify({
+        orderID: orderId.toString(),
         side: "sell",
-        ordertype: "Market",
+        ordertype: type,
         amount: amount,
+        price: lmtPrice,
         ticker: shares,
         progress: 0,
         completed: false,
@@ -195,70 +239,91 @@ export const Trade = () => {
     } else {
       handleAddSellLmtOrder();
     }
+    orderId++;
   };
   const handleAddOrder = () => {
     const amount = document.getElementById("amount").value;
-    setShares(document.getElementById("shares").value);
-    setOrder(
-      "  " +
-        shares +
-        "     Mkt Buy    " +
-        price +
-        "    " +
-        amount +
-        "        10/04/23    Filled"
-    );
-    setOrderPlList([...orderPlList, order]);
+    addOrder({
+      orderID: orderId,
+      ticker: shares,
+      type: type,
+      side: "Buy",
+      price: price,
+      amount: amount,
+      date: new Date().toLocaleDateString(),
+      status: "Not Filled",
+    });
+    // console.log(shares, type, price, amount, new Date().toISOString());
+    // setOrderPlList([...orderPlList, order]);
     setlmtPrice("");
   };
   const handleAddSellOrder = () => {
     const amount = document.getElementById("amount").value;
-    setShares(document.getElementById("shares").value);
-    setOrder(
-      "  " +
-        shares +
-        "     Mkt Sell    " +
-        price +
-        "    " +
-        amount +
-        "        10/04/23    Filled"
-    );
-    setOrderPlList([...orderPlList, order]);
+    // setShares(document.getElementById("shares").value);
+    addOrder({
+      orderID: orderId,
+      ticker: shares,
+      type: type,
+      side: "Sell",
+      price: price,
+      amount: amount,
+      date: new Date().toLocaleDateString(),
+      status: "Not Filled",
+    });
+    // setOrderPlList([...orderPlList, order]);
   };
   const handleAddLmtOrder = () => {
     const amount = document.getElementById("amount").value;
-    setShares(document.getElementById("shares").value);
-    setOrder(
-      "  " +
-        shares +
-        "     Lmt Buy    " +
-        lmtPrice +
-        "    " +
-        amount +
-        "        10/04/23    Filled"
-    );
-    setOrderPlList([...orderPlList, order]);
+    // setShares(document.getElementById("shares").value);
+    addOrder({
+      orderID: orderId,
+      ticker: shares,
+      type: type,
+      side: "Buy",
+      price: lmtPrice,
+      amount: amount,
+      date: new Date().toLocaleDateString(),
+      status: "Not Filled",
+    });
+    // setOrder(
+    //   "  " +
+    //     shares +
+    //     "     Lmt Buy    " +
+    //     lmtPrice +
+    //     "    " +
+    //     amount +
+    //     "        10/04/23    Filled"
+    // );
+    // setOrderPlList([...orderPlList, order]);
   };
   const handleAddSellLmtOrder = () => {
     const amount = document.getElementById("amount").value;
-    setShares(document.getElementById("shares").value);
-    setOrder(
-      "  " +
-        shares +
-        "     Lmt Sell    " +
-        lmtPrice +
-        "    " +
-        amount +
-        "        10/04/23    Filled"
-    );
-    setOrderPlList([...orderPlList, order]);
+    // setShares(document.getElementById("shares").value);
+    addOrder({
+      orderID: orderId,
+      ticker: shares,
+      type: type,
+      side: "Sell",
+      price: lmtPrice,
+      amount: amount,
+      date: new Date().toLocaleDateString(),
+      status: "Not Filled",
+    });
+    // setOrder(
+    //   "  " +
+    //     shares +
+    //     "     Lmt Sell    " +
+    //     lmtPrice +
+    //     "    " +
+    //     amount +
+    //     "        10/04/23    Filled"
+    // );
+    // setOrderPlList([...orderPlList, order]);
   };
 
-  const getInfo = () => {
-    setShares(document.getElementById("shares").value);
-    // setIsShown(false);
-    // setIsShown(true);
-  };
+  // const getInfo = () => {
+  //   setShares(document.getElementById("shares").value);
+  // };
   const getPrice = (event) => {
     if (event === "Limit") {
       setIsPriceShown((current) => !current);
@@ -288,11 +353,11 @@ export const Trade = () => {
 
   useEffect(() => {
     const element = document.querySelector("#EqList");
-    console.log(element);
+    // console.log(element);
   }, []);
 
   return (
-    <div className="home" style={{ backgroundColor: "black" }}>
+    <div className="" style={{ backgroundColor: "black" }}>
       <div className="flex-container">
         <div className="item text-center main-background-box">
           <div>
@@ -333,8 +398,8 @@ export const Trade = () => {
                       setIsShown(false);
                     } else {
                       setShares(event.value.symbol);
-                      setIsShown(false);
                       setIsShown(true);
+                      changePriceMkt();
                     }
                   }}
                 />
@@ -360,7 +425,8 @@ export const Trade = () => {
                 ) : null}
                 <br />
                 <div className="" style={{}}>
-                  <Button className="margin-right-small"
+                  <Button
+                    className="margin-right-small"
                     style={{
                       backgroundColor: "#B2CEB7",
                       border: "none",
@@ -441,49 +507,39 @@ export const Trade = () => {
         <div className="item main-background-box">
           <div className="text-white text-center">
             <h2>Your Trades</h2>
-            <table className="center-horizontally">
-              <thead>
-                <tr>
-                  <th>Ticker</th>
-                  <th>Type</th>
-                  <th>Price</th>
-                  <th>Amount</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-            </table>
-            {order ? (
-              <div>
-                <input
-                  type="text"
-                  value={order === null ? "" : order}
-                  onChange={(e) => setOrder(e.target.value)}
-                  style={{ width: "400px", backgroundColor: "yellow" }}
-                />
-                <button
-                  onClick={() => setModalShow(true)}
-                  style={{ marginLeft: -60, backgroundColor: "yellow" }}
-                >
-                  Status
-                </button>
-                {orderPlList.map((order, index) => (
-                  <div key={index}>
-                    <input
-                      defaultValue={order === null ? "" : order}
-                      style={{ width: "400px" }}
-                    />
-                    ,
-                    <button
-                      onClick={() => setModalShow(true)}
-                      style={{ marginLeft: -60 }}
-                    >
-                      Status
-                    </button>
-                  </div>
-                ))}
-              </div>
-            ) : null}
+            <div className="center-div">
+              <table>
+                <>
+                  <thead>
+                    <tr className="grid-seven-columns grid-item">
+                      <th>Ticker</th>
+                      <th>Type</th>
+                      <th>Side</th>
+                      <th>Price</th>
+                      <th>Amount</th>
+                      <th>Date</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orderPlList.length !== 0
+                      ? orderPlList.map((order) => (
+                          <tr
+                            className="grid-seven-columns grid-item"
+                            key={order.orderID}
+                          >
+                            {Object.entries(order).map(([key, value]) => {
+                              if (key !== "orderID") {
+                                return <td key={key}>{value}</td>;
+                              }
+                            })}
+                          </tr>
+                        ))
+                      : null}
+                  </tbody>
+                </>
+              </table>
+            </div>
           </div>
         </div>
       </div>

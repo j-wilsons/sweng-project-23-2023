@@ -26,8 +26,8 @@ struct Stock {
     Stock(std::string stockTicker);
 };
 void printOrders(json allOrders);
-void processOrders(const json& orders, std::vector<Stock>& stockList);
-void startEngine();
+void processOrders(const json& orders, std::vector<Stock>& stockList, const FIX::SessionID &sessionID);
+void startEngine(FIX::SessionID &sessionID);
 std::vector<Stock> createStockList();
 
 

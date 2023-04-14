@@ -1,24 +1,27 @@
 /* centre text */
-h1 {
-  text-align: left;
+/* h1 { */
+  /* text-align: left;
   font-family: monospace;
   font-size: 40px;
   font-weight: 500;
   margin-top: -0.5cm;
   margin-bottom: -0.5cm;
   margin-left: 5cm;
-  color: hsl(0, 0%, 28%);
-}
-h1 {
-  padding: 64px;
+  color: hsl(0, 0%, 28%); */
+/* } */
+/* h1 { */
+  /* padding: 64px;
   background: linear-gradient(to right, hsl(0, 0%, 30%) 0, hsl(0, 0%, 100%) 10%, hsl(0, 0%, 30%) 20%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: shine 3s infinite linear;
-}
+  animation: shine 3s infinite linear; */
+/* } */
 
-h2{
-  display: inline-block;
+h1,
+h2
+{
+  margin: 0;
+  padding: 0;
 }
 
 @keyframes shine {

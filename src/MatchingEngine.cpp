@@ -10,6 +10,7 @@
 #include <string>
 #include "json.hpp"
 #include <algorithm>
+#include "quickfix/fix44/ExecutionReport.h"
 
 using json = nlohmann::json;
 
@@ -58,7 +59,7 @@ void printOrders(json allOrders)
     }
 }
 
-FIX44::NewOrderSingle createNewOrderSingle44(std::string ID, const std::string &Symbol, int Quantity, const std::string side, double Price)
+FIX44::NewOrderSingle createNewOrderSingle44(std::string ID, const std::string &Symbol, int Quantity, const std::string side, double Price, std::string CustomOrderID)
 {
     FIX::Side fixSide;
     if (side == "BUY")
@@ -75,6 +76,9 @@ FIX44::NewOrderSingle createNewOrderSingle44(std::string ID, const std::string &
     newOrder.set(FIX::Price(Price));
     newOrder.set(FIX::HandlInst('1'));
     newOrder.set(FIX::TimeInForce(FIX::TimeInForce_DAY));
+    const int CustomOrderIDTag = 9000;
+    FIX::StringField customOrderIDField(CustomOrderIDTag, CustomOrderID);
+    newOrder.setField(customOrderIDField);
     return newOrder;
 }
 
@@ -105,7 +109,29 @@ void print_ibm_orderbook_keys(const std::vector<Stock> &stockList)
     }
 }
 
-void matchOrders(Stock &stock)
+FIX44::ExecutionReport tradeSuccessful(const FIX::SessionID &sessionID, int CumQty, double price, std::string CustomOrderID)
+{
+    FIX44::ExecutionReport orderReport(FIX::OrderID(CustomOrderID),
+                                       FIX::ExecID("I"),
+                                       FIX::ExecType('F'),
+                                       FIX::OrdStatus('2'),
+                                       FIX::Side('1'),
+                                       FIX::LeavesQty(0),
+                                       FIX::CumQty(CumQty),
+                                       FIX::AvgPx(price));
+    std::cout << "\nTrade Successfully Completed\n";
+    const int CustomOrderIDTag = 9000;
+    FIX::StringField customOrderIDField(CustomOrderIDTag, CustomOrderID);
+    orderReport.setField(customOrderIDField);
+    return orderReport;
+}
+
+void onMatch(FIX::SessionID &sessionID, int cumQty, double price, std::string CustomOrderID){
+    FIX44::ExecutionReport orderReport = tradeSuccessful(sessionID, cumQty, price, CustomOrderID);
+    FIX::Session::sendToTarget(orderReport, sessionID);
+}
+
+void matchOrders(Stock &stock, FIX::SessionID &sessionID)
 {
     try
     {
@@ -125,14 +151,18 @@ void matchOrders(Stock &stock)
 
                 if (highest_buy->first >= lowest_sell->first)
                 {
+                    double matchedPrice = static_cast<double>(lowest_sell->first);
                     auto &buy_order = highest_buy->second.front();
                     auto &sell_order = lowest_sell->second.front();
 
+                    /*
                      if (buy_order.getField(49) == sell_order.getField(49))
                     {
                         // Skip the current order and continue with the next
                         continue;
                     }
+                    */
+                    
                     
                     matchFound = true;
                     std::cout << "\n\nMATCH FOUND "
@@ -152,6 +182,7 @@ void matchOrders(Stock &stock)
                     {
                         
                         int orderId = stoi(buy_order.getField(11));
+                        std::string CustomOrderID = buy_order.getField(9000);
                         std::cout << "\n deleting order " << orderId << " from DB \n ";
                         deleteOrder(orderId); // Delete the finished order from the database
                         
@@ -161,6 +192,7 @@ void matchOrders(Stock &stock)
                             auto key_to_erase = highest_buy->first;
                             buy_orderbook.erase(key_to_erase);
                         }
+                        onMatch(sessionID, buy_quantity, matchedPrice, CustomOrderID);
                     }
                     else
                     {
@@ -174,6 +206,7 @@ void matchOrders(Stock &stock)
                     {
                         int orderId = stoi(sell_order.getField(11));
                         std::cout << "\n deleting order " << orderId << " from DB \n ";
+                        std::string CustomOrderID = sell_order.getField(9000);
                         deleteOrder(orderId); // Delete the finished order from the database
                         
                         lowest_sell->second.pop();
@@ -181,6 +214,7 @@ void matchOrders(Stock &stock)
                         {
                             sell_orderbook.erase(lowest_sell->first);
                         }
+                        onMatch(sessionID, sell_quantity, matchedPrice, CustomOrderID);
                     }
                     else
                     {
@@ -199,7 +233,7 @@ void matchOrders(Stock &stock)
     }
 };
 
-void processOrders(const json &orders, std::vector<Stock> &stockList)
+void processOrders(const json &orders, std::vector<Stock> &stockList, FIX::SessionID &sessionID)
 {
     try
     {
@@ -210,7 +244,8 @@ void processOrders(const json &orders, std::vector<Stock> &stockList)
             double price = order["price"];
             int quantity = order["quantity"];
             std::string id = to_string(order["id"]);
-            FIX44::NewOrderSingle fixOrder = createNewOrderSingle44(id, ticker, quantity, side, price);
+            std::string CustomOrderID = order["CustomOrderID"];
+            FIX44::NewOrderSingle fixOrder = createNewOrderSingle44(id, ticker, quantity, side, price, CustomOrderID);
 
             // Debug: Print order information
             std::cout << "Processing order for ticker: " << ticker << ", side: " << side << ", price: " << price << ", quantity: " << quantity << std::endl;
@@ -230,7 +265,7 @@ void processOrders(const json &orders, std::vector<Stock> &stockList)
                 {
                     it->sell_orderbook[price].push(fixOrder);
                 }
-                matchOrders(*it);
+                matchOrders(*it, sessionID);
             }
         }
     }
@@ -274,12 +309,12 @@ void display_ibm_orders(const std::vector<Stock> &stockList)
     }
 }
 
-void startEngine()
+void startEngine(FIX::SessionID &sessionID)
 {
     connectToDB();
     json allOrders = pullOrderTable();
     //printOrders(allOrders);
     std::vector<Stock> stockList = createStockList();
-    processOrders(allOrders, stockList);
+    processOrders(allOrders, stockList, sessionID);
     //print_ibm_orderbook_keys(stockList);
 }

@@ -1,34 +1,38 @@
 body {
-  height: 100%;
   background-color: black;
 }
+
 thead {
   background-color: rgba(255, 255, 255, 0.3);
 }
 
-.tbody {
+/* .tbody {
   height: 300px;
   overflow-x: auto;
   margin-top: 0px;
   border: 1px solid rgba(255, 255, 255, 0.3);
-}
+} */
 
 th {
-  padding: 20px 15px;
-  text-align: left;
+  /* text-align: center; */
   font-weight: 500;
   font-size: 12px;
   text-transform: uppercase;
 }
 
 td {
-  padding: 15px;
-  text-align: left;
+  min-width: calc(100% / 7);
+  /* text-align: left;
   vertical-align: middle;
   font-weight: 300;
   font-size: 16px;
-  border-bottom: solid 1px rgba(255, 255, 255, 0.1);
+  border-bottom: solid 1px rgba(255, 255, 255, 0.1); */
 }
+
+table {
+  width: 100%;
+}
+
 /* centre div vertically and horizontally*/
 .center {
   position: absolute;
@@ -37,18 +41,28 @@ td {
   transform: translate(-50%, -50%);
 }
 
-.center-horizontally {
+/* .center-horizontally { */
   /* margin-left: auto;
   margin-right: auto;
   width: 50%; */
+/* } */
+
+/* .center-in-div-vertically {
+  display: flex;
+  align-items: center;
 }
 
-.home {
+.place-div-right {
+  display: flex;
+  justify-content: flex-end;
+} */
+
+/* .home {
   background-color: black;
   position: absolute;
   height: 100%;
   width: 100%;
-}
+} */
 
 .container-pos {
   background-color: rgb(48, 48, 48);
@@ -163,11 +177,11 @@ img {
   flex-direction: row;
 }
 
-.margin-top-small{
+.margin-top-small {
   margin-top: 0.5rem;
 }
 
-.margin-right-small{
+.margin-right-small {
   margin-right: 0.5rem;
 }
 
@@ -180,7 +194,7 @@ img {
   padding: 1%;
 }
 
-.center-horizontally{
+.center-horizontally {
   margin-left: auto;
   margin-right: auto;
   width: 50%;
