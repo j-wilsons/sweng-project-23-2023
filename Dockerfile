@@ -32,12 +32,12 @@ RUN \
 RUN  choco install -y cmake
 
 # Copy the source code to the container.
-COPY . C:\app
+COPY . C:/app/
 
 # Build the application.
 RUN \
     # Set working directory
-    cd C:\app \
+    cd C:/app/
     # Run CMake
     && cmake . \
     # Build the application
