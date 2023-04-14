@@ -130,9 +130,13 @@ export const Trade = () => {
   const fetchData = () => {
     // function which gets called every n milliseconds
     fetch("http://localhost:1234/ping", {
-      mode: "no-cors", // <---- for CORS, do not delete
+      // mode: "no-cors", // <---- for CORS, do not delete
       // method: "GET"       // for post request
     })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data.message);
+      })
       // .then((response) => response.json())
       // .then((data) => {
       //   console.log(data);
@@ -171,6 +175,10 @@ export const Trade = () => {
       headers: {
         "Content-type": "application/json;",
       },
+    })
+    // .then((response) => response.txt())
+    .then((data) => {
+      console.log(data);
     });
 
     console.log(
