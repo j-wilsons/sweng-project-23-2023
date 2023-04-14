@@ -1,9 +1,9 @@
 name: CD to Dockerhub
 
 on:
-  create:
-    tags:
-      - "v*.*.*"
+  on:
+    push:
+      branches: [ "cd-dev-2"]
 
 
 jobs:
@@ -15,9 +15,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       name: checkout code
-      
+
     - uses: mr-smithers-excellent/docker-build-push@v6
-      name: Build & Push 
+      name: Build & Push
       with:
         image: ${{ secrets.DOCKER_HUB_USERNAME }}/sweng-project-23-2023
         tags: latest
@@ -30,5 +30,3 @@ jobs:
 
     - name: Image digest
       run: echo ${{ steps.docker_build.outputs.digest }}
-
-      
