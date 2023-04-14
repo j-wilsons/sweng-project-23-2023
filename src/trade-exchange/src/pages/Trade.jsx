@@ -147,7 +147,9 @@ export const Trade = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        updateOrders(data.filled);
+        if (data.filled) {
+          updateOrders(data.filled);
+        }
       })
       // .then((response) => response.json())
       // .then((data) => {
