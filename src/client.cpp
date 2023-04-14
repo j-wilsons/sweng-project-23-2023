@@ -101,7 +101,7 @@ void handle_ping(const httplib::Request& req, httplib::Response& res) {
     std::vector<std::string> keys = unorderedMapKeysToList(orderStatusMap);
     // Create a JSON object with a message, and send it back to the client
     json response;
-    response["Filled"] = listToJson(keys);
+    response["filled"] = listToJson(keys);
     //message is the key, and pong is the value
     std::cout << "Converted JSON: " << response.dump() << std::endl;
 
