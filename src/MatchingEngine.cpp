@@ -206,7 +206,7 @@ void matchOrders(Stock &stock, FIX::SessionID &sessionID)
                     {
                         int orderId = stoi(sell_order.getField(11));
                         std::cout << "\n deleting order " << orderId << " from DB \n ";
-                        std::string CustomOrderID = buy_order.getField(9000);
+                        std::string CustomOrderID = sell_order.getField(9000);
                         deleteOrder(orderId); // Delete the finished order from the database
                         
                         lowest_sell->second.pop();

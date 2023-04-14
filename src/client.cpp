@@ -89,7 +89,8 @@ json listToJson(const std::vector<std::string>& list) {
     nlohmann::json json_list = nlohmann::json::array();
 
     for (const auto& item : list) {
-        json_list.push_back(item);
+        int number = std::stoi(item);
+        json_list.push_back(number);
     }
 
     return json_list;
@@ -99,9 +100,10 @@ void handle_ping(const httplib::Request& req, httplib::Response& res) {
     std::cout<<"ping"<<std::endl;
     std::vector<std::string> keys = unorderedMapKeysToList(orderStatusMap);
     // Create a JSON object with a message, and send it back to the client
-    json response = listToJson(keys);
+    json response;
+    response["Filled"] = listToJson(keys);
     //message is the key, and pong is the value
-     std::cout << "Converted JSON: " << response.dump() << std::endl;
+    std::cout << "Converted JSON: " << response.dump() << std::endl;
 
     res.set_header("Access-Control-Allow-Origin", "*"); // This is required for CORS
     res.status = 200;       //this one is not rly important but thats how the big boys check if the request was successful
