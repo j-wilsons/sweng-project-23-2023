@@ -27,7 +27,7 @@ RUN \
     && del /q vs_buildtools.exe
 
 # Install CMake
-RUN `
+RUN \
     # Download CMake
     curl -SL --output cmake_installer.exe https://github.com/Kitware/CMake/releases/download/v3.22.0/cmake-3.22.0-windows-x86_64.exe \
     # Install CMake
