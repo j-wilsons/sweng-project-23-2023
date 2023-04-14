@@ -30,13 +30,8 @@ RUN \
 
 # Install CMake
 RUN \
-    # Download CMake
-    curl -SL --output cmake_installer.exe https://github.com/Kitware/CMake/releases/download/v3.22.0/cmake-3.22.0-windows-x86_64.exe \
-    # Install CMake
-    && cmake_installer.exe --quiet --skip-license \
-    # Cleanup
-    && del /q cmake_installer.exe
-
+    RUN choco install -y cmake
+    
 # Copy the source code to the container.
 COPY . C:\app
 
