@@ -84,23 +84,28 @@ void handle_post(const httplib::Request& req, httplib::Response& res, Applicatio
     try
     {
         /* code */
-        string OrderSide = request["side"];
+    string OrderSide = request["side"];
+    std::cout << "side" << std::endl;
     string Symbol = request["ticker"];
+    std::cout << "symbol" << std::endl;
     string Quantity = request["amount"];
     int QuantityInt = std::stoi(Quantity);
-    double price = request["price"];
+    std::cout << "quantity" << std::endl;
+    string price = request["price"];
+    double Dprice = std::stod(price);
+    std::cout << "price" << std::endl;
     // double price = std::stoi(priceString);
     std::cout << "orderside" << OrderSide << std::endl; 
     if(OrderSide == "buy"){
        try{
                 std::cout << "buy order came through" << std::endl;
-                app.sendBuyOrder(app.sessionId_, Symbol, QuantityInt, price);
+                app.sendBuyOrder(app.sessionId_, Symbol, QuantityInt, Dprice);
             }catch(std::exception & e){
                 std::cout << e.what();
             }
     }else if(OrderSide == "sell"){
         try{
-                app.sendSellOrder(app.sessionId_, Symbol, QuantityInt,price);
+                app.sendSellOrder(app.sessionId_, Symbol, QuantityInt,Dprice);
             }catch(std::exception & e){
                 std::cout << e.what();
             }
