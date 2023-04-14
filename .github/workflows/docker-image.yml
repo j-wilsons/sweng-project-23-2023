@@ -1,7 +1,6 @@
 name: CD to Dockerhub
 
 on:
-  on:
     push:
       branches: [ "cd-dev-2"]
 
