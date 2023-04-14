@@ -39,6 +39,6 @@ RUN \
     # Set working directory
     cd C:/app/ \
     # Run CMake
-    && cmake -DCMAKE_BUILD_TYPE=Release -A Win32 -B build
+    && cmake -DCMAKE_BUILD_TYPE=Release -A Win32 -B build \
     # Build the application
     && cmake --build build --config Release
