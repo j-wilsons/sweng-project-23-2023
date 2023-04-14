@@ -10,10 +10,6 @@ RUN powershell.exe -Command "Set-ExecutionPolicy Bypass -Scope Process -Force; [
 # Install curl using Chocolatey
 RUN powershell.exe -Command "choco install curl -y"
 
-# Install curl
-RUN powershell.exe -Command Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force ; \
-    powershell.exe -Command Install-Package -Name curl
-
 # Install the Visual Studio Build Tools.
 RUN \
     # Download the Build Tools bootstrapper.
