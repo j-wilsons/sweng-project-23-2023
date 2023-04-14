@@ -26,6 +26,7 @@ import axios from "axios";
 
 var amount = 0;
 let myData; // variable to hold response from backend
+let orderId = 1;
 
 const columns = [
   {
@@ -141,6 +142,9 @@ export const Trade = () => {
       });
   };
 
+  const randomNumber = () => {
+    return Math.floor(Math.random() * 20);
+  };
   const buyShares = () => {
     const amount = document.getElementById("amount").value;
     // setShares(document.getElementById("shares").value);
@@ -154,6 +158,7 @@ export const Trade = () => {
       //set the body of the request to the data we want to send
       //key-value pairs
       body: JSON.stringify({
+        orderID: orderId.toString(),
         side: "buy",
         ordertype: type,
         amount: amount,
@@ -168,16 +173,25 @@ export const Trade = () => {
       },
     });
 
-    console.log("Buying " + amount + " shares of " + shares + " at " + price);
+    console.log(
+      "ID: " +
+        orderId +
+        " Buying " +
+        amount +
+        " shares of " +
+        shares +
+        " at " +
+        price
+    );
     if (lmtPrice != "") {
       handleAddLmtOrder();
     } else {
       handleAddOrder();
     }
+    orderId++;
   };
   const sellShares = () => {
     amount = document.getElementById("amount").value;
-    // setShares(document.getElementById("shares").value);
     console.log("Selling " + amount + " shares of " + shares);
 
     //post data to backend
@@ -188,7 +202,7 @@ export const Trade = () => {
       //set the body of the request to the data we want to send
       //key-value pairs
       body: JSON.stringify({
-
+        orderID: orderId.toString(),
         side: "sell",
         ordertype: type,
         amount: amount,
@@ -207,10 +221,12 @@ export const Trade = () => {
     } else {
       handleAddSellLmtOrder();
     }
+    orderId++;
   };
   const handleAddOrder = () => {
     const amount = document.getElementById("amount").value;
     addOrder({
+      orderID: orderId,
       ticker: shares,
       type: type,
       side: "Buy",
@@ -227,6 +243,7 @@ export const Trade = () => {
     const amount = document.getElementById("amount").value;
     // setShares(document.getElementById("shares").value);
     addOrder({
+      orderID: orderId,
       ticker: shares,
       type: type,
       side: "Sell",
@@ -241,6 +258,7 @@ export const Trade = () => {
     const amount = document.getElementById("amount").value;
     // setShares(document.getElementById("shares").value);
     addOrder({
+      orderID: orderId,
       ticker: shares,
       type: type,
       side: "Buy",
@@ -264,6 +282,7 @@ export const Trade = () => {
     const amount = document.getElementById("amount").value;
     // setShares(document.getElementById("shares").value);
     addOrder({
+      orderID: orderId,
       ticker: shares,
       type: type,
       side: "Sell",
