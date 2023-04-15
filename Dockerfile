@@ -39,6 +39,6 @@ RUN \
     # Set working directory
     cd C:/app/ \
     # Run CMake
-    && cmake -DCMAKE_BUILD_TYPE=Release -A Win32 -B build \
+    && cmake -G "Visual Studio 17 2022" -A Win32 -DCMAKE_BUILD_TYPE=Release -B build \
     # Build the application
     && cmake --build build --config Release
