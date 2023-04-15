@@ -28,6 +28,7 @@ RUN \
     # Cleanup
     && del /q vs_buildtools.exe
 
+RUN dir
 # Install CMake
 RUN choco install cmake -y --installargs 'ADD_CMAKE_TO_PATH=System'
 
@@ -38,6 +39,7 @@ COPY . C:/app/
 RUN \
     # Set working directory
     cd C:/app/ \
+    && dir \
     # Run CMake
     && cmake -G "Visual Studio 17 2022" C:/app/ -A Win32 -DCMAKE_BUILD_TYPE=Release -B build \
     # Build the application
