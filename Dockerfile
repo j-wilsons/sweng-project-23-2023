@@ -28,11 +28,9 @@ RUN \
     # Cleanup
     && del /q vs_buildtools.exe
 
+# Add the installation directory to PATH  
+ENV PATH="${PATH}:/path/to/visual/studio/bin"
 RUN dir
-
-# Add the installation directory to PATH
-ENV PATH="${PATH}:C:/app/"
-
 # Install CMake
 RUN choco install cmake -y --installargs 'ADD_CMAKE_TO_PATH=System'
 
