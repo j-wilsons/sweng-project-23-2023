@@ -17,7 +17,7 @@ RUN \
     \
     # Install Build Tools with the Microsoft.VisualStudio.Workload.AzureBuildTools workload, excluding workloads and components with known issues.
     && (start /w vs_buildtools.exe --quiet --wait --norestart --nocache \
-        --installPath "C:/app/" \
+        --installPath "%ProgramFiles(x86)%\Microsoft Visual Studio\2022\BuildTools" \
         --add Microsoft.VisualStudio.Workload.AzureBuildTools \
         --remove Microsoft.VisualStudio.Component.Windows10SDK.10240 \
         --remove Microsoft.VisualStudio.Component.Windows10SDK.10586 \
@@ -28,9 +28,6 @@ RUN \
     # Cleanup
     && del /q vs_buildtools.exe
 
-# Add the installation directory to PATH
-ENV PATH="${PATH}:C:/app/"
-RUN dir
 # Install CMake
 RUN choco install cmake -y --installargs 'ADD_CMAKE_TO_PATH=System'
 
@@ -41,8 +38,7 @@ COPY . C:/app/
 RUN \
     # Set working directory
     cd C:/app/ \
-    && dir \
     # Run CMake
-    && cmake -G "Visual Studio 17 2022" C:/app/ -A Win32 -DCMAKE_BUILD_TYPE=Release -B build \
+    && && cmake -G "Visual Studio 17 2022" -A Win32 -DCMAKE_BUILD_TYPE=Release -B build \
     # Build the application
     && cmake --build build --config Release
