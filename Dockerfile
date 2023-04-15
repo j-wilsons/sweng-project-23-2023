@@ -15,23 +15,17 @@ RUN \
     # Download the Build Tools bootstrapper.
     curl -SL --output vs_buildtools.exe https://aka.ms/vs/17/release/vs_buildtools.exe \
     \
-    # Install Build Tools with the required workloads and components, excluding workloads and components with known issues.
+    # Install Build Tools with the required workloads and components, including Windows 10 SDK.
     && (start /w vs_buildtools.exe --quiet --wait --norestart --nocache \
         --installPath "%ProgramFiles(x86)%\Microsoft Visual Studio\2022\BuildTools" \
         --add Microsoft.VisualStudio.Workload.AzureBuildTools \
         --add Microsoft.VisualStudio.Component.VC.CMake.Project \
         --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 \
-        --remove Microsoft.VisualStudio.Component.Windows10SDK.10240 \
-        --remove Microsoft.VisualStudio.Component.Windows10SDK.10586 \
-        --remove Microsoft.VisualStudio.Component.Windows10SDK.14393 \
-        --remove Microsoft.VisualStudio.Component.Windows81SDK \
+        --add Microsoft.VisualStudio.Component.Windows10SDK \
         || IF "%ERRORLEVEL%"=="3010" EXIT 0) \
     \
     # Cleanup
     && del /q vs_buildtools.exe
-
-# Set the VS150COMNTOOLS environment variable to the appropriate path for Visual Studio 2022 Build Tools.
-ENV VS150COMNTOOLS "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\Common7\Tools"
 
 # Install CMake
 RUN choco install cmake -y --installargs 'ADD_CMAKE_TO_PATH=System'
