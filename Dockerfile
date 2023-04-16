@@ -30,10 +30,6 @@ RUN \
 # Install CMake
 RUN choco install cmake -y --installargs 'ADD_CMAKE_TO_PATH=System'
 
-# Set C and C++ compiler environment variables
-ENV CMAKE_C_COMPILER="C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.30.30705\bin\Hostx64\x86\cl.exe"
-ENV CMAKE_CXX_COMPILER="C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.30.30705\bin\Hostx64\x86\cl.exe"
-
 # Copy the source code to the container.
 COPY . C:/app/
 
@@ -41,7 +37,7 @@ COPY . C:/app/
 RUN \
     # Set working directory
     cd C:/app/ \
-    # Run CMake
-    && cmake -G "Visual Studio 17 2022" -A Win32 -DCMAKE_BUILD_TYPE=Release -B build \
+    # Run CMake with explicit compiler paths
+    && cmake -G "Visual Studio 17 2022" -A Win32 -DCMAKE_BUILD_TYPE=Release -B build -DCMAKE_C_COMPILER="C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.30.30705\bin\Hostx64\x86\cl.exe" -DCMAKE_CXX_COMPILER="C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.30.30705\bin\Hostx64\x86\cl.exe" \
     # Build the application
     && cmake --build build --config Release
