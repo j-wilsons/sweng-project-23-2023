@@ -30,6 +30,10 @@ RUN \
 # Install CMake
 RUN choco install cmake -y --installargs 'ADD_CMAKE_TO_PATH=System'
 
+# Set C and C++ compiler environment variables
+ENV CMAKE_C_COMPILER="C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.30.30705\bin\Hostx64\x86\cl.exe"
+ENV CMAKE_CXX_COMPILER="C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.30.30705\bin\Hostx64\x86\cl.exe"
+
 # Copy the source code to the container.
 COPY . C:/app/
 
