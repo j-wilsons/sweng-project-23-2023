@@ -19,7 +19,6 @@ RUN \
     && (start /w vs_buildtools.exe --quiet --wait --norestart --nocache \
         --installPath "%ProgramFiles(x86)%\Microsoft Visual Studio\2022\BuildTools" \
         --add Microsoft.VisualStudio.Workload.AzureBuildTools \
-        --add Microsoft.VisualStudio.Workload.VCTools \
         --add Microsoft.VisualStudio.Component.VC.CMake.Project \
         --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 \
         --add Microsoft.VisualStudio.Component.Windows10SDK \
@@ -33,7 +32,6 @@ RUN choco install cmake -y --installargs 'ADD_CMAKE_TO_PATH=System'
 
 #look for compiler
 RUN powershell.exe -Command "Get-ChildItem 'C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC' -Recurse -Filter 'cl.exe' | Select-Object FullName"
-
 
 # Copy the source code to the container.
 COPY . C:/app/
