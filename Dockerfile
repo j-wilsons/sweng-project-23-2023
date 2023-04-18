@@ -7,13 +7,29 @@ SHELL ["cmd", "/S", "/C"]
 # Install Chocolatey
 RUN powershell.exe -Command "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"
 
-# Install the Visual Studio Build Tools.
-RUN choco install visualstudio2022buildtools --package-parameters "--allWorkloads --includeRecommended --includeOptional --passive --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.Windows10SDK.19041 --locale en-US" -y
+# Install curl using Chocolatey
+RUN powershell.exe -Command "choco install curl -y"
 
-# Set the paths to the C and C++ compilers
+# Install the Visual Studio Build Tools.
+RUN \
+    # Download the Build Tools bootstrapper.
+    curl -SL --output vs_buildtools.exe https://aka.ms/vs/17/release/vs_buildtools.exe \
+    \
+    # Install Build Tools with the required workloads and components, including Windows 10 SDK.
+    && (start /w vs_buildtools.exe --quiet --wait --norestart --nocache \
+        --installPath "%ProgramFiles(x86)%\Microsoft Visual Studio\2022\BuildTools" \
+        --add Microsoft.VisualStudio.Workload.AzureBuildTools \
+        --add Microsoft.VisualStudio.Component.VC.CMake.Project \
+        --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 \
+        --add Microsoft.VisualStudio.Component.Windows10SDK \
+        || IF "%ERRORLEVEL%"=="3010" EXIT 0) \
+    \
+    # Cleanup
+    && del /q vs_buildtools.exe
+
+    # Set the paths to the C and C++ compilers
 ENV CMAKE_C_COMPILER="C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64\cl.exe"
 ENV CMAKE_CXX_COMPILER="C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64\cl.exe"
-
 
 # Copy the source code to the container.
 COPY . C:/app/
