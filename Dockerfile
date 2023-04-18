@@ -27,7 +27,10 @@ RUN \
     # Cleanup
     && del /q vs_buildtools.exe
 
-    # Set the paths to the C and C++ compilers
+# Install CMake
+RUN choco install cmake -y --installargs 'ADD_CMAKE_TO_PATH=System'
+
+#  Set the paths to the C and C++ compilers
 ENV CMAKE_C_COMPILER="C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64\cl.exe"
 ENV CMAKE_CXX_COMPILER="C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64\cl.exe"
 
